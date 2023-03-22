@@ -34,5 +34,12 @@ float Rsqrt(const float a){
     return m_b[0];
 }
 
+inline
+void Swap(float &a, float &b){
+    float temp = a;
+    a = b;
+    b = temp;
+}
+
 }
 #endif

@@ -2,7 +2,6 @@
 #include <assert.h>
 #endif
 
-#include <xmmintrin.h>
 #include "Vectors.h"
 #include "Tools.h"
 namespace sablin{
@@ -97,5 +96,84 @@ void Vector3f::Normalized(){
 
 Vector4f::Vector4f(float x, float y, float z, float w):
     x_(x),y_(y),z_(z),w_(w){}
+
+Vector4f& Vector4f::operator+=(const Vector4f &rhs){
+    x_ += rhs.x_;
+    y_ += rhs.y_;
+    z_ += rhs.z_;
+    w_ += rhs.w_;
+    return *this;
+}
+
+Vector4f operator+(const Vector4f &lhs, const Vector4f &rhs){
+    Vector4f sum = lhs;
+    sum += rhs;
+    return sum;
+}
+
+Vector4f& Vector4f::operator+=(const float f_number){
+    x_ += f_number;
+    y_ += f_number;
+    z_ += f_number;
+    w_ += f_number;
+    return *this;
+}
+
+Vector4f operator+(const Vector4f &rhs, const float f_number){
+    Vector4f sum = rhs;
+    sum += f_number;
+    return sum;
+}
+
+Vector4f& Vector4f::operator-=(const Vector4f &rhs){
+    x_ -= rhs.x_;
+    y_ -= rhs.y_;
+    z_ -= rhs.z_;
+    w_ -= rhs.w_;
+    return *this;
+}
+
+Vector4f operator-(const Vector4f &lhs, const Vector4f &rhs){
+    Vector4f sum = lhs;
+    sum -= rhs;
+    return sum;
+}
+
+Vector4f& Vector4f::operator-=(const float f_number){
+    x_ -= f_number;
+    y_ -= f_number;
+    z_ -= f_number;
+    w_ -= f_number;
+    return *this;
+}
+
+Vector4f operator-(const Vector4f &rhs, const float f_number){
+    Vector4f sum = rhs;
+    sum -= f_number;
+    return sum;
+}
+
+bool operator==(const Vector4f &rhs, const Vector4f &lhs){
+    return Abs(rhs.x_ - lhs.x_) < FLOAT_ERROR &&
+                Abs(rhs.y_ - lhs.y_) < FLOAT_ERROR &&
+                    Abs(rhs.z_ - lhs.z_) < FLOAT_ERROR &&
+                        Abs(rhs.w_ - lhs.w_) < FLOAT_ERROR;
+}
+
+bool operator!=(const Vector4f &rhs, const Vector4f &lhs){
+    return !(rhs == lhs);
+}
+
+float Vector4f::Norm() const{
+    return Sqrt(x_*x_+ y_*y_+ z_*z_+ w_*w_);
+}
+
+void Vector4f::Normalized(){
+   float rnorm = Rsqrt(x_*x_+y_*y_+z_*z_+w_*w_);
+   x_ *= rnorm;
+   y_ *= rnorm;
+   z_ *= rnorm;
+   w_ *= rnorm;
+}
 
 }

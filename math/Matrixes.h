@@ -21,7 +21,17 @@ public:
     Matrix3x3f(float e00, float e01, float e02,
                     float e10, float e11, float e12,
                         float e20, float e21, float e22);
-};
+
+    Matrix3x3f(const Matrix3x3f&) = default;
+    Matrix3x3f(Matrix3x3f&&) = default;
+    Matrix3x3f& operator=(const Matrix3x3f&) = default;
+    Matrix3x3f& operator=(Matrix3x3f&&) = default;
+    ~Matrix3x3f() = default;
+
+    Matrix3x3f Transpose() const;
+    void       Transposed();
+    float      Det() const;
+}__attribute__((aligned(16)));
 
 }
 #endif
