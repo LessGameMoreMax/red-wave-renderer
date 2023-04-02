@@ -176,4 +176,83 @@ void Vector4f::Normalized(){
    w_ *= rnorm;
 }
 
+Vector3i::Vector3i(int32_t x, int32_t y, int32_t z):
+    x_(x),y_(y),z_(z){}
+
+Vector3i& Vector3i::operator+=(const Vector3i &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ += rhs.x_;
+    y_ += rhs.y_;
+    z_ += rhs.z_;
+#endif
+    return *this;
+}
+
+Vector3i operator+(const Vector3i &lhs, const Vector3i &rhs){
+    Vector3i sum = lhs;
+    sum += rhs;
+    return sum;
+}
+
+Vector3i& Vector3i::operator+=(const int32_t i_number){
+#ifdef OPTIMIZE
+#else
+    x_ += i_number;
+    y_ += i_number;
+    z_ += i_number;
+#endif
+    return *this;
+}
+
+Vector3i operator+(const Vector3i &lhs, const int32_t i_number){
+    Vector3i sum = lhs;
+    sum += i_number;
+    return sum;
+}
+
+Vector3i& Vector3i::operator-=(const Vector3i &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ -= rhs.x_;
+    y_ -= rhs.y_;
+    z_ -= rhs.z_;
+#endif
+    return *this;
+}
+
+Vector3i operator-(const Vector3i &lhs, const Vector3i &rhs){
+    Vector3i sum = lhs;
+    sum -= rhs;
+    return sum;
+}
+
+Vector3i& Vector3i::operator-=(const int32_t i_number){
+#ifdef OPTIMIZE
+#else
+    x_ -= i_number;
+    y_ -= i_number;
+    z_ -= i_number;
+#endif
+    return *this;
+}
+
+Vector3i operator-(const Vector3i &lhs, const int32_t i_number){
+    Vector3i sum = lhs;
+    sum -= i_number;
+    return sum;
+}
+
+bool operator==(const Vector3i &lhs, const Vector3i &rhs){
+    return lhs.x_ == rhs.x_ && lhs.y_ == rhs.y_ && lhs.z_ == rhs.z_;
+}
+
+bool operator!=(const Vector3i &lhs, const Vector3i &rhs){
+    return !(lhs == rhs);
+}
+
+float Vector3i::Norm() const{
+    return Sqrt(x_ * x_ + y_ * y_ + z_ * z_);
+}
+
 }

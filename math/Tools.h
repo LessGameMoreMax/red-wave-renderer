@@ -4,6 +4,8 @@
 #include <assert.h>
 #endif
 
+#include "Vectors.h"
+#include "Matrixes.h"
 #include <xmmintrin.h>
 namespace sablin{
 
@@ -40,6 +42,16 @@ void Swap(float &a, float &b){
     a = b;
     b = temp;
 }
+
+inline
+void Swap(int32_t &a, int32_t &b){
+    int32_t temp = a;
+    a = b;
+    b = temp;
+}
+
+Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
+Vector3i LUPDecomposition3x3f(Matrix3x3f&);
 
 }
 #endif

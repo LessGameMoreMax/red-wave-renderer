@@ -30,6 +30,8 @@ public:
 
     Matrix3x3f Transpose() const;
     void       Transposed();
+    Matrix3x3f Inverse() const;
+    void       Inversed();
     float      Det() const;
 }__attribute__((aligned(16)));
 

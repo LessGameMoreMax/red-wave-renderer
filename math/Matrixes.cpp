@@ -28,4 +28,52 @@ float Matrix3x3f::Det() const{
                 -s_[2]*s_[4]*s_[6]-s_[1]*s_[3]*s_[8]-s_[5]*s_[7]*s_[0];
 }
 
+Matrix3x3f Matrix3x3f::Inverse() const{
+    Matrix3x3f A(*this);
+    Vector3i pi = LUPDecomposition3x3f(A);
+    Matrix3x3f L{
+        1.0f,   0.0f,   0.0f,
+        A.e10_, 1.0f,   0.0f,
+        A.e20_, A.e21_, 1.0f
+    };
+    Matrix3x3f U{
+        A.e00_, A.e01_, A.e02_,
+        0.0f,   A.e11_, A.e12_,
+        0.0f,   0.0f,   A.e22_
+    };
+    Vector3f b0{1.0f, 0.0f, 0.0f};
+    Vector3f b1{0.0f, 1.0f, 0.0f};
+    Vector3f b2{0.0f, 0.0f, 1.0f};
+    b0 = LUPSolve3f(L, U, pi, b0);
+    b1 = LUPSolve3f(L, U, pi, b1);
+    b2 = LUPSolve3f(L, U, pi, b2);
+    return Matrix3x3f{b0.x_, b1.x_, b2.x_,
+                      b0.y_, b1.y_, b2.y_,
+                      b0.z_, b1.z_, b2.z_};
+}
+
+void Matrix3x3f::Inversed(){
+    Matrix3x3f A(*this);
+    Vector3i pi = LUPDecomposition3x3f(A);
+    Matrix3x3f L{
+        1.0f,   0.0f,   0.0f,
+        A.e10_, 1.0f,   0.0f,
+        A.e20_, A.e21_, 1.0f
+    };
+    Matrix3x3f U{
+        A.e00_, A.e01_, A.e02_,
+        0.0f,   A.e11_, A.e12_,
+        0.0f,   0.0f,   A.e22_
+    };
+    Vector3f b0{1.0f, 0.0f, 0.0f};
+    Vector3f b1{0.0f, 1.0f, 0.0f};
+    Vector3f b2{0.0f, 0.0f, 1.0f};
+    b0 = LUPSolve3f(L, U, pi, b0);
+    b1 = LUPSolve3f(L, U, pi, b1);
+    b2 = LUPSolve3f(L, U, pi, b2);
+    e00_ = b0.x_; e01_ = b1.x_; e02_ = b2.x_; 
+    e10_ = b0.y_; e11_ = b1.y_; e12_ = b2.y_; 
+    e20_ = b0.z_; e21_ = b1.z_; e22_ = b2.z_; 
+}
+
 }

@@ -1,14 +1,20 @@
 #ifndef VECTORS_H
 #define VECTORS_H
+#include <cstdint>
 namespace sablin{
 
 class Vector3f{
 public:
-    float x_ = 0.0f;
-    float y_ = 0.0f;
-    float z_ = 0.0f;
+    union{
+        struct{
+            float x_ = 0.0f;
+            float y_ = 0.0f;
+            float z_ = 0.0f;
+        };
+        float s_[3];
+    };
 public:
-    explicit Vector3f() = default;
+    explicit Vector3f(): x_(0.0f), y_(0.0f), z_(0.0f){}
     explicit Vector3f(float x, float y, float z);
     Vector3f(const Vector3f&) = default;
     Vector3f(Vector3f&&) = default;
@@ -34,12 +40,17 @@ bool     operator!=(const Vector3f&, const Vector3f&);
 
 class Vector4f{
 public:
-    float x_ = 0.0f;
-    float y_ = 0.0f;
-    float z_ = 0.0f;
-    float w_ = 0.0f;
+    union{
+        struct{
+            float x_ = 0.0f;
+            float y_ = 0.0f;
+            float z_ = 0.0f;
+            float w_ = 0.0f;
+        };
+        float s_[4];
+    };
 
-    explicit Vector4f() = default;
+    explicit Vector4f(): x_(0.0f), y_(0.0f), z_(0.0f), w_(0.0f){}
     explicit Vector4f(float x, float y, float z, float w);
     Vector4f(const Vector4f&) = default;
     Vector4f(Vector4f&&) = default;
@@ -62,6 +73,40 @@ Vector4f operator+(const Vector4f&, const float);
 Vector4f operator-(const Vector4f&, const float);
 bool     operator==(const Vector4f&, const Vector4f&);
 bool     operator!=(const Vector4f&, const Vector4f&);
+
+class Vector3i{
+public:
+    union{
+        struct{
+            int32_t x_ = 0;
+            int32_t y_ = 0;
+            int32_t z_ = 0;
+        };
+        int32_t s_[3];
+    };
+public:
+    explicit Vector3i(): x_(0.0f), y_(0.0f), z_(0.0f){}
+    explicit Vector3i(int32_t x, int32_t y, int32_t z);
+    Vector3i(const Vector3i&) = default;
+    Vector3i(Vector3i&&) = default;
+    Vector3i& operator=(const Vector3i&) = default;
+    Vector3i& operator=(Vector3i&&) = default;
+    ~Vector3i() = default;
+
+    Vector3i& operator+=(const Vector3i&);
+    Vector3i& operator+=(const int32_t);
+    Vector3i& operator-=(const Vector3i&);
+    Vector3i& operator-=(const int32_t);
+
+    float Norm() const;
+}__attribute__((aligned(16))); // explicitly align for 16 byte
+
+Vector3i operator+(const Vector3i&, const Vector3i&);
+Vector3i operator-(const Vector3i&, const Vector3i&);
+Vector3i operator+(const Vector3i&, const int32_t);
+Vector3i operator-(const Vector3i&, const int32_t);
+bool     operator==(const Vector3i&, const Vector3i&);
+bool     operator!=(const Vector3i&, const Vector3i&);
 
 }
 #endif
