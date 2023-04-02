@@ -28,12 +28,28 @@ public:
     Matrix3x3f& operator=(Matrix3x3f&&) = default;
     ~Matrix3x3f() = default;
 
+    Matrix3x3f& operator+=(const Matrix3x3f&);
+    Matrix3x3f& operator+=(const float);
+    Matrix3x3f& operator-=(const Matrix3x3f&);
+    Matrix3x3f& operator-=(const float);
+    Matrix3x3f& operator*=(const float);
+    Matrix3x3f& operator/=(const float);
+
     Matrix3x3f Transpose() const;
     void       Transposed();
     Matrix3x3f Inverse() const;
     void       Inversed();
     float      Det() const;
 }__attribute__((aligned(16)));
+
+Matrix3x3f operator+(const Matrix3x3f&, const Matrix3x3f&);
+Matrix3x3f operator-(const Matrix3x3f&, const Matrix3x3f&);
+Matrix3x3f operator+(const Matrix3x3f&, const float);
+Matrix3x3f operator-(const Matrix3x3f&, const float);
+Matrix3x3f operator*(const Matrix3x3f&, const float);
+Matrix3x3f operator/(const Matrix3x3f&, const float);
+bool       operator==(const Matrix3x3f&, const Matrix3x3f&);
+bool       operator!=(const Matrix3x3f&, const Matrix3x3f&);
 
 class Matrix4x4f{
 public:
@@ -64,12 +80,28 @@ public:
     Matrix4x4f& operator=(Matrix4x4f&&) = default;
     ~Matrix4x4f() = default;
 
+    Matrix4x4f& operator+=(const Matrix4x4f&);
+    Matrix4x4f& operator+=(const float);
+    Matrix4x4f& operator-=(const Matrix4x4f&);
+    Matrix4x4f& operator-=(const float);
+    Matrix4x4f& operator*=(const float);
+    Matrix4x4f& operator/=(const float);
+
     Matrix4x4f Transpose() const;
     void       Transposed();
     Matrix4x4f Inverse() const;
     void       Inversed();
     float      Det() const;
 }__attribute__((aligned(16)));
+
+Matrix4x4f operator+(const Matrix4x4f&, const Matrix4x4f&);
+Matrix4x4f operator-(const Matrix4x4f&, const Matrix4x4f&);
+Matrix4x4f operator+(const Matrix4x4f&, const float);
+Matrix4x4f operator-(const Matrix4x4f&, const float);
+Matrix4x4f operator*(const Matrix4x4f&, const float);
+Matrix4x4f operator/(const Matrix4x4f&, const float);
+bool       operator==(const Matrix4x4f&, const Matrix4x4f&);
+bool       operator!=(const Matrix4x4f&, const Matrix4x4f&);
 
 }
 #endif

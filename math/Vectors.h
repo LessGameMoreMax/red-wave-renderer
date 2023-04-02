@@ -26,6 +26,8 @@ public:
     Vector3f& operator+=(const float);
     Vector3f& operator-=(const Vector3f&);
     Vector3f& operator-=(const float);
+    Vector3f& operator*=(const float);
+    Vector3f& operator/=(const float);
 
     float Norm() const;
     void Normalized();
@@ -35,6 +37,8 @@ Vector3f operator+(const Vector3f&, const Vector3f&);
 Vector3f operator-(const Vector3f&, const Vector3f&);
 Vector3f operator+(const Vector3f&, const float);
 Vector3f operator-(const Vector3f&, const float);
+Vector3f operator*(const Vector3f&, const float);
+Vector3f operator/(const Vector3f&, const float);
 bool     operator==(const Vector3f&, const Vector3f&);
 bool     operator!=(const Vector3f&, const Vector3f&);
 
@@ -62,6 +66,8 @@ public:
     Vector4f& operator+=(const float);
     Vector4f& operator-=(const Vector4f&);
     Vector4f& operator-=(const float);
+    Vector4f& operator*=(const float);
+    Vector4f& operator/=(const float);
 
     float Norm() const;
     void Normalized();
@@ -71,6 +77,8 @@ Vector4f operator+(const Vector4f&, const Vector4f&);
 Vector4f operator-(const Vector4f&, const Vector4f&);
 Vector4f operator+(const Vector4f&, const float);
 Vector4f operator-(const Vector4f&, const float);
+Vector4f operator*(const Vector4f&, const float);
+Vector4f operator/(const Vector4f&, const float);
 bool     operator==(const Vector4f&, const Vector4f&);
 bool     operator!=(const Vector4f&, const Vector4f&);
 

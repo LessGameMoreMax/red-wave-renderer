@@ -73,6 +73,38 @@ Vector3f operator-(const Vector3f &lhs, const float f_number){
     return sum;
 }
 
+Vector3f& Vector3f::operator*=(const float f_number){
+    x_ *= f_number;
+    y_ *= f_number;
+    z_ *= f_number;
+    return *this;
+}
+
+Vector3f operator*(const Vector3f &lhs, const float f_number){
+    Vector3f multi = lhs;
+    multi *= f_number;
+    return multi;
+}
+
+Vector3f& Vector3f::operator/=(const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    x_ /= f_number;
+    y_ /= f_number;
+    z_ /= f_number;
+    return *this;
+}
+
+Vector3f operator/(const Vector3f &lhs, const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    Vector3f div = lhs;
+    div /= f_number;
+    return div;
+}
+
 bool operator==(const Vector3f &lhs, const Vector3f &rhs){
     return Abs(lhs.x_ - rhs.x_) < FLOAT_ERROR &&
                 Abs(lhs.y_ - rhs.y_) < FLOAT_ERROR &&
@@ -151,6 +183,40 @@ Vector4f operator-(const Vector4f &rhs, const float f_number){
     Vector4f sum = rhs;
     sum -= f_number;
     return sum;
+}
+
+Vector4f& Vector4f::operator*=(const float f_number){
+    x_ *= f_number;
+    y_ *= f_number;
+    z_ *= f_number;
+    w_ *= f_number;
+    return *this;
+}
+
+Vector4f operator*(const Vector4f &lhs, const float f_number){
+    Vector4f multi = lhs;
+    multi *= f_number;
+    return multi;
+}
+
+Vector4f& Vector4f::operator/=(const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    x_ /= f_number;
+    y_ /= f_number;
+    z_ /= f_number;
+    w_ /= f_number;
+    return *this;
+}
+
+Vector4f operator/(const Vector4f &lhs, const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    Vector4f div = lhs;
+    div /= f_number;
+    return div;
 }
 
 bool operator==(const Vector4f &rhs, const Vector4f &lhs){
