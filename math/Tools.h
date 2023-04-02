@@ -52,6 +52,8 @@ void Swap(int32_t &a, int32_t &b){
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
 Vector3i LUPDecomposition3x3f(Matrix3x3f&);
+Vector4f LUPSolve4f(const Matrix4x4f&, const Matrix4x4f&, const Vector4i&, const Vector4f&);
+Vector4i LUPDecomposition4x4f(Matrix4x4f&);
 
 }
 #endif

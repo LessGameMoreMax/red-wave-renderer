@@ -255,4 +255,76 @@ float Vector3i::Norm() const{
     return Sqrt(x_ * x_ + y_ * y_ + z_ * z_);
 }
 
+Vector4i::Vector4i(int32_t x, int32_t y, int32_t z, int32_t w):
+    x_(x),y_(y),z_(z),w_(w){}
+
+Vector4i& Vector4i::operator+=(const Vector4i &rhs){
+    x_ += rhs.x_;
+    y_ += rhs.y_;
+    z_ += rhs.z_;
+    w_ += rhs.w_;
+    return *this;
+}
+
+Vector4i operator+(const Vector4i &lhs, const Vector4i &rhs){
+    Vector4i sum = lhs;
+    sum += rhs;
+    return sum;
+}
+
+Vector4i& Vector4i::operator+=(const int32_t i_number){
+    x_ += i_number;
+    y_ += i_number;
+    z_ += i_number;
+    w_ += i_number;
+    return *this;
+}
+
+Vector4i operator+(const Vector4i &rhs, const int32_t i_number){
+    Vector4i sum = rhs;
+    sum += i_number;
+    return sum;
+}
+
+Vector4i& Vector4i::operator-=(const Vector4i &rhs){
+    x_ -= rhs.x_;
+    y_ -= rhs.y_;
+    z_ -= rhs.z_;
+    w_ -= rhs.w_;
+    return *this;
+}
+
+Vector4i operator-(const Vector4i &lhs, const Vector4i &rhs){
+    Vector4i sum = lhs;
+    sum -= rhs;
+    return sum;
+}
+
+Vector4i& Vector4i::operator-=(const int32_t i_number){
+    x_ -= i_number;
+    y_ -= i_number;
+    z_ -= i_number;
+    w_ -= i_number;
+    return *this;
+}
+
+Vector4i operator-(const Vector4i &rhs, const int32_t i_number){
+    Vector4i sum = rhs;
+    sum -= i_number;
+    return sum;
+}
+
+bool operator==(const Vector4i &rhs, const Vector4i &lhs){
+    return rhs.x_ == lhs.x_ && rhs.y_ == lhs.y_ &&
+                rhs.z_ == lhs.z_ && rhs.w_ == lhs.w_;
+}
+
+bool operator!=(const Vector4i &rhs, const Vector4i &lhs){
+    return !(rhs == lhs);
+}
+
+float Vector4i::Norm() const{
+    return Sqrt(x_*x_+ y_*y_+ z_*z_+ w_*w_);
+}
+
 }

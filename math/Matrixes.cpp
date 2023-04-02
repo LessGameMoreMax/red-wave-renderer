@@ -76,4 +76,97 @@ void Matrix3x3f::Inversed(){
     e20_ = b0.z_; e21_ = b1.z_; e22_ = b2.z_; 
 }
 
+Matrix4x4f::Matrix4x4f(float e00, float e01, float e02, float e03,
+                float e10, float e11, float e12, float e13,
+                    float e20, float e21, float e22, float e23,
+                        float e30, float e31, float e32, float e33):
+            e00_(e00),e01_(e01),e02_(e02),e03_(e03),
+                e10_(e10),e11_(e11),e12_(e12),e13_(e13),
+                    e20_(e20),e21_(e21),e22_(e22),e23_(e23),
+                        e30_(e30),e31_(e31),e32_(e32),e33_(e33){}
+
+Matrix4x4f Matrix4x4f::Transpose() const{
+    Matrix4x4f result(*this);
+    Swap(result.m_[0][1], result.m_[1][0]);
+    Swap(result.m_[0][2], result.m_[2][0]);
+    Swap(result.m_[0][3], result.m_[3][0]);
+    Swap(result.m_[1][2], result.m_[2][1]);
+    Swap(result.m_[1][3], result.m_[3][1]);
+    Swap(result.m_[2][3], result.m_[3][2]);
+    return result;
+}
+
+void Matrix4x4f::Transposed(){
+    Swap(m_[0][1], m_[1][0]);
+    Swap(m_[0][2], m_[2][0]);
+    Swap(m_[0][3], m_[3][0]);
+    Swap(m_[1][2], m_[2][1]);
+    Swap(m_[1][3], m_[3][1]);
+    Swap(m_[2][3], m_[3][2]);
+}
+
+float Matrix4x4f::Det() const{
+    Matrix4x4f A(*this);
+    LUPDecomposition4x4f(A);
+    return -(A.e00_ * A.e11_ * A.e22_ * A.e33_);
+}
+
+Matrix4x4f Matrix4x4f::Inverse() const{
+    Matrix4x4f A(*this);
+    Vector4i pi = LUPDecomposition4x4f(A);
+    Matrix4x4f L{
+        1.0f,   0.0f,   0.0f,   0.0f,
+        A.e10_, 1.0f,   0.0f,   0.0f,
+        A.e20_, A.e21_, 1.0f,   0.0f,
+        A.e30_, A.e31_, A.e32_, 1.0f
+    };
+    Matrix4x4f U{
+        A.e00_, A.e01_, A.e02_, A.e03_,
+        0.0f,   A.e11_, A.e12_, A.e13_,
+        0.0f,   0.0f,   A.e22_, A.e23_,
+        0.0f,   0.0f,   0.0f,   A.e33_
+    };
+    Vector4f b0{1.0f, 0.0f, 0.0f, 0.0f};
+    Vector4f b1{0.0f, 1.0f, 0.0f, 0.0f};
+    Vector4f b2{0.0f, 0.0f, 1.0f, 0.0f};
+    Vector4f b3{0.0f, 0.0f, 0.0f, 1.0f};
+    b0 = LUPSolve4f(L, U, pi, b0);
+    b1 = LUPSolve4f(L, U, pi, b1);
+    b2 = LUPSolve4f(L, U, pi, b2);
+    b3 = LUPSolve4f(L, U, pi, b3);
+    return Matrix4x4f{b0.x_, b1.x_, b2.x_, b3.x_,
+                      b0.y_, b1.y_, b2.y_, b3.y_,
+                      b0.z_, b1.z_, b2.z_, b3.z_,
+                      b0.w_, b1.w_, b2.w_, b3.w_};
+}
+
+void Matrix4x4f::Inversed(){
+    Matrix4x4f A(*this);
+    Vector4i pi = LUPDecomposition4x4f(A);
+    Matrix4x4f L{
+        1.0f,   0.0f,   0.0f,   0.0f,
+        A.e10_, 1.0f,   0.0f,   0.0f,
+        A.e20_, A.e21_, 1.0f,   0.0f,
+        A.e30_, A.e31_, A.e32_, 1.0f
+    };
+    Matrix4x4f U{
+        A.e00_, A.e01_, A.e02_, A.e03_,
+        0.0f,   A.e11_, A.e12_, A.e13_,
+        0.0f,   0.0f,   A.e22_, A.e23_,
+        0.0f,   0.0f,   0.0f,   A.e33_
+    };
+    Vector4f b0{1.0f, 0.0f, 0.0f, 0.0f};
+    Vector4f b1{0.0f, 1.0f, 0.0f, 0.0f};
+    Vector4f b2{0.0f, 0.0f, 1.0f, 0.0f};
+    Vector4f b3{0.0f, 0.0f, 0.0f, 1.0f};
+    b0 = LUPSolve4f(L, U, pi, b0);
+    b1 = LUPSolve4f(L, U, pi, b1);
+    b2 = LUPSolve4f(L, U, pi, b2);
+    b3 = LUPSolve4f(L, U, pi, b3);
+    e00_ = b0.x_; e01_ = b1.x_; e02_ = b2.x_; e03_ = b3.x_;
+    e10_ = b0.y_; e11_ = b1.y_; e12_ = b2.y_; e13_ = b3.y_;
+    e20_ = b0.z_; e21_ = b1.z_; e22_ = b2.z_; e23_ = b3.z_;
+    e30_ = b0.w_; e31_ = b1.w_; e32_ = b2.w_; e33_ = b3.w_;
+}
+
 }

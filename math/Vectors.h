@@ -108,5 +108,40 @@ Vector3i operator-(const Vector3i&, const int32_t);
 bool     operator==(const Vector3i&, const Vector3i&);
 bool     operator!=(const Vector3i&, const Vector3i&);
 
+class Vector4i{
+public:
+    union{
+        struct{
+            int32_t x_ = 0;
+            int32_t y_ = 0;
+            int32_t z_ = 0;
+            int32_t w_ = 0;
+        };
+        int32_t s_[4];
+    };
+
+    explicit Vector4i(): x_(0), y_(0), z_(0), w_(0){}
+    explicit Vector4i(int32_t x, int32_t y, int32_t z, int32_t w);
+    Vector4i(const Vector4i&) = default;
+    Vector4i(Vector4i&&) = default;
+    Vector4i& operator=(const Vector4i&) = default;
+    Vector4i& operator=(Vector4i&&) = default;
+    ~Vector4i() = default;
+
+    Vector4i& operator+=(const Vector4i&);
+    Vector4i& operator+=(const int32_t);
+    Vector4i& operator-=(const Vector4i&);
+    Vector4i& operator-=(const int32_t);
+
+    float Norm() const;
+}__attribute__((aligned(16))); // explicitly align for 16 byte
+
+Vector4i operator+(const Vector4i&, const Vector4i&);
+Vector4i operator-(const Vector4i&, const Vector4i&);
+Vector4i operator+(const Vector4i&, const int32_t);
+Vector4i operator-(const Vector4i&, const int32_t);
+bool     operator==(const Vector4i&, const Vector4i&);
+bool     operator!=(const Vector4i&, const Vector4i&);
+
 }
 #endif
