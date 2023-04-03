@@ -76,6 +76,8 @@ public:
                         float e20, float e21, float e22, float e23,
                             float e30, float e31, float e32, float e33);
 
+    Matrix4x4f(__m128 v0, __m128 v1, __m128 v2, __m128 v3);
+
     Matrix4x4f(const Matrix4x4f&) = default;
     Matrix4x4f(Matrix4x4f&&) = default;
     Matrix4x4f& operator=(const Matrix4x4f&) = default;

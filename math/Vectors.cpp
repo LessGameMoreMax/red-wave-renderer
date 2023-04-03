@@ -129,6 +129,8 @@ void Vector3f::Normalized(){
 Vector4f::Vector4f(float x, float y, float z, float w):
     x_(x),y_(y),z_(z),w_(w){}
 
+Vector4f::Vector4f(__m128 v): v_(v){}
+
 Vector4f& Vector4f::operator+=(const Vector4f &rhs){
     x_ += rhs.x_;
     y_ += rhs.y_;

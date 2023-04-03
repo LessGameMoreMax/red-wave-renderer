@@ -2,6 +2,7 @@
 #include "Tools.h"
 #include <xmmintrin.h>
 namespace sablin{
+
 float DotProduct(const Vector3f &rhs, const Vector3f &lhs){
     return rhs.x_*lhs.x_+rhs.y_*lhs.y_+rhs.z_*lhs.z_;
 }
@@ -58,12 +59,16 @@ Matrix3x3f operator*(const Matrix3x3f &lhs, const Matrix3x3f &rhs){
 }
 
 Vector4f operator*(const Vector4f &vector, const Matrix4x4f &matrix){
-    Vector4f result;
-    result.x_ = vector.x_ * matrix.e00_ + vector.y_ * matrix.e10_ + vector.z_ * matrix.e20_ + vector.w_ * matrix.e30_;
-    result.y_ = vector.x_ * matrix.e01_ + vector.y_ * matrix.e11_ + vector.z_ * matrix.e21_ + vector.w_ * matrix.e31_;
-    result.z_ = vector.x_ * matrix.e02_ + vector.y_ * matrix.e12_ + vector.z_ * matrix.e22_ + vector.w_ * matrix.e32_;
-    result.w_ = vector.x_ * matrix.e03_ + vector.y_ * matrix.e13_ + vector.z_ * matrix.e23_ + vector.w_ * matrix.e33_;
-    return result;
+    __m128 vX = _mm_shuffle_ps(vector.v_, vector.v_, 0x00);
+    __m128 vY = _mm_shuffle_ps(vector.v_, vector.v_, 0x55);
+    __m128 vZ = _mm_shuffle_ps(vector.v_, vector.v_, 0xaa);
+    __m128 vW = _mm_shuffle_ps(vector.v_, vector.v_, 0xff);
+
+    __m128 r = _mm_mul_ps(vX, matrix.v_[0]);
+    r = _mm_add_ps(r, _mm_mul_ps(vY, matrix.v_[1]));
+    r = _mm_add_ps(r, _mm_mul_ps(vZ, matrix.v_[2]));
+    r = _mm_add_ps(r, _mm_mul_ps(vW, matrix.v_[3]));
+    return Vector4f{r};
 }
 
 Vector4f operator*(const Matrix4x4f &matrix, const Vector4f &vector){
@@ -74,56 +79,6 @@ Vector4f operator*(const Matrix4x4f &matrix, const Vector4f &vector){
     result.w_ = matrix.e30_ * vector.x_ + matrix.e31_ * vector.y_ + matrix.e32_ * vector.z_ + matrix.e33_ * vector.w_;
     return result;
 }
-
-// Matrix4x4f operator*(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
-//     Matrix4x4f result;
-//     __m128 m_r_r0 = _mm_load_ps(rhs.m_[0]);
-//     __m128 m_r_r1 = _mm_load_ps(rhs.m_[1]);
-//     __m128 m_r_r2 = _mm_load_ps(rhs.m_[2]);
-//     __m128 m_r_r3 = _mm_load_ps(rhs.m_[3]);
-//
-//     __m128 m_b = _mm_set1_ps(lhs.e00_);
-//     __m128 m_c = _mm_mul_ps(m_r_r0, m_b);
-//     m_b = _mm_set1_ps(lhs.e01_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r1, m_b));
-//     m_b = _mm_set1_ps(lhs.e02_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r2, m_b));
-//     m_b = _mm_set1_ps(lhs.e03_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r3, m_b));
-//     _mm_store_ps(result.m_[0], m_c);
-//
-//     m_b = _mm_set1_ps(lhs.e10_);
-//     m_c = _mm_mul_ps(m_r_r0, m_b);
-//     m_b = _mm_set1_ps(lhs.e11_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r1, m_b));
-//     m_b = _mm_set1_ps(lhs.e12_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r2, m_b));
-//     m_b = _mm_set1_ps(lhs.e13_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r3, m_b));
-//     _mm_store_ps(result.m_[1], m_c);
-//
-//     m_b = _mm_set1_ps(lhs.e20_);
-//     m_c = _mm_mul_ps(m_r_r0, m_b);
-//     m_b = _mm_set1_ps(lhs.e21_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r1, m_b));
-//     m_b = _mm_set1_ps(lhs.e22_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r2, m_b));
-//     m_b = _mm_set1_ps(lhs.e23_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r3, m_b));
-//     _mm_store_ps(result.m_[2], m_c);
-//
-//     m_b = _mm_set1_ps(lhs.e30_);
-//     m_c = _mm_mul_ps(m_r_r0, m_b);
-//     m_b = _mm_set1_ps(lhs.e31_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r1, m_b));
-//     m_b = _mm_set1_ps(lhs.e32_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r2, m_b));
-//     m_b = _mm_set1_ps(lhs.e33_);
-//     m_c = _mm_add_ps(m_c, _mm_mul_ps(m_r_r3, m_b));
-//     _mm_store_ps(result.m_[3], m_c);
-//
-//     return result;
-// }
 
 Matrix4x4f operator*(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
     Matrix4x4f result;
@@ -147,6 +102,9 @@ Matrix4x4f operator*(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
     result.e32_ = lhs.e30_ * rhs.e02_ + lhs.e31_ * rhs.e12_ + lhs.e32_ * rhs.e22_ + lhs.e33_ * rhs.e32_;
     result.e33_ = lhs.e30_ * rhs.e03_ + lhs.e31_ * rhs.e13_ + lhs.e32_ * rhs.e23_ + lhs.e33_ * rhs.e33_;
     return result;
+
+    // return Matrix4x4f{MulVecMat_SSE(lhs.v_[0], rhs), MulVecMat_SSE(lhs.v_[1], rhs),
+    //         MulVecMat_SSE(lhs.v_[2], rhs), MulVecMat_SSE(lhs.v_[3], rhs)};
 }
 
 }

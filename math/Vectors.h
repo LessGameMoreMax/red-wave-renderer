@@ -58,6 +58,7 @@ public:
 
     explicit Vector4f(): x_(0.0f), y_(0.0f), z_(0.0f), w_(0.0f){}
     explicit Vector4f(float x, float y, float z, float w);
+    explicit Vector4f(__m128 v);
     Vector4f(const Vector4f&) = default;
     Vector4f(Vector4f&&) = default;
     Vector4f& operator=(const Vector4f&) = default;

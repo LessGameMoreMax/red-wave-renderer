@@ -174,24 +174,37 @@ Matrix4x4f::Matrix4x4f(float e00, float e01, float e02, float e03,
                     e20_(e20),e21_(e21),e22_(e22),e23_(e23),
                         e30_(e30),e31_(e31),e32_(e32),e33_(e33){}
 
+Matrix4x4f::Matrix4x4f(__m128 v0, __m128 v1, __m128 v2, __m128 v3){
+    v_[0] = v0;
+    v_[1] = v1;
+    v_[2] = v2;
+    v_[3] = v3;
+}
+
 Matrix4x4f Matrix4x4f::Transpose() const{
+    __m128 tmp0 = _mm_shuffle_ps(v_[0], v_[1], 0x44);
+    __m128 tmp2 = _mm_shuffle_ps(v_[0], v_[1], 0xee);
+    __m128 tmp1 = _mm_shuffle_ps(v_[2], v_[3], 0x44);
+    __m128 tmp3 = _mm_shuffle_ps(v_[2], v_[3], 0xee);
+
     Matrix4x4f result(*this);
-    Swap(result.m_[0][1], result.m_[1][0]);
-    Swap(result.m_[0][2], result.m_[2][0]);
-    Swap(result.m_[0][3], result.m_[3][0]);
-    Swap(result.m_[1][2], result.m_[2][1]);
-    Swap(result.m_[1][3], result.m_[3][1]);
-    Swap(result.m_[2][3], result.m_[3][2]);
+    result.v_[0] = _mm_shuffle_ps(tmp0, tmp1, 0x88);
+    result.v_[1] = _mm_shuffle_ps(tmp0, tmp1, 0xdd);
+    result.v_[2] = _mm_shuffle_ps(tmp2, tmp3, 0x88);
+    result.v_[3] = _mm_shuffle_ps(tmp2, tmp3, 0xdd);
     return result;
 }
 
 void Matrix4x4f::Transposed(){
-    Swap(m_[0][1], m_[1][0]);
-    Swap(m_[0][2], m_[2][0]);
-    Swap(m_[0][3], m_[3][0]);
-    Swap(m_[1][2], m_[2][1]);
-    Swap(m_[1][3], m_[3][1]);
-    Swap(m_[2][3], m_[3][2]);
+    __m128 tmp0 = _mm_shuffle_ps(v_[0], v_[1], 0x44);
+    __m128 tmp2 = _mm_shuffle_ps(v_[0], v_[1], 0xee);
+    __m128 tmp1 = _mm_shuffle_ps(v_[2], v_[3], 0x44);
+    __m128 tmp3 = _mm_shuffle_ps(v_[2], v_[3], 0xee);
+
+    v_[0] = _mm_shuffle_ps(tmp0, tmp1, 0x88);
+    v_[1] = _mm_shuffle_ps(tmp0, tmp1, 0xdd);
+    v_[2] = _mm_shuffle_ps(tmp2, tmp3, 0x88);
+    v_[3] = _mm_shuffle_ps(tmp2, tmp3, 0xdd);
 }
 
 float Matrix4x4f::Det() const{
@@ -259,11 +272,8 @@ void Matrix4x4f::Inversed(){
 }
 
 Matrix4x4f& Matrix4x4f::operator+=(const Matrix4x4f &lhs){
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        __m128 m_b = _mm_load_ps(lhs.m_[i]);
-        _mm_store_ps(m_[i], _mm_add_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_add_ps(v_[i], lhs.v_[i]);
     return *this;
 }
 
@@ -275,10 +285,8 @@ Matrix4x4f operator+(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
 
 Matrix4x4f& Matrix4x4f::operator+=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        _mm_store_ps(m_[i], _mm_add_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_add_ps(v_[i], m_b);
     return *this;
 }
 
@@ -289,11 +297,8 @@ Matrix4x4f operator+(const Matrix4x4f &lhs, const float f_number){
 }
 
 Matrix4x4f& Matrix4x4f::operator-=(const Matrix4x4f &rhs){
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        __m128 m_b = _mm_load_ps(rhs.m_[i]);
-        _mm_store_ps(m_[i], _mm_sub_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_sub_ps(v_[i], rhs.v_[i]);
     return *this;
 }
 
@@ -305,10 +310,8 @@ Matrix4x4f operator-(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
 
 Matrix4x4f& Matrix4x4f::operator-=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        _mm_store_ps(m_[i], _mm_sub_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_sub_ps(v_[i], m_b);
     return *this;
 }
 
@@ -320,10 +323,8 @@ Matrix4x4f operator-(const Matrix4x4f &lhs, const float f_number){
 
 Matrix4x4f& Matrix4x4f::operator*=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        _mm_store_ps(m_[i], _mm_mul_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_mul_ps(v_[i], m_b);
     return *this;
 }
 
@@ -338,10 +339,8 @@ Matrix4x4f& Matrix4x4f::operator/=(const float f_number){
     assert(Abs(f_number) > FLOAT_ERROR);
 #endif
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int8_t i = 0;i != 4; ++i){
-        __m128 m_a = _mm_load_ps(m_[i]);
-        _mm_store_ps(m_[i], _mm_div_ps(m_a, m_b));
-    }
+    for(int8_t i = 0;i != 4; ++i)
+        v_[i] = _mm_div_ps(v_[i], m_b);
     return *this;
 }
 
