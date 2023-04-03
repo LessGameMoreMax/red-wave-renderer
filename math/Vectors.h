@@ -1,6 +1,7 @@
 #ifndef VECTORS_H
 #define VECTORS_H
 #include <cstdint>
+#include <xmmintrin.h>
 namespace sablin{
 
 class Vector3f{
@@ -52,6 +53,7 @@ public:
             float w_ = 0.0f;
         };
         float s_[4];
+        __m128 v_;
     };
 
     explicit Vector4f(): x_(0.0f), y_(0.0f), z_(0.0f), w_(0.0f){}

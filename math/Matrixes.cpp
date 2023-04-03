@@ -10,7 +10,7 @@ Matrix3x3f::Matrix3x3f(float e00, float e01, float e02,
                     e20_(e20),e21_(e21),e22_(e22){}
 
 Matrix3x3f& Matrix3x3f::operator+=(const Matrix3x3f &lhs){
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         s_[i] += lhs.s_[i];
     return *this;
 }
@@ -22,7 +22,7 @@ Matrix3x3f operator+(const Matrix3x3f &lhs, const Matrix3x3f &rhs){
 }
 
 Matrix3x3f& Matrix3x3f::operator+=(const float f_number){
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         s_[i] += f_number;
     return *this;
 }
@@ -34,7 +34,7 @@ Matrix3x3f operator+(const Matrix3x3f &lhs, const float f_number){
 }
 
 Matrix3x3f& Matrix3x3f::operator-=(const Matrix3x3f &rhs){
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         s_[i] -= rhs.s_[i];
     return *this;
 }
@@ -46,7 +46,7 @@ Matrix3x3f operator-(const Matrix3x3f &lhs, const Matrix3x3f &rhs){
 }
 
 Matrix3x3f& Matrix3x3f::operator-=(const float f_number){
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         s_[i] -= f_number;
     return *this;
 }
@@ -58,7 +58,7 @@ Matrix3x3f operator-(const Matrix3x3f &lhs, const float f_number){
 }
 
 Matrix3x3f& Matrix3x3f::operator*=(const float f_number){
-    for(int i = 0; i != 9; ++i)
+    for(int8_t i = 0; i != 9; ++i)
         s_[i] *= f_number;
     return *this;
 }
@@ -73,7 +73,7 @@ Matrix3x3f& Matrix3x3f::operator/=(const float f_number){
 #ifdef ASSERT
     assert(Abs(f_number) > FLOAT_ERROR);
 #endif
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         s_[i] /= f_number;
     return *this;
 }
@@ -88,7 +88,7 @@ Matrix3x3f operator/(const Matrix3x3f &lhs, const float f_number){
 }
 
 bool operator==(const Matrix3x3f &lhs, const Matrix3x3f &rhs){
-    for(int i = 0;i != 9; ++i)
+    for(int8_t i = 0;i != 9; ++i)
         if(Abs(lhs.s_[i] - rhs.s_[i]) > FLOAT_ERROR)
             return false;
     return true;
@@ -259,7 +259,7 @@ void Matrix4x4f::Inversed(){
 }
 
 Matrix4x4f& Matrix4x4f::operator+=(const Matrix4x4f &lhs){
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         __m128 m_b = _mm_load_ps(lhs.m_[i]);
         _mm_store_ps(m_[i], _mm_add_ps(m_a, m_b));
@@ -275,7 +275,7 @@ Matrix4x4f operator+(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
 
 Matrix4x4f& Matrix4x4f::operator+=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         _mm_store_ps(m_[i], _mm_add_ps(m_a, m_b));
     }
@@ -289,7 +289,7 @@ Matrix4x4f operator+(const Matrix4x4f &lhs, const float f_number){
 }
 
 Matrix4x4f& Matrix4x4f::operator-=(const Matrix4x4f &rhs){
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         __m128 m_b = _mm_load_ps(rhs.m_[i]);
         _mm_store_ps(m_[i], _mm_sub_ps(m_a, m_b));
@@ -305,7 +305,7 @@ Matrix4x4f operator-(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
 
 Matrix4x4f& Matrix4x4f::operator-=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         _mm_store_ps(m_[i], _mm_sub_ps(m_a, m_b));
     }
@@ -320,7 +320,7 @@ Matrix4x4f operator-(const Matrix4x4f &lhs, const float f_number){
 
 Matrix4x4f& Matrix4x4f::operator*=(const float f_number){
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         _mm_store_ps(m_[i], _mm_mul_ps(m_a, m_b));
     }
@@ -338,7 +338,7 @@ Matrix4x4f& Matrix4x4f::operator/=(const float f_number){
     assert(Abs(f_number) > FLOAT_ERROR);
 #endif
     __m128 m_b = _mm_set1_ps(f_number);
-    for(int i = 0;i != 4; ++i){
+    for(int8_t i = 0;i != 4; ++i){
         __m128 m_a = _mm_load_ps(m_[i]);
         _mm_store_ps(m_[i], _mm_div_ps(m_a, m_b));
     }
@@ -355,7 +355,7 @@ Matrix4x4f operator/(const Matrix4x4f &lhs, const float f_number){
 }
 
 bool operator==(const Matrix4x4f &lhs, const Matrix4x4f &rhs){
-    for(int i = 0;i != 16; ++i)
+    for(int8_t i = 0;i != 16; ++i)
         if(Abs(lhs.s_[i] - rhs.s_[i]) > FLOAT_ERROR)
             return false;
     return true;

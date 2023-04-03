@@ -1,5 +1,6 @@
 #ifndef MATRIXES_H
 #define MATRIXES_H
+#include <xmmintrin.h>
 namespace sablin{
 
 class Matrix3x3f{
@@ -62,6 +63,7 @@ public:
         };
         float m_[4][4];
         float s_[16];
+        __m128 v_[4];
     };
 
     Matrix4x4f():e00_(0.0f),e01_(0.0f),e02_(0.0f),e03_(0.0f),
