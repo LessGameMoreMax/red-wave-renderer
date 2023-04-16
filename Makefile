@@ -1,21 +1,14 @@
-main: Vectors.o Matrixes.o Compute.o main.o Tools.o
-	g++ -o main.out Vectors.o Matrixes.o Compute.o main.o Tools.o
-main.o: main.cpp
-	g++ -Wall -c main.cpp
-Vectors.o: math/Vectors.cpp
-	g++ -Wall -c math/Vectors.cpp
-Matrixes.o: math/Matrixes.cpp
-	g++ -Wall -c math/Matrixes.cpp
-Compute.o: math/Compute.cpp
-	g++ -Wall -c math/Compute.cpp
-Tools.o: math/Tools.cpp
-	g++ -Wall -c math/Tools.cpp
-debug:
-	g++ -Wall -g -c main.cpp
-	g++ -Wall -g -c math/Vectors.cpp
-	g++ -Wall -g -c math/Matrixes.cpp
-	g++ -Wall -g -c math/Compute.cpp
-	g++ -Wall -g -c math/Tools.cpp
-	g++ -o main.out main.o Vectors.o Matrixes.o Compute.o Tools.o
-clean:
-	rm -rf main.out main.o *.o
+OBJ_S = main.o \
+	    math/Compute.o \
+		math/Matrixes.o \
+        math/Tools.o \
+		math/Vectors.o
+
+main : ${OBJ_S}
+	g++ -Wall -o main.out $(OBJ_S) -lSDL2
+
+$(OBJ_S) : $(HEADER_S)
+
+.PHONY : clean
+clean :
+	rm main.out $(OBJ_S)
