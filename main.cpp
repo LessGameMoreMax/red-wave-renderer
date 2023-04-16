@@ -1,14 +1,11 @@
-#include <iostream>
-#include <SDL2/SDL.h>
+#include "src/defs/SOFT_RTR.h"
 
 using namespace std;
+using namespace sablin;
 
 int main(){
-    if(SDL_Init(SDL_INIT_EVERYTHING) == -1){
-        cout << "Fail to initialize" << endl;
-        return 0;
-    }
-    cout << "Succeed to initialize" << endl;
-    SDL_Quit();
+    DisplayConfiguration display_configuration{640, 480};
+    Display::Create(display_configuration);
+    Display::GetSingleton();
     return 0;
 }
