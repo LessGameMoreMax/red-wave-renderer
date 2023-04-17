@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "defs/SOFT_RTR.h"
+#include "src/defs/SOFT_RTR.h"
 
 using namespace std;
 using namespace sablin;
@@ -64,26 +64,26 @@ int main(){
 
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
-    // SDL_Delay(5000);
-    bool quit = false;
-    SDL_Event event;
-    while(!quit){
-        SDL_WaitEvent(&event);
-        switch(event.type){
-            case SDL_KEYDOWN:
-                if(event.key.keysym.sym == SDLK_q){
-                    SDL_Log("Quit");
-                    quit = true;
-                }
-                break;
-            case SDL_QUIT:
-                SDL_Log("Exit");
-                quit = true;
-                break;
-            default:
-                break;
-        }
-    }
+    SDL_Delay(5000);
+    // bool quit = false;
+    // SDL_Event event;
+    // while(!quit){
+    //     SDL_WaitEvent(&event);
+    //     switch(event.type){
+    //         case SDL_KEYDOWN:
+    //             if(event.key.keysym.sym == SDLK_q){
+    //                 SDL_Log("Quit");
+    //                 quit = true;
+    //             }
+    //             break;
+    //         case SDL_QUIT:
+    //             SDL_Log("Exit");
+    //             quit = true;
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyTexture(texture);

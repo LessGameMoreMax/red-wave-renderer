@@ -82,8 +82,10 @@ void Display::Destroy(){
     if(renderer_ != nullptr) SDL_DestroyRenderer(renderer_);
     if(window_ != nullptr) SDL_DestroyWindow(window_);
     SDL_Quit();
-    delete singleton_;
-    singleton_ = nullptr;
+    if(singleton_ != nullptr){
+        singleton_ = nullptr;
+        delete this;
+    }
 }
 
 void Display::FreshChildDisplayConfiguration(const ChildDisplayConfiguration &child_display_configuration){

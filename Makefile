@@ -9,6 +9,9 @@ OBJ_S = main.o \
 main : ${OBJ_S}
 	g++ -Wall -o main.out $(OBJ_S) -lSDL2
 
+debug : ${OBJ_S}
+	g++ -Wall -g -o main.out $(OBJ_S) -lSDL2
+
 $(OBJ_S) : $(HEADER_S)
 
 .PHONY : clean
