@@ -3,7 +3,8 @@ OBJ_S = main.o \
 		src/math/Matrixes.o \
         src/math/Tools.o \
 		src/math/Vectors.o \
-		src/sdl_display/Display.o
+		src/sdl_display/Display.o \
+		src/renderer/Frame.o
 
 main : ${OBJ_S}
 	g++ -Wall -o main.out $(OBJ_S) -lSDL2

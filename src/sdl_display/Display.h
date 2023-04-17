@@ -14,11 +14,8 @@ private:
     SDL_Renderer *renderer_;
     SDL_Texture *texture_;
     
-    void *pixel;
-    int32_t pitch;
-    Display():display_configuration_(),child_display_configuration_(),
-            format_(nullptr), window_(nullptr), renderer_(nullptr),
-            texture_(nullptr), pixel(nullptr), pitch(0){}
+    void *pixel_;
+    int32_t pitch_;
     Display(DisplayConfiguration&);
 
     int32_t Initalize();
@@ -27,6 +24,8 @@ public:
     static Display* Create(DisplayConfiguration&);
     static Display* GetSingleton();
     ~Display();
+    void FreshChildDisplayConfiguration(const ChildDisplayConfiguration&);
+    void Draw();
 };
 
 }

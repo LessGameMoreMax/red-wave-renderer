@@ -2,6 +2,7 @@
 #define DISPLAYSTRUCTS_H
 #include <cstdint>
 #include "../math/Vectors.h"
+#include "../renderer/Frame.h"
 namespace sablin{
 
 struct DisplayConfiguration{
@@ -10,11 +11,9 @@ struct DisplayConfiguration{
 };
 
 struct ChildDisplayConfiguration{
-    int16_t   left_up_x = 0;
-    int16_t   left_up_y = 0;
-    int16_t   right_down_x = 0;
-    int16_t   right_down_y = 0;
-    Vector4f  *colors = 0;
+    int16_t start_x = 0;
+    int16_t start_y = 0;
+    Frame *frame = nullptr;
 };
 }
 #endif
