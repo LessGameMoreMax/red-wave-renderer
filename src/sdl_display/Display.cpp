@@ -19,9 +19,7 @@ Display::Display(DisplayConfiguration &display_configuration):
    }
 }
 
-Display::~Display(){
-    Destroy();
-}
+Display::~Display(){}
 
 Display* Display::Create(DisplayConfiguration &display_configuration){
     if(Display::singleton_ != nullptr) return Display::singleton_;
@@ -74,6 +72,11 @@ int32_t Display::Initalize(){
     }
 
     format_ = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+    
+    if(format_ == nullptr){
+        std::cout << "SDL_AllocFormat Fail" << std::endl;
+        return -1;
+    }
     return 0;
 }
 

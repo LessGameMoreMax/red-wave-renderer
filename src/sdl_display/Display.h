@@ -19,9 +19,9 @@ private:
     Display(DisplayConfiguration&);
 
     int32_t Initalize();
-    void    Destroy();
 public:
     static Display* Create(DisplayConfiguration&);
+    void    Destroy();
     static Display* GetSingleton();
     ~Display();
     void FreshChildDisplayConfiguration(const ChildDisplayConfiguration&);

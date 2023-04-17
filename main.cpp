@@ -38,18 +38,20 @@ int main(){
     Display::Create(display_configuration);
 
     Frame frame;
-    for(int i = 0;i != 9000; ++i){
-        if(i < 3000)
-            frame.FreshColors(ShadeRed());
-        else if(i < 6000)
-            frame.FreshColors(ShadeGreen());
-        else
-            frame.FreshColors(ShadeBlue());
+    for(int i = 0;i != 900; ++i){
+        // if(i < 300)
+        //     frame.FreshColors(ShadeRed());
+        // else if(i < 600)
+        //     frame.FreshColors(ShadeGreen());
+        // else
+        //     frame.FreshColors(ShadeBlue());
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0, &frame});
         Display::GetSingleton()->Draw();
         // SDL_Delay(33);
     }
+
+    Display::GetSingleton()->Destroy();
     return 0;
 }
 
