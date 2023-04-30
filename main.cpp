@@ -1,5 +1,6 @@
 #include "src/defs/SOFT_RTR.h"
 #include <SDL2/SDL.h>
+#include <time.h>
 
 using namespace std;
 using namespace sablin;
@@ -11,9 +12,6 @@ Vector4f* ShadeBlue();
 int main(){
     // bool quit = false;
     // SDL_Event event;
-
-    // DisplayConfiguration display_configuration{640, 480};
-    // Display::Create(display_configuration);
 
     // while(!quit){
     //     SDL_WaitEvent(&event);
@@ -33,25 +31,31 @@ int main(){
     //     }
     // }
 
-
+    int frame_number = 900;
     DisplayConfiguration display_configuration{640, 480};
     Display::Create(display_configuration);
 
     Frame frame;
-    for(int i = 0;i != 900; ++i){
-        // if(i < 300)
-        //     frame.FreshColors(ShadeRed());
-        // else if(i < 600)
-        //     frame.FreshColors(ShadeGreen());
-        // else
-        //     frame.FreshColors(ShadeBlue());
+
+    struct timespec time_start = {0, 0};
+    struct timespec time_end = {0, 0};
+    clock_gettime(CLOCK_REALTIME, &time_start);
+    for(int i = 0;i != frame_number; ++i){
+        if(i < frame_number / 3)
+             frame.FreshColors(ShadeRed());
+        else if(i < frame_number / 3 * 2)
+             frame.FreshColors(ShadeGreen());
+        else
+             frame.FreshColors(ShadeBlue());
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0, &frame});
         Display::GetSingleton()->Draw();
-        // SDL_Delay(33);
     }
+    clock_gettime(CLOCK_REALTIME, &time_end);
 
     Display::GetSingleton()->Destroy();
+
+    printf("Frame Rate is : %ld\n", frame_number / (time_end.tv_sec - time_start.tv_sec));
     return 0;
 }
 
