@@ -26,6 +26,7 @@ public:
     ~Display();
     void FreshChildDisplayConfiguration(const ChildDisplayConfiguration&);
     void Draw();
+    void MultiThreadDraw(const int16_t);
 };
 
 }

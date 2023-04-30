@@ -49,6 +49,7 @@ int main(){
              frame.FreshColors(ShadeBlue());
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0, &frame});
+        // Display::GetSingleton()->MultiThreadDraw(8);
         Display::GetSingleton()->Draw();
     }
     clock_gettime(CLOCK_REALTIME, &time_end);

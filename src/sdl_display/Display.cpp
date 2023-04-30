@@ -1,6 +1,8 @@
 #include "Display.h"
 #include <cassert>
 #include <iostream>
+#include <thread>
+#include <vector>
 namespace sablin{
 
 extern int16_t DISPLAY_HORIZONTAL_SIZE;
@@ -108,6 +110,64 @@ void Display::Draw(){
         ((uint32_t*)pixel_)[start_index + i / ch_hori_size * hori_size + i % ch_hori_size] =
             SDL_MapRGBA(format_, temp.x_, temp.y_, temp.z_, 0xff);
     }
+    SDL_UnlockTexture(texture_);
+    
+    SDL_RenderCopy(renderer_, texture_, NULL, NULL);
+    SDL_RenderPresent(renderer_);
+}
+
+void FillPixels(const int32_t start_index, const int16_t pi_hori_size, const int16_t pi_vert_size,
+            const Vector4f *colors, const int32_t color_index, const int16_t hori_size, const int32_t ch_hori_size,
+            void* pixel, SDL_PixelFormat *format){
+    int32_t total_size = pi_hori_size * pi_vert_size;
+    for(int32_t i = 0;i != total_size; ++i){
+        Vector4f temp = colors[color_index + i / pi_hori_size * ch_hori_size + i % pi_hori_size] * 255.0f;
+        ((uint32_t*)pixel)[start_index + i / pi_hori_size * hori_size + i % pi_hori_size] =
+            SDL_MapRGBA(format, temp.x_, temp.y_, temp.z_, 0xff);
+    }
+    return;
+}
+
+void Display::MultiThreadDraw(const int16_t thread_number){
+    if(thread_number % 2 != 0){
+        std::cout << "Multi thread number must be even!\n" << std::endl;
+        std::cout << "Now Running single thread!\n" << std::endl;
+        return Draw();
+    }
+
+    int8_t half_thread_number = thread_number / 2;
+    int16_t hori_size = display_configuration_.display_horizontal_size;
+    int32_t ch_hori_size = child_display_configuration_.frame->get_horizontal_size_();
+    int32_t ch_vert_size = child_display_configuration_.frame->get_vertical_size_();
+    int32_t pi_hori_size = ch_hori_size / half_thread_number;
+    int32_t pi_vert_size = ch_vert_size / 2;
+    Vector4f *colors = child_display_configuration_.frame->get_colors_();
+    
+    std::thread *threads[thread_number];
+
+    SDL_LockTexture(texture_, nullptr, &pixel_, &pitch_);
+    int32_t start_index = child_display_configuration_.start_y * hori_size + child_display_configuration_.start_x;
+    //TODO: Implement a thread pool!
+    for(int8_t i = 0;i != thread_number; ++i){
+        threads[i] = new std::thread(FillPixels, 
+                 start_index + i % half_thread_number * pi_hori_size + i / half_thread_number * pi_vert_size * hori_size,
+                 pi_hori_size, pi_vert_size, colors, i%half_thread_number*pi_hori_size + i/half_thread_number*pi_vert_size*ch_hori_size,
+                 hori_size, ch_hori_size, pixel_, format_);
+    }
+    for(int8_t i = 0;i != thread_number; ++i){
+        if(threads[i]->joinable()){
+            threads[i]->join();
+            delete threads[i];
+        }
+        else{
+            std::cout << "Not Joinable!" << std::endl;;
+            for(int8_t j = i;j != thread_number; ++j)
+                delete threads[j];
+            Destroy();
+            exit(-1);
+        }
+    }
+
     SDL_UnlockTexture(texture_);
     
     SDL_RenderCopy(renderer_, texture_, NULL, NULL);
