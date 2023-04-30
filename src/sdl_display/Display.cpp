@@ -104,7 +104,7 @@ void Display::Draw(){
     Vector4f *colors = child_display_configuration_.frame->get_colors_();
     int32_t start_index = child_display_configuration_.start_y * hori_size + child_display_configuration_.start_x;
     SDL_LockTexture(texture_, nullptr, &pixel_, &pitch_);
-    //TODO: accelerated by muti-thread
+    //TODO: accelerated by muti-thread : NO USE!
     for(int32_t i = 0;i != ch_hori_size * ch_vert_size; ++i){
         Vector4f temp = colors[i] * 255.0f;
         ((uint32_t*)pixel_)[start_index + i / ch_hori_size * hori_size + i % ch_hori_size] =
