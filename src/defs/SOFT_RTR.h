@@ -15,4 +15,11 @@
 
 //renderer
 #include "../renderer/Frame.h"
+
+//driver
+#include "../driver/Loader.h"
+
+//data
+#include "../data/Model.h"
+
 #endif

@@ -4,7 +4,9 @@ OBJ_S = main.o \
         src/math/Tools.o \
 		src/math/Vectors.o \
 		src/sdl_display/Display.o \
-		src/renderer/Frame.o
+		src/renderer/Frame.o \
+		src/driver/Loader.o \
+		src/data/Model.o
 
 main : ${OBJ_S}
 	g++ -Wall -o main.out $(OBJ_S) -lSDL2
