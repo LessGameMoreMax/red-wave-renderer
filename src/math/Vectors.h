@@ -154,5 +154,40 @@ Vector4i operator-(const Vector4i&, const int32_t);
 bool     operator==(const Vector4i&, const Vector4i&);
 bool     operator!=(const Vector4i&, const Vector4i&);
 
+class Vector2f{
+public:
+    union{
+        struct{
+            float x_ = 0.0f;
+            float y_ = 0.0f;
+        };
+        float s_[2];
+    };
+public:
+    explicit Vector2f(): x_(0.0f), y_(0.0f){}
+    explicit Vector2f(float x, float y);
+    Vector2f(const Vector2f&) = default;
+    Vector2f(Vector2f&&) = default;
+    Vector2f& operator=(const Vector2f&) = default;
+    Vector2f& operator=(Vector2f&&) = default;
+    ~Vector2f() = default;
+
+    Vector2f& operator+=(const Vector2f&);
+    Vector2f& operator+=(const float);
+    Vector2f& operator-=(const Vector2f&);
+    Vector2f& operator-=(const float);
+    Vector2f& operator*=(const float);
+    Vector2f& operator/=(const float);
+
+}__attribute__((aligned(16))); // explicitly align for 16 byte
+
+Vector2f operator+(const Vector2f&, const Vector2f&);
+Vector2f operator-(const Vector2f&, const Vector2f&);
+Vector2f operator+(const Vector2f&, const float);
+Vector2f operator-(const Vector2f&, const float);
+Vector2f operator*(const Vector2f&, const float);
+Vector2f operator/(const Vector2f&, const float);
+bool     operator==(const Vector2f&, const Vector2f&);
+bool     operator!=(const Vector2f&, const Vector2f&);
 }
 #endif

@@ -395,4 +395,105 @@ float Vector4i::Norm() const{
     return Sqrt(x_*x_+ y_*y_+ z_*z_+ w_*w_);
 }
 
+Vector2f::Vector2f(float x, float y):
+    x_(x),y_(y){}
+
+Vector2f& Vector2f::operator+=(const Vector2f &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ += rhs.x_;
+    y_ += rhs.y_;
+#endif
+    return *this;
+}
+
+Vector2f operator+(const Vector2f &lhs, const Vector2f &rhs){
+    Vector2f sum = lhs;
+    sum += rhs;
+    return sum;
+}
+
+Vector2f& Vector2f::operator+=(const float f_number){
+#ifdef OPTIMIZE
+#else
+    x_ += f_number;
+    y_ += f_number;
+#endif
+    return *this;
+}
+
+Vector2f operator+(const Vector2f &lhs, const float f_number){
+    Vector2f sum = lhs;
+    sum += f_number;
+    return sum;
+}
+
+Vector2f& Vector2f::operator-=(const Vector2f &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ -= rhs.x_;
+    y_ -= rhs.y_;
+#endif
+    return *this;
+}
+
+Vector2f operator-(const Vector2f &lhs, const Vector2f &rhs){
+    Vector2f sum = lhs;
+    sum -= rhs;
+    return sum;
+}
+
+Vector2f& Vector2f::operator-=(const float f_number){
+#ifdef OPTIMIZE
+#else
+    x_ -= f_number;
+    y_ -= f_number;
+#endif
+    return *this;
+}
+
+Vector2f operator-(const Vector2f &lhs, const float f_number){
+    Vector2f sum = lhs;
+    sum -= f_number;
+    return sum;
+}
+
+Vector2f& Vector2f::operator*=(const float f_number){
+    x_ *= f_number;
+    y_ *= f_number;
+    return *this;
+}
+
+Vector2f operator*(const Vector2f &lhs, const float f_number){
+    Vector2f multi = lhs;
+    multi *= f_number;
+    return multi;
+}
+
+Vector2f& Vector2f::operator/=(const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    x_ /= f_number;
+    y_ /= f_number;
+    return *this;
+}
+
+Vector2f operator/(const Vector2f &lhs, const float f_number){
+#ifdef ASSERT
+    assert(Abs(f_number) > FLOAT_ERROR);
+#endif
+    Vector2f div = lhs;
+    div /= f_number;
+    return div;
+}
+
+bool operator==(const Vector2f &lhs, const Vector2f &rhs){
+    return Abs(lhs.x_ - rhs.x_) < FLOAT_ERROR &&
+                Abs(lhs.y_ - rhs.y_) < FLOAT_ERROR;
+}
+
+bool operator!=(const Vector2f &lhs, const Vector2f &rhs){
+    return !(lhs == rhs);
+}
 }

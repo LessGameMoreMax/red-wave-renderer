@@ -3,6 +3,8 @@
 namespace sablin{
 
 class Model{
+private:
+    Mesh *mesh_;
 
 };
 }
