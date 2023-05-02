@@ -8,6 +8,7 @@ namespace sablin{
 class Loader{
 private:
     static std::string GetParentPath(const std::string&);
+    static int8_t JudgeTriangleNumber(const std::string&);
 public:
     Loader() = delete;
     Loader(const Loader&) = delete;
