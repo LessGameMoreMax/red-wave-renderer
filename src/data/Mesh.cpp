@@ -3,59 +3,59 @@
 namespace sablin{
 
 Mesh::Mesh(const int64_t triangle_pool_size,
-        const int64_t coord_pool_size):
+        const int64_t coord_pool_size, const int64_t uv_coord_pool_size):
         triangle_pool_size_(triangle_pool_size),
-        coord_pool_size_(coord_pool_size){
+        coord_pool_size_(coord_pool_size),
+        uv_coord_pool_size_(uv_coord_pool_size){
     triangle_pool_ = new Triangle[triangle_pool_size];
-    if(triangle_pool_ == nullptr){
-        std::cout << "Fail to create triangle pool!" << std::endl;
-        exit(-1);
-    }
+    if(triangle_pool_ == nullptr)
+        PrintError("triangle pool");
 
     h_edge_pool_ = new HEdge[triangle_pool_size * 3];
-    if(h_edge_pool_ == nullptr){
-        std::cout << "Fail to create h_edge pool!" << std::endl;
-        delete[] triangle_pool_;
-        exit(-1);
-    }
+    if(h_edge_pool_ == nullptr)
+        PrintError("h_edge pool");
 
     coord_pool_ = new Vector4f[coord_pool_size];
-    if(coord_pool_ == nullptr){
-        std::cout << "Fail to create coord pool!" << std::endl;
-        delete[] h_edge_pool_;
-        delete[] triangle_pool_;
-        exit(-1);
-    }
+    if(coord_pool_ == nullptr)
+        PrintError("coord pool");
 
     vertex_normal_pool_ = new Vector4f[coord_pool_size];
-    if(vertex_normal_pool_ == nullptr){
-        std::cout << "Fail to create vertex_normal pool!" << std::endl;
-        delete[] coord_pool_;
-        delete[] h_edge_pool_;
-        delete[] triangle_pool_;
-        exit(-1);
-    }
+    if(vertex_normal_pool_ == nullptr)
+        PrintError("vertex normal pool");
 
     vertex_normal_map_ = new Vertex*[coord_pool_size];
-    if(vertex_normal_map_ == nullptr){
-        std::cout << "Fail to create vertex_normal map!" << std::endl;
-        delete[] vertex_normal_pool_;
-        delete[] coord_pool_;
-        delete[] h_edge_pool_;
-        delete[] triangle_pool_;
-        exit(-1);
-    }    
+    if(vertex_normal_map_ == nullptr)
+        PrintError("vertex normal map");
+    
+    uv_coord_pool_ = new Vector2f[uv_coord_pool_size];
+    if(uv_coord_pool_ == nullptr)
+        PrintError("uv coord pool");
 }
 
 Mesh::~Mesh(){
-    delete[] vertex_normal_map_;
-    delete[] vertex_normal_pool_;
-    delete[] coord_pool_;
-    delete[] h_edge_pool_;
-    delete[] triangle_pool_;
+    Destroy();
 }
 
+void Mesh::Destroy(){
+    if(uv_coord_pool_ != nullptr)
+        delete[] uv_coord_pool_;
+    if(vertex_normal_map_ != nullptr)
+        delete[] vertex_normal_map_;
+    if(vertex_normal_pool_ != nullptr)
+        delete[] vertex_normal_pool_;
+    if(coord_pool_ != nullptr)
+        delete[] coord_pool_;
+    if(h_edge_pool_ != nullptr)
+        delete[] h_edge_pool_;
+    if(triangle_pool_ != nullptr)
+        delete[] triangle_pool_;
+}
 
+void Mesh::PrintError(const char *error){
+    std::cout << "Fail to create " << error << std::endl;
+    Destroy();
+    exit(-1);
+}
 
 
 }

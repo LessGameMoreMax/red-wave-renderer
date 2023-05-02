@@ -23,8 +23,8 @@ public:
     Material(float, float, float, float, float, int8_t,
             sablin::Vector3f&, sablin::Vector3f&, sablin::Vector3f&,
             sablin::Vector3f&, Texture*, Texture*);
-    Material(const Material&) = delete;
-    Material& operator=(const Material&) = delete;
+    Material(const Material&) = default;
+    Material& operator=(const Material&) = default;
     ~Material();
 };
 }

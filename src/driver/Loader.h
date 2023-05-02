@@ -2,9 +2,12 @@
 #define LOADER_H
 #include "../data/Model.h"
 #include <string>
+#include <map>
 namespace sablin{
 
 class Loader{
+private:
+    static std::string GetParentPath(const std::string&);
 public:
     Loader() = delete;
     Loader(const Loader&) = delete;
@@ -12,7 +15,8 @@ public:
     ~Loader() = default;
 public:
     static Model* LoadOBJModel(const std::string&);
-    static Material* LoadMTLMaterial(const std::string&);
+    static std::map<std::string, Material*>
+        LoadMTLMaterial(const std::string&);
     static Texture* LoadPNGTexture(const std::string&);
 };
 }
