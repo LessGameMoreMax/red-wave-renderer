@@ -34,10 +34,7 @@ public:
     sablin::HEdge* getp_h_edge_() const;
 
     static std::vector<Vertex*>
-        VertexesOfTriangle(const Triangle&);
-    
-
-     
+        VertexesOfTriangle(Triangle&);
 };
 }
 #endif

@@ -37,9 +37,14 @@ HEdge* Triangle::getp_h_edge_() const{
     return h_edge_;
 }
 
-
-
-
+std::vector<Vertex*>
+Triangle::VertexesOfTriangle(Triangle &triangle){
+    std::vector<Vertex*> result;
+    result.push_back(triangle.getp_vertex_a_());
+    result.push_back(triangle.getp_vertex_b_());
+    result.push_back(triangle.getp_vertex_c_());
+    return result;
+}
 
 
 }

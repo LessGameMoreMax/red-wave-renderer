@@ -12,6 +12,8 @@ public:
     ~Loader() = default;
 public:
     static Model* LoadOBJModel(const std::string&);
+    static Material* LoadMTLMaterial(const std::string&);
+    static Texture* LoadPNGTexture(const std::string&);
 };
 }
 #endif

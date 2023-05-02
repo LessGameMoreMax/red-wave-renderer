@@ -1,3 +1,6 @@
 1. Implement a thread pool to organize threads.
 Reference points:
     Display.cpp line:150
+2. Implement a PNG texture loader.
+Reference points:
+    Loader.cpp
