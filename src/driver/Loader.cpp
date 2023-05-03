@@ -10,22 +10,6 @@ std::string Loader::GetParentPath(const std::string &file_path){
     return file_path.substr(0, last_slash + 1);
 }
 
-int8_t Loader::JudgeTriangleNumber(const std::string &points){
-    int8_t point_number = 0;
-    std::istringstream string_stream(points);
-    std::string temp;
-    while(!string_stream.eof()){
-        string_stream >> temp;
-        ++point_number;
-    }
-    if(point_number == 3)
-        return 1;
-    if(point_number == 4)
-        return 2;
-    std::cout << "f point number beyond 4!" << std::endl;
-    exit(-1);
-}
-
 Vector2f* Loader::ParseUVCoord(const std::string& heft, Mesh *mesh){
     int16_t first_slash = heft.find('/');
     int16_t second_slash = heft.rfind('/');
@@ -60,9 +44,10 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
         exit(-1);
     }
 
-    std::string line;
     while(!obj_first_file.eof()){
+        std::string line;
         getline(obj_first_file, line);
+        if(line.empty()) continue;
         std::istringstream line_stream(line);
         std::string promt;
         line_stream >> promt;
@@ -78,16 +63,24 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
         }else if(promt == "vt"){
             ++uv_coord_pool_size;
         }else if(promt == "f"){
-            int8_t point_number = 0;
-            std::string temp;
+            int16_t point_number = 0;
             while(!line_stream.eof()){
+                std::string temp;
                 line_stream >> temp;
-                ++point_number;
+                if(!temp.empty())
+                    ++point_number;
             }
-            if(point_number == 3)
+            if(point_number == 3){
                 ++triangle_pool_size;
-            if(point_number == 4)
+            }else if(point_number == 4){
                 triangle_pool_size += 2;
+            }else{
+                std::cout << "point nubmer is: "
+                    << point_number << std::endl;
+                std::cout << "triangles number: "
+                    << triangle_pool_size << std::endl;
+                exit(-1);
+            }
         }
     }
 
@@ -102,6 +95,11 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
     ModelPool::GetSingleton()->ManageModel(model);
 
 //Second Pass: Fill the mesh.
+    Material *current_material = nullptr;
+    int64_t triangle_pool_index = 0;
+    int64_t coord_pool_index = 0;
+    int64_t uv_coord_pool_index = 0;
+
     std::ifstream obj_second_file;
     obj_second_file.open(file_path, std::ios::in);
     if(!obj_second_file.is_open()){
@@ -110,12 +108,10 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
         exit(-1);
     }
 
-    Material *current_material = nullptr;
-    int64_t triangle_pool_index = 0;
-    int64_t coord_pool_index = 0;
-    int64_t uv_coord_pool_index = 0;
     while(!obj_second_file.eof()){
+        std::string line;
         getline(obj_second_file, line);
+        if(line.empty()) continue;
         std::istringstream line_stream(line);
         std::string promt;
         line_stream >> promt;
@@ -148,11 +144,12 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
             current_material =
                 string_material_map.find(material_name)->second;
         }else if(promt == "f"){
-            std::string heft;
             std::vector<std::string> hefts;
             while(!line_stream.eof()){
+                std::string heft;
                 line_stream >> heft;
-                hefts.push_back(heft);
+                if(!heft.empty())
+                    hefts.push_back(heft);
             }
             
             std::vector<std::vector<std::string>> triangles;
@@ -235,9 +232,10 @@ Loader::LoadMTLMaterial(const std::string &file_path){
         exit(-1);
     }
     
-    std::string line;
     while(!material_first_file.eof()){
+        std::string line;
         getline(material_first_file, line);
+        if(line.empty()) continue;
         std::istringstream line_stream(line);
         std::string promt;
         line_stream >> promt;
@@ -261,7 +259,9 @@ Loader::LoadMTLMaterial(const std::string &file_path){
 
     int16_t material_index = -1;
     while(!material_second_file.eof()){
+        std::string line;
         getline(material_second_file, line);
+        if(line.empty()) continue;
         std::istringstream line_stream(line);
         std::string promt;
         line_stream >> promt;
