@@ -26,8 +26,16 @@ int8_t Loader::JudgeTriangleNumber(const std::string &points){
     exit(-1);
 }
 
-void* ParseVertex(const std::string& heft, int8_t index, Mesh *mesh){
+Vector2f* Loader::ParseUVCoord(const std::string& heft, Mesh *mesh){
+    if(index == 0){
+        return &mesh->coord_pool_[coord_pool_index];
+    }else{
 
+    }
+}
+
+int64_t Loader::ParseVertexCoord(const std::string &heft){
+    return std::stoi(heft.substr(0, heft.find('/'))) - 1;
 }
 
 Model* Loader::LoadOBJModel(const std::string &file_path){
@@ -134,19 +142,6 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
             current_material =
                 string_material_map.find(material_name)->second;
         }else if(promt == "f"){
-            // std::string temp;
-            // std::istringstream count_stream(line);
-            // count_stream >> temp;
-            // int8_t point_number = 0;
-            // while(!count_stream.eof()){
-            //     count_stream >> temp;
-            //     ++point_number;
-            // }
-            //
-            // if(point_number == 4){
-            //
-            // }
-
             std::string heft;
             std::vector<std::string> hefts;
             while(!line_stream.eof()){
@@ -167,24 +162,43 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
             for(auto iter = triangles.begin();
                     iter != triangles.end(); ++iter){
                 
+                int64_t one_coord = ParseVertexCoord((*iter)[0]);
                 Vertex one{
-                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
-                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
-
-                Vertex two{
-                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
-                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
-
-                Vertex three{
-                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
-                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
-
+                    &mesh->coord_pool_[one_coord],
+                    ParseUVCoord((*iter)[0], mesh)};
+                if(mesh->vertex_normal_map_[one_coord] == nullptr){
+                    mesh->vertex_normal_map_[one_coord]
+                        = &mesh->triangle_pool_[triangle_pool_index]
+                            .vertex_a_;
+                }
                 mesh->triangle_pool_[triangle_pool_index]
                     .vertex_a_ = one;
+
+
+                int64_t two_coord = ParseVertexCoord((*iter)[1]);
+                Vertex two{
+                    &mesh->coord_pool_[two_coord],
+                    ParseUVCoord((*iter)[1], mesh)};
+                if(mesh->vertex_normal_map_[two_coord] == nullptr){
+                    mesh->vertex_normal_map_[two_coord]
+                        = &mesh->triangle_pool_[triangle_pool_index]
+                            .vertex_b_;
+                }
                 mesh->triangle_pool_[triangle_pool_index]
                     .vertex_b_ = two;
+
+                int64_t three_coord = ParseVertexCoord((*iter)[2]);
+                Vertex three{
+                    &mesh->coord_pool_[three_coord],
+                    ParseUVCoord((*iter)[2], mesh)};
+                if(mesh->vertex_normal_map_[three_coord] == nullptr){
+                    mesh->vertex_normal_map_[three_coord]
+                        = &mesh->triangle_pool_[triangle_pool_index]
+                            .vertex_c_;
+                }
                 mesh->triangle_pool_[triangle_pool_index]
                     .vertex_c_ = three;
+
                 mesh->triangle_pool_[triangle_pool_index]
                     .material_ = current_material;
                 mesh->triangle_pool_[triangle_pool_index]
@@ -194,8 +208,8 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
             }
         }
     }
-    
 
+    obj_second_file.close();
 }
 
 std::map<std::string, Material*>
