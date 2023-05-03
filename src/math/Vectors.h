@@ -31,7 +31,7 @@ public:
     Vector3f& operator/=(const float);
 
     float Norm() const;
-    void Normalized();
+    Vector3f Normalized();
 }__attribute__((aligned(16))); // explicitly align for 16 byte
 
 Vector3f operator+(const Vector3f&, const Vector3f&);
@@ -73,7 +73,7 @@ public:
     Vector4f& operator/=(const float);
 
     float Norm() const;
-    void Normalized();
+    Vector4f Normalized();
 }__attribute__((aligned(16))); // explicitly align for 16 byte
 
 Vector4f operator+(const Vector4f&, const Vector4f&);

@@ -27,11 +27,17 @@ int8_t Loader::JudgeTriangleNumber(const std::string &points){
 }
 
 Vector2f* Loader::ParseUVCoord(const std::string& heft, Mesh *mesh){
-    if(index == 0){
-        return &mesh->coord_pool_[coord_pool_index];
-    }else{
-
-    }
+    int16_t first_slash = heft.find('/');
+    int16_t second_slash = heft.rfind('/');
+    if(first_slash + 1 == second_slash ||
+            first_slash == heft.size()-1 ||
+                first_slash == -1)
+        return nullptr;
+    if(first_slash == second_slash)
+        return &mesh->uv_coord_pool_[
+            std::stoi(heft.substr(first_slash + 1, heft.size()))-1];
+    return &mesh->uv_coord_pool_[
+        std::stoi(heft.substr(first_slash + 1, second_slash))-1];
 }
 
 int64_t Loader::ParseVertexCoord(const std::string &heft){
@@ -210,6 +216,10 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
     }
 
     obj_second_file.close();
+    
+    //Build HEdge Structure
+    //Calculate Vertex Normal
+    return model;
 }
 
 std::map<std::string, Material*>

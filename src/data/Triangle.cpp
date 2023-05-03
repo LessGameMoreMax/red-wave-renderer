@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include "../math/Compute.h"
 namespace sablin{
 Triangle::Triangle():vertex_a_(),vertex_b_(),
         vertex_c_(), material_(nullptr), normal_(),
@@ -16,6 +17,14 @@ Triangle::VertexesOfTriangle(Triangle &triangle){
     result.push_back(&triangle.vertex_b_);
     result.push_back(&triangle.vertex_c_);
     return result;
+}
+
+Vector4f
+Triangle::CalculateTriangleNormal(const Triangle &triangle){
+    Vector4f result = CrossProduct(
+        (triangle.vertex_b_.get_local_coord_() - triangle.vertex_a_.get_local_coord_()),
+        (triangle.vertex_c_.get_local_coord_() - triangle.vertex_a_.get_local_coord_()));
+    return result.Normalized();    
 }
 
 

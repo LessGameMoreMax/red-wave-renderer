@@ -119,11 +119,12 @@ float Vector3f::Norm() const{
     return Sqrt(x_ * x_ + y_ * y_ + z_ * z_);
 }
 
-void Vector3f::Normalized(){
+Vector3f Vector3f::Normalized(){
     float rnorm = Rsqrt(x_ * x_ + y_ * y_ + z_ * z_);
     x_ *= rnorm;
     y_ *= rnorm;
     z_ *= rnorm;
+    return *this;
 }
 
 Vector4f::Vector4f(float x, float y, float z, float w):
@@ -236,12 +237,13 @@ float Vector4f::Norm() const{
     return Sqrt(x_*x_+ y_*y_+ z_*z_+ w_*w_);
 }
 
-void Vector4f::Normalized(){
+Vector4f Vector4f::Normalized(){
    float rnorm = Rsqrt(x_*x_+y_*y_+z_*z_+w_*w_);
    x_ *= rnorm;
    y_ *= rnorm;
    z_ *= rnorm;
    w_ *= rnorm;
+   return *this;
 }
 
 Vector3i::Vector3i(int32_t x, int32_t y, int32_t z):
