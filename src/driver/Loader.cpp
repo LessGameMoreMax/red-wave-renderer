@@ -1,4 +1,5 @@
 #include "Loader.h"
+#include "../data/ModelPool.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -23,6 +24,10 @@ int8_t Loader::JudgeTriangleNumber(const std::string &points){
         return 2;
     std::cout << "f point number beyond 4!" << std::endl;
     exit(-1);
+}
+
+void* ParseVertex(const std::string& heft, int8_t index, Mesh *mesh){
+
 }
 
 Model* Loader::LoadOBJModel(const std::string &file_path){
@@ -59,16 +64,136 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
         }else if(promt == "vt"){
             ++uv_coord_pool_size;
         }else if(promt == "f"){
-            std::string points;
-            line_stream >> points;
-            triangle_pool_size += Loader::JudgeTriangleNumber(points); 
+            int8_t point_number = 0;
+            std::string temp;
+            while(!line_stream.eof()){
+                line_stream >> temp;
+                ++point_number;
+            }
+            if(point_number == 3)
+                ++triangle_pool_size;
+            if(point_number == 4)
+                triangle_pool_size += 2;
         }
     }
 
     obj_first_file.close();
 
-//Second Pass:
+//TODO: Multi Tread Need Lock!
+//Create model and join the model pool
+    Mesh *mesh = new Mesh(triangle_pool_size,
+                          coord_pool_size,
+                          uv_coord_pool_size);
+    Model *model = new Model(material_pool, mesh);
+    ModelPool::GetSingleton()->ManageModel(model);
 
+//Second Pass: Fill the mesh.
+    std::ifstream obj_second_file;
+    obj_second_file.open(file_path, std::ios::in);
+    if(!obj_second_file.is_open()){
+        std::cout << "Fail to open second obj file: " <<
+            file_path << std::endl;
+        exit(-1);
+    }
+
+    Material *current_material = nullptr;
+    int64_t triangle_pool_index = 0;
+    int64_t coord_pool_index = 0;
+    int64_t uv_coord_pool_index = 0;
+    while(!obj_second_file.eof()){
+        getline(obj_second_file, line);
+        std::istringstream line_stream(line);
+        std::string promt;
+        line_stream >> promt;
+        if(promt == "v"){
+            std::string heft;
+            line_stream >> heft;
+            mesh->coord_pool_[coord_pool_index]
+                .x_ = std::stof(heft);
+            line_stream >> heft;
+            mesh->coord_pool_[coord_pool_index]
+                .y_ = std::stof(heft);
+            line_stream >> heft;
+            mesh->coord_pool_[coord_pool_index]
+                .z_ = std::stof(heft);
+            mesh->coord_pool_[coord_pool_index]
+                .w_ = 1.0f;
+            ++coord_pool_index;
+        }else if(promt == "vt"){
+            std::string heft;
+            line_stream >> heft;
+            mesh->uv_coord_pool_[uv_coord_pool_index]
+                .x_ = std::stof(heft);
+            line_stream >> heft;
+            mesh->uv_coord_pool_[uv_coord_pool_index]
+                .y_ = std::stof(heft);
+            ++uv_coord_pool_index;
+        }else if(promt == "usemtl"){
+            std::string material_name;
+            line_stream >> material_name;
+            current_material =
+                string_material_map.find(material_name)->second;
+        }else if(promt == "f"){
+            // std::string temp;
+            // std::istringstream count_stream(line);
+            // count_stream >> temp;
+            // int8_t point_number = 0;
+            // while(!count_stream.eof()){
+            //     count_stream >> temp;
+            //     ++point_number;
+            // }
+            //
+            // if(point_number == 4){
+            //
+            // }
+
+            std::string heft;
+            std::vector<std::string> hefts;
+            while(!line_stream.eof()){
+                line_stream >> heft;
+                hefts.push_back(heft);
+            }
+            
+            std::vector<std::vector<std::string>> triangles;
+            if(hefts.size() == 4){
+                triangles.push_back(std::vector<std::string>{
+                            hefts[0], hefts[1], hefts[3]});
+                triangles.push_back(std::vector<std::string>{
+                            hefts[1], hefts[2], hefts[3]});
+            }else{
+                triangles.push_back(hefts);
+            }
+            
+            for(auto iter = triangles.begin();
+                    iter != triangles.end(); ++iter){
+                
+                Vertex one{
+                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
+                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
+
+                Vertex two{
+                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
+                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
+
+                Vertex three{
+                    (Vector4f*)ParseVertex((*iter)[0], 0, mesh),
+                    (Vector2f*)ParseVertex((*iter)[0], 1, mesh)};
+
+                mesh->triangle_pool_[triangle_pool_index]
+                    .vertex_a_ = one;
+                mesh->triangle_pool_[triangle_pool_index]
+                    .vertex_b_ = two;
+                mesh->triangle_pool_[triangle_pool_index]
+                    .vertex_c_ = three;
+                mesh->triangle_pool_[triangle_pool_index]
+                    .material_ = current_material;
+                mesh->triangle_pool_[triangle_pool_index]
+                    .normal_ = Triangle::CalculateTriangleNormal(
+                            mesh->triangle_pool_[triangle_pool_index]);
+                ++triangle_pool_index;
+            }
+        }
+    }
     
 
 }

@@ -9,6 +9,7 @@ class Loader{
 private:
     static std::string GetParentPath(const std::string&);
     static int8_t JudgeTriangleNumber(const std::string&);
+    static void* ParseVertex(const std::string&, int8_t, Mesh*);
 public:
     Loader() = delete;
     Loader(const Loader&) = delete;

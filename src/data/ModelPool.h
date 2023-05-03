@@ -17,6 +17,8 @@ public:
     void Destroy();
 
     void ManageModel(Model*);
+    Model* GetModel(int16_t) const;
+    int16_t ModelPoolSize() const;
 };
 }
 #endif

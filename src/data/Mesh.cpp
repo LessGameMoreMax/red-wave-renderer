@@ -27,6 +27,10 @@ Mesh::Mesh(const int64_t triangle_pool_size,
     if(vertex_normal_map_ == nullptr)
         PrintError("vertex normal map");
     
+    if(uv_coord_pool_size == 0){
+        uv_coord_pool_ = nullptr;
+        return;
+    }
     uv_coord_pool_ = new Vector2f[uv_coord_pool_size];
     if(uv_coord_pool_ == nullptr)
         PrintError("uv coord pool");
