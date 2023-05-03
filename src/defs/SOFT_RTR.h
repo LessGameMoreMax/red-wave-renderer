@@ -21,5 +21,12 @@
 
 //data
 #include "../data/Model.h"
+#include "../data/ModelPool.h"
+#include "../data/HEdge.h"
+#include "../data/Material.h"
+#include "../data/Mesh.h"
+#include "../data/Texture.h"
+#include "../data/Triangle.h"
+#include "../data/Vertex.h"
 
 #endif
