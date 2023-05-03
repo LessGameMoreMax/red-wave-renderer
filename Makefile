@@ -6,7 +6,13 @@ OBJ_S = main.o \
 		src/sdl_display/Display.o \
 		src/renderer/Frame.o \
 		src/driver/Loader.o \
-		src/data/Model.o
+		src/data/Model.o \
+		src/data/Material.o \
+		src/data/Mesh.o \
+		src/data/ModelPool.o \
+		src/data/Texture.o \
+		src/data/Triangle.o \
+		src/data/Vertex.o
 
 main : ${OBJ_S}
 	g++ -Wall -o main.out $(OBJ_S) -lSDL2
