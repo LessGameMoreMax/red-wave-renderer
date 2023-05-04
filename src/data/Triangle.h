@@ -23,6 +23,10 @@ public:
         VertexesOfTriangle(Triangle&);
 
     static Vector4f CalculateTriangleNormal(const Triangle&);
+
+    static float CalculateTriangleArea(const Triangle&);
+
+    Vertex* GetVertexOfTriangle(const Vector4f&);
 };
 }
 #endif

@@ -1,5 +1,6 @@
 #include "Vertex.h"
 #include "Triangle.h"
+#include <iostream>
 namespace sablin{
 Vertex::Vertex():local_coord_(nullptr),uv_coord_(nullptr),
         normal_(), h_edge_(nullptr){}
@@ -56,5 +57,29 @@ Vertex::OtherVertexOfVertex(const Vertex &vertex){
 bool Vertex::IsSameCoord(const Vertex &a, const Vertex &b){
     return a.local_coord_ == b.local_coord_;
 }
+
+Vector4f Vertex::CalculateVertexNormal(const Vertex &vertex){
+    std::vector<Triangle*> triangles = Vertex::TrianglesOfVertex(vertex);
+    float total_area = 0.0f;
+    std::vector<float> areas;
+    for(auto iter = triangles.begin(); iter != triangles.end(); ++iter){
+        float area = Triangle::CalculateTriangleArea(**iter);
+        Vertex *v = (*iter)->GetVertexOfTriangle(vertex.get_local_coord_());
+        Triangle *t = Vertex::OppositeTriangle(*v);
+        if(t->normal_ == (*iter)->normal_)
+            area += Triangle::CalculateTriangleArea(*t);
+        areas.push_back(area);
+        total_area += area;
+    }
+    Vector4f result;
+    for(int64_t i = 0;i != triangles.size(); ++i)
+        result += triangles[i]->normal_ * areas[i] / total_area;
+    return result.Normalized();
+}
+
+Triangle* Vertex::OppositeTriangle(const Vertex &vertex){
+    return vertex.h_edge_->next->next->pair->left;
+}
+
 
 }

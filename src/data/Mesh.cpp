@@ -26,6 +26,8 @@ Mesh::Mesh(const int64_t triangle_pool_size,
     vertex_normal_map_ = new Vertex*[coord_pool_size];
     if(vertex_normal_map_ == nullptr)
         PrintError("vertex normal map");
+    for(int64_t i = 0;i != coord_pool_size_; ++i)
+        vertex_normal_map_[i] = nullptr;
     
     if(uv_coord_pool_size == 0){
         uv_coord_pool_ = nullptr;

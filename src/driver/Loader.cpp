@@ -72,6 +72,8 @@ void Loader::BuildHEdge(Mesh *mesh){
         t->vertex_c_.h_edge_ =
             &mesh->h_edge_pool_[3 * i + 1];
     }
+
+
 //Second Pass: Fill all h_edge pair.
     for(int64_t i = 0;i != mesh->triangle_pool_size_ - 1; ++i){
         Triangle *t = mesh->triangle_pool_ + i;
@@ -99,6 +101,7 @@ void Loader::BuildHEdge(Mesh *mesh){
             h_edge->pair = t->vertex_a_.h_edge_;
         }
     }
+
 }
 
 Model* Loader::LoadOBJModel(const std::string &file_path){
@@ -286,9 +289,21 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
     }
 
     obj_second_file.close();
-    
-    BuildHEdge(mesh);
-    //Calculate Vertex Normal
+
+    Loader::BuildHEdge(mesh);
+
+//Calculate Vertex Normal
+    for(int64_t i = 0;i != mesh->coord_pool_size_; ++i){
+        Vertex *vertex = mesh->vertex_normal_map_[i];
+        Vector4f vertex_normal = Vertex::CalculateVertexNormal(
+                *vertex);
+        mesh->vertex_normal_pool_[i] = vertex_normal;
+        std::vector<Vertex*> vertexs = 
+                Vertex::OtherVertexOfVertex(*vertex);
+        for(auto iter = vertexs.begin();iter != vertexs.end(); ++iter)
+            (*iter)->normal_ = &mesh->vertex_normal_pool_[i];
+    }
+
     return model;
 }
 

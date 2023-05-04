@@ -27,5 +27,18 @@ Triangle::CalculateTriangleNormal(const Triangle &triangle){
     return result.Normalized();    
 }
 
+float
+Triangle::CalculateTriangleArea(const Triangle &triangle){
+    return CrossProduct(triangle.vertex_b_.get_local_coord_() - triangle.vertex_a_.get_local_coord_(),
+            triangle.vertex_c_.get_local_coord_() - triangle.vertex_a_.get_local_coord_()).Norm() / 2.0f;
+}
+
+Vertex*
+Triangle::GetVertexOfTriangle(const Vector4f &coord){
+    if(coord == vertex_a_.get_local_coord_()) return &vertex_a_;
+    if(coord == vertex_b_.get_local_coord_()) return &vertex_b_;
+    if(coord == vertex_c_.get_local_coord_()) return &vertex_c_;
+    return nullptr;
+}
 
 }

@@ -5,10 +5,10 @@ namespace sablin{
 class Vertex;
 class Triangle;
 struct HEdge{
-    HEdge    *pair;
-    HEdge    *next;
-    Vertex   *head;
-    Triangle *left;
+    HEdge    *pair = nullptr;
+    HEdge    *next = nullptr;
+    Vertex   *head = nullptr;
+    Triangle *left = nullptr;
 };
 }
 #endif

@@ -31,6 +31,10 @@ public:
         OtherVertexOfVertex(const sablin::Vertex&);
 
     static bool IsSameCoord(const Vertex&, const Vertex&);
+
+    static Vector4f CalculateVertexNormal(const Vertex&);
+
+    static Triangle* OppositeTriangle(const Vertex&);
 };
 
 }
