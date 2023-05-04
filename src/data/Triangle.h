@@ -11,7 +11,6 @@ public:
     sablin::Vertex    vertex_c_;
     sablin::Material *material_;
     sablin::Vector4f  normal_;
-    sablin::HEdge    *h_edge_;
 public:
     explicit Triangle();
     explicit Triangle(sablin::Vertex&, sablin::Vertex&,

@@ -10,6 +10,9 @@ private:
     static std::string GetParentPath(const std::string&);
     static Vector2f* ParseUVCoord(const std::string&, Mesh*);
     static int64_t ParseVertexCoord(const std::string&);
+    static void BuildHEdge(Mesh*);
+    static HEdge* GetHEdgePair(Mesh*, const int64_t,
+                const Vertex&, const Vertex&);
 public:
     Loader() = delete;
     Loader(const Loader&) = delete;

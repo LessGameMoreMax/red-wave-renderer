@@ -8,6 +8,7 @@ class Vertex{
 private:
     sablin::Vector4f *local_coord_;
     sablin::Vector2f *uv_coord_;
+public:
     sablin::Vector4f *normal_;
     sablin::HEdge    *h_edge_;
 public:
@@ -23,15 +24,13 @@ public:
     sablin::Vector2f get_uv_coord_() const;
     void set_uv_coord_(sablin::Vector2f&);
 
-    sablin::Vector4f* getp_normal_() const;
-
-    sablin::HEdge* getp_h_edge_() const;
-
     static std::vector<sablin::Triangle*>
         TrianglesOfVertex(const sablin::Vertex&);
 
     static std::vector<sablin::Vertex*>
         OtherVertexOfVertex(const sablin::Vertex&);
+
+    static bool IsSameCoord(const Vertex&, const Vertex&);
 };
 
 }

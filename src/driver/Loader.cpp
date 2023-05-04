@@ -28,6 +28,79 @@ int64_t Loader::ParseVertexCoord(const std::string &heft){
     return std::stoi(heft.substr(0, heft.find('/'))) - 1;
 }
 
+HEdge* Loader::GetHEdgePair(Mesh *mesh, const int64_t index,
+            const Vertex &a, const Vertex &b){
+    for(int64_t i = index; i != mesh->triangle_pool_size_; ++i){
+        Triangle *t = mesh->triangle_pool_ + i;
+        if(Vertex::IsSameCoord(a, t->vertex_a_) &&
+                Vertex::IsSameCoord(b, t->vertex_b_))
+            return t->vertex_b_.h_edge_;
+        if(Vertex::IsSameCoord(a, t->vertex_b_) &&
+                Vertex::IsSameCoord(b, t->vertex_c_))
+            return t->vertex_c_.h_edge_;
+        if(Vertex::IsSameCoord(a, t->vertex_c_) &&
+                Vertex::IsSameCoord(b, t->vertex_a_))
+            return t->vertex_a_.h_edge_;
+    }
+//debug----------------------
+    std::cout << index << std::endl;
+//debug----------------------
+    std::cout << "Fail to GetHEdgePair !" << std::endl;
+    exit(-1);
+}
+
+void Loader::BuildHEdge(Mesh *mesh){
+//First Pass:
+    for(int64_t i = 0;i != mesh->triangle_pool_size_; ++i){        
+        Triangle *t = mesh->triangle_pool_ + i;
+        mesh->h_edge_pool_[3 * i + 0].left = t;
+        mesh->h_edge_pool_[3 * i + 1].left = t;
+        mesh->h_edge_pool_[3 * i + 2].left = t;
+        mesh->h_edge_pool_[3 * i + 0].head = &t->vertex_b_;
+        mesh->h_edge_pool_[3 * i + 1].head = &t->vertex_c_;
+        mesh->h_edge_pool_[3 * i + 2].head = &t->vertex_a_;
+        mesh->h_edge_pool_[3 * i + 0].next = 
+            &mesh->h_edge_pool_[3 * i + 1];
+        mesh->h_edge_pool_[3 * i + 1].next =
+            &mesh->h_edge_pool_[3 * i + 2];
+        mesh->h_edge_pool_[3 * i + 2].next =
+            &mesh->h_edge_pool_[3 * i + 0];
+        t->vertex_a_.h_edge_ =
+            &mesh->h_edge_pool_[3 * i + 2];
+        t->vertex_b_.h_edge_ =
+            &mesh->h_edge_pool_[3 * i + 0];
+        t->vertex_c_.h_edge_ =
+            &mesh->h_edge_pool_[3 * i + 1];
+    }
+//Second Pass: Fill all h_edge pair.
+    for(int64_t i = 0;i != mesh->triangle_pool_size_ - 1; ++i){
+        Triangle *t = mesh->triangle_pool_ + i;
+        if(t->vertex_b_.h_edge_->pair == nullptr){
+            HEdge *h_edge = GetHEdgePair(mesh, i + 1,
+                    t->vertex_b_,
+                    t->vertex_a_);
+            t->vertex_b_.h_edge_->pair = h_edge;
+            h_edge->pair = t->vertex_b_.h_edge_;
+        }
+
+        if(t->vertex_c_.h_edge_->pair == nullptr){
+            HEdge *h_edge = GetHEdgePair(mesh, i + 1,
+                    t->vertex_c_,
+                    t->vertex_b_);
+            t->vertex_c_.h_edge_->pair = h_edge;
+            h_edge->pair = t->vertex_c_.h_edge_;
+        }
+
+        if(t->vertex_a_.h_edge_->pair == nullptr){
+            HEdge *h_edge = GetHEdgePair(mesh, i + 1,
+                    t->vertex_a_,
+                    t->vertex_c_);
+            t->vertex_a_.h_edge_->pair = h_edge;
+            h_edge->pair = t->vertex_a_.h_edge_;
+        }
+    }
+}
+
 Model* Loader::LoadOBJModel(const std::string &file_path){
 //First pass: count the data and complete material pool
     int64_t triangle_pool_size = 0;
@@ -214,7 +287,7 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
 
     obj_second_file.close();
     
-    //Build HEdge Structure
+    BuildHEdge(mesh);
     //Calculate Vertex Normal
     return model;
 }

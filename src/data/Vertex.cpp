@@ -25,22 +25,14 @@ void Vertex::set_uv_coord_(sablin::Vector2f &uv_coord){
     *uv_coord_ = uv_coord;
 }
 
-sablin::Vector4f* Vertex::getp_normal_() const{
-    return normal_;
-}
-
-sablin::HEdge* Vertex::getp_h_edge_() const{
-    return h_edge_;
-}
-
 std::vector<sablin::Triangle*>
 Vertex::TrianglesOfVertex(const Vertex &vertex){
     std::vector<sablin::Triangle*> triangles;
-    HEdge *h_edge_p = vertex.getp_h_edge_();
+    HEdge *h_edge_p = vertex.h_edge_;
     do{
         triangles.push_back(h_edge_p->left);
         h_edge_p = h_edge_p->next->pair;
-    }while(h_edge_p != vertex.getp_h_edge_());
+    }while(h_edge_p != vertex.h_edge_);
     return triangles;
 }
 
@@ -59,6 +51,10 @@ Vertex::OtherVertexOfVertex(const Vertex &vertex){
             }
     }
     return result;
+}
+
+bool Vertex::IsSameCoord(const Vertex &a, const Vertex &b){
+    return a.local_coord_ == b.local_coord_;
 }
 
 }
