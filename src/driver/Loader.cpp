@@ -242,6 +242,8 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
                     iter != triangles.end(); ++iter){
                 
                 int64_t one_coord = ParseVertexCoord((*iter)[0]);
+                if(one_coord < 0)
+                    one_coord = one_coord + 1 + coord_pool_size;
                 Vertex one{
                     &mesh->coord_pool_[one_coord],
                     ParseUVCoord((*iter)[0], mesh)};
@@ -255,6 +257,8 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
 
 
                 int64_t two_coord = ParseVertexCoord((*iter)[1]);
+                if(two_coord < 0)
+                    two_coord = two_coord + 1 + coord_pool_size;
                 Vertex two{
                     &mesh->coord_pool_[two_coord],
                     ParseUVCoord((*iter)[1], mesh)};
@@ -267,6 +271,8 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
                     .vertex_b_ = two;
 
                 int64_t three_coord = ParseVertexCoord((*iter)[2]);
+                if(three_coord < 0)
+                    three_coord = three_coord + 1 + coord_pool_size;
                 Vertex three{
                     &mesh->coord_pool_[three_coord],
                     ParseUVCoord((*iter)[2], mesh)};
