@@ -15,6 +15,8 @@
 
 //renderer
 #include "../renderer/Frame.h"
+#include "../renderer/Object.h"
+#include "../renderer/Scene.h"
 
 //driver
 #include "../driver/Loader.h"

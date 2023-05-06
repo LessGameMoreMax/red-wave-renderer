@@ -5,6 +5,8 @@ OBJ_S = main.o \
 		src/math/Vectors.o \
 		src/sdl_display/Display.o \
 		src/renderer/Frame.o \
+		src/renderer/Object.o \
+		src/renderer/Scene.o \
 		src/driver/Loader.o \
 		src/data/Model.o \
 		src/data/Material.o \

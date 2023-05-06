@@ -7,9 +7,11 @@
 #include "Vectors.h"
 #include "Matrixes.h"
 #include <xmmintrin.h>
+#include <cmath>
 namespace sablin{
 
 static const float FLOAT_ERROR = 10e-5;
+const double PI = std::acos(-1);
 
 inline
 constexpr float Abs(const float a){
@@ -48,6 +50,11 @@ void Swap(int32_t &a, int32_t &b){
     int32_t temp = a;
     a = b;
     b = temp;
+}
+
+inline
+double AngleToRadian(const float angle){
+    return (double)angle / 180.0 * PI;
 }
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
