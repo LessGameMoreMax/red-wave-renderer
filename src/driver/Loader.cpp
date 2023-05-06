@@ -1,5 +1,6 @@
 #include "Loader.h"
 #include "../data/ModelPool.h"
+#include "../math/Tools.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -175,6 +176,8 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
     int64_t triangle_pool_index = 0;
     int64_t coord_pool_index = 0;
     int64_t uv_coord_pool_index = 0;
+    Vector4f min_coord{FLOAT_MAX, FLOAT_MAX, FLOAT_MAX, 1.0f};
+    Vector4f max_coord{FLOAT_MIN, FLOAT_MIN, FLOAT_MIN, 1.0f};
 
     std::ifstream obj_second_file;
     obj_second_file.open(file_path, std::ios::in);
@@ -194,14 +197,32 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
         if(promt == "v"){
             std::string heft;
             line_stream >> heft;
+            float x = std::stof(heft);
             mesh->coord_pool_[coord_pool_index]
-                .x_ = std::stof(heft);
+                .x_ = x;
+            if(x > max_coord.x_)
+                max_coord.x_ = x;
+            if(x < min_coord.x_)
+                min_coord.x_ = x;
+
             line_stream >> heft;
+            float y = std::stof(heft);
             mesh->coord_pool_[coord_pool_index]
-                .y_ = std::stof(heft);
+                .y_ = y;
+            if(y > max_coord.y_)
+                max_coord.y_ = y;
+            if(y < min_coord.y_)
+                min_coord.y_ = y;
+
             line_stream >> heft;
+            float z = std::stof(heft);
             mesh->coord_pool_[coord_pool_index]
-                .z_ = std::stof(heft);
+                .z_ = z;
+            if(z > max_coord.z_)
+                max_coord.z_ = z;
+            if(z < min_coord.z_)
+                min_coord.z_ = z;
+
             mesh->coord_pool_[coord_pool_index]
                 .w_ = 1.0f;
             ++coord_pool_index;
@@ -295,6 +316,9 @@ Model* Loader::LoadOBJModel(const std::string &file_path){
     }
 
     obj_second_file.close();
+
+    mesh->aabb_bounding_box_.min_coord_ = min_coord;
+    mesh->aabb_bounding_box_.max_coord_ = max_coord;
 
     Loader::BuildHEdge(mesh);
 

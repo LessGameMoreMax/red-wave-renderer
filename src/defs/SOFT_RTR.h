@@ -30,5 +30,6 @@
 #include "../data/Texture.h"
 #include "../data/Triangle.h"
 #include "../data/Vertex.h"
+#include "../data/AABB.h"
 
 #endif

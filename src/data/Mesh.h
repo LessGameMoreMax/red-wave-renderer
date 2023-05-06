@@ -4,6 +4,7 @@
 #include "../math/Vectors.h"
 #include "Vertex.h"
 #include "HEdge.h"
+#include "AABB.h"
 namespace sablin{
 class Mesh{
 private:
@@ -16,6 +17,7 @@ public:
     Vector4f *vertex_normal_pool_;
     Vertex*  *vertex_normal_map_;
     Vector2f *uv_coord_pool_;
+    AABB     aabb_bounding_box_;
 
     int64_t  triangle_pool_size_;
     int64_t  coord_pool_size_;

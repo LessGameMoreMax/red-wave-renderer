@@ -11,7 +11,9 @@
 namespace sablin{
 
 static const float FLOAT_ERROR = 10e-5;
-const double PI = std::acos(-1);
+static const float FLOAT_MAX = 10e35;
+static const float FLOAT_MIN = -10e35;
+static const double PI = std::acos(-1);
 
 inline
 constexpr float Abs(const float a){

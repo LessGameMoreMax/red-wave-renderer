@@ -14,7 +14,8 @@ OBJ_S = main.o \
 		src/data/ModelPool.o \
 		src/data/Texture.o \
 		src/data/Triangle.o \
-		src/data/Vertex.o
+		src/data/Vertex.o \
+		src/data/AABB.o
 
 main : ${OBJ_S}
 	g++ -Wall -o main.out $(OBJ_S) -lSDL2
