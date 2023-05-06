@@ -7,6 +7,8 @@ OBJ_S = main.o \
 		src/renderer/Frame.o \
 		src/renderer/Object.o \
 		src/renderer/Scene.o \
+		src/renderer/Camera.o \
+		src/renderer/Light.o \
 		src/driver/Loader.o \
 		src/data/Model.o \
 		src/data/Material.o \

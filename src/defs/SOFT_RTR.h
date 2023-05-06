@@ -17,6 +17,8 @@
 #include "../renderer/Frame.h"
 #include "../renderer/Object.h"
 #include "../renderer/Scene.h"
+#include "../renderer/Camera.h"
+#include "../renderer/Light.h"
 
 //driver
 #include "../driver/Loader.h"
