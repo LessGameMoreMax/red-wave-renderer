@@ -152,4 +152,8 @@ Matrix4x4f Object::GetWorldMatrix() const{
             local_rotation_ * local_scale_;
 }
 
+Model* Object::GetModel() const{
+    return model_;
+}
+
 }

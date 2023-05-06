@@ -40,6 +40,8 @@ public:
     void WorldTranslate(const Vector3f &world_translate_position);
 
     Matrix4x4f GetWorldMatrix() const;
+
+    Model* GetModel() const;
 };
 
 
