@@ -104,17 +104,17 @@ void Object::BuildAnyRotation(
 
     Matrix4x4f rotation;
     rotation.e00_ = c + (1.0f - c) * x * x;
-    rotation.e01_ = (1.0f - c) * x * y + s * z;
-    rotation.e02_ = (1.0f - c) * x * z - s * y;
+    rotation.e10_ = (1.0f - c) * x * y + s * z;
+    rotation.e20_ = (1.0f - c) * x * z - s * y;
     rotation.e03_ = 0.0f;
     
-    rotation.e10_ = (1.0f - c) * x * y - s * z;
+    rotation.e01_ = (1.0f - c) * x * y - s * z;
     rotation.e11_ = c + (1.0f - c) * y * y;
-    rotation.e12_ = (1.0f - c) * y * z + s * x;
+    rotation.e21_ = (1.0f - c) * y * z + s * x;
     rotation.e13_ = 0.0f;
 
-    rotation.e20_ = (1.0f - c) * x * z + s * y;
-    rotation.e21_ = (1.0f - c) * y * z - s * x;
+    rotation.e02_ = (1.0f - c) * x * z + s * y;
+    rotation.e12_ = (1.0f - c) * y * z - s * x;
     rotation.e22_ = c + (1.0f - c) * z * z;
     rotation.e23_ = 0.0f;
 

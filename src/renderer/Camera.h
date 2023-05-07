@@ -12,8 +12,9 @@ private:
 private:
     void FreshViewMatrix();
 public: 
-    Camera(const Vector4f&, const Vector4f&,
-            const Vector4f&);
+    Camera(const Vector4f& world_position, 
+           const Vector4f& target_position,
+           const Vector4f& up_direction);
     Camera(const Camera&) = default;
     Camera& operator=(const Camera&) = default;
     ~Camera() = default;

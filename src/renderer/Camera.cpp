@@ -22,17 +22,17 @@ void Camera::FreshViewMatrix(){
     Vector4f v = CrossProduct(w, u);
 
     view_matrix_.e00_ = u.x_;
-    view_matrix_.e01_ = v.x_;
-    view_matrix_.e02_ = w.x_;
+    view_matrix_.e01_ = u.y_;
+    view_matrix_.e02_ = u.z_;
     view_matrix_.e03_ = -DotProduct(world_position_, u);
 
-    view_matrix_.e10_ = u.y_;
+    view_matrix_.e10_ = v.x_;
     view_matrix_.e11_ = v.y_;
-    view_matrix_.e12_ = w.y_;
+    view_matrix_.e12_ = v.z_;
     view_matrix_.e13_ = -DotProduct(world_position_, v);
 
-    view_matrix_.e20_ = u.z_;
-    view_matrix_.e21_ = v.z_;
+    view_matrix_.e20_ = w.x_;
+    view_matrix_.e21_ = w.y_;
     view_matrix_.e22_ = w.z_;
     view_matrix_.e23_ = -DotProduct(world_position_, w);
 
