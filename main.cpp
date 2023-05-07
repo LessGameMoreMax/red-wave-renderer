@@ -19,7 +19,7 @@ int main(){
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
-    int frame_number = 900;
+    int frame_number = 300;
     DisplayConfiguration display_configuration{640, 480};
     Display::Create(display_configuration);
 
