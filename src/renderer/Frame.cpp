@@ -35,8 +35,4 @@ Vector4f* Frame::get_colors_() const{
     return colors_;
 }
 
-void Frame::FreshColors(Vector4f *colors){
-    if(colors_ != nullptr) delete [] colors_;
-    colors_ = colors;
-}
 }

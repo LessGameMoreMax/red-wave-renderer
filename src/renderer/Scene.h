@@ -4,7 +4,9 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Frame.h"
 namespace sablin{
+
 class Scene{
 private:
     std::vector<Object*> objects_;
@@ -12,6 +14,7 @@ private:
     Camera*              camera_;
     int16_t              frame_width_;
     int16_t              frame_height_;
+    Frame*               frame_;
 public:
     Scene(const int16_t, const int16_t);
     Scene(const Scene&) = default;
@@ -35,6 +38,11 @@ public:
                 const float far_plane,
                 const float vertical_fov_angle);
     Camera* GetCamera() const;
+    
+    int16_t GetFrameWidth() const;
+    int16_t GetFrameHeight() const;
+
+    Frame* GetFrame() const;
 };
 }
 #endif

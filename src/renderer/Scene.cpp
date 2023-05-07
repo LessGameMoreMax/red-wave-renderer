@@ -7,6 +7,7 @@ Scene::Scene(const int16_t frame_width,
         frame_height_(frame_height){
     objects_.clear();
     lights_.clear();
+    frame_ = new Frame(frame_width, frame_height);
 }
 
 Scene::~Scene(){
@@ -18,6 +19,8 @@ Scene::~Scene(){
         delete *iter;
     if(camera_ != nullptr)
         delete camera_;
+    if(frame_ != nullptr)
+        delete frame_;
 }
 
 
@@ -62,6 +65,18 @@ void Scene::AddCamera(const Vector4f &world_position,
 
 Camera* Scene::GetCamera() const{
     return camera_;
+}
+
+int16_t Scene::GetFrameWidth() const{
+    return frame_width_;
+}
+
+int16_t Scene::GetFrameHeight() const{
+    return frame_height_;
+}
+
+Frame* Scene::GetFrame() const{
+    return frame_;
 }
 
 }
