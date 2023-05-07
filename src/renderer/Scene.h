@@ -13,7 +13,7 @@ private:
     int16_t              frame_width_;
     int16_t              frame_height_;
 public:
-    Scene();
+    Scene(const int16_t, const int16_t);
     Scene(const Scene&) = default;
     Scene& operator=(const Scene&) = default;
     ~Scene();
@@ -28,7 +28,12 @@ public:
     Object* GetObject(const int16_t) const;
     int16_t ObjectNumber() const;
 
-    void AddCamera();
+    void AddCamera(const Vector4f &world_position,
+                const Vector4f &target_position,
+                const Vector4f &up_direction,
+                const float near_plane,
+                const float far_plane,
+                const float vertical_fov_angle);
     Camera* GetCamera() const;
 };
 }

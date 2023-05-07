@@ -1,7 +1,13 @@
 #include "Scene.h"
 #include <iostream>
 namespace sablin{
-Scene::Scene():camera_(nullptr){}
+Scene::Scene(const int16_t frame_width,
+            const int16_t frame_height):
+        camera_(nullptr),frame_width_(frame_width),
+        frame_height_(frame_height){
+    objects_.clear();
+    lights_.clear();
+}
 
 Scene::~Scene(){
     for(auto iter = objects_.begin();
@@ -10,7 +16,8 @@ Scene::~Scene(){
     for(auto iter = lights_.begin();
             iter != lights_.end(); ++iter)
         delete *iter;
-    delete camera_;
+    if(camera_ != nullptr)
+        delete camera_;
 }
 
 
@@ -37,6 +44,20 @@ Object* Scene::GetObject(const int16_t index) const{
 
 int16_t Scene::ObjectNumber() const{
     return objects_.size();
+}
+
+void Scene::AddCamera(const Vector4f &world_position,
+                    const Vector4f &target_position,
+                    const Vector4f &up_direction,
+                    const float near_plane,
+                    const float far_plane,
+                    const float vertical_fov_angle){
+    if(camera_ != nullptr) delete camera_;
+    camera_ = new Camera(world_position, target_position,
+                up_direction, near_plane, far_plane,
+                vertical_fov_angle,
+                static_cast<float>(frame_width_)/
+                static_cast<float>(frame_height_));
 }
 
 Camera* Scene::GetCamera() const{
