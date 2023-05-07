@@ -10,6 +10,8 @@ private:
     std::vector<Object*> objects_;
     std::vector<Light*>  lights_;
     Camera*              camera_;
+    int16_t              frame_width_;
+    int16_t              frame_height_;
 public:
     Scene();
     Scene(const Scene&) = default;

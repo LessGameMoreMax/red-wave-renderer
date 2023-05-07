@@ -1,17 +1,31 @@
 #include "Camera.h"
 #include "../math/Compute.h"
+#include "../math/Tools.h"
 namespace sablin{
 Camera::Camera(const Vector4f &world_position,
             const Vector4f &target_position,
-            const Vector4f &up_direction):
+            const Vector4f &up_direction,
+            const float near_plane,
+            const float far_plane,
+            const float vertical_fov_angle,
+            const float aspect_ratio):
         world_position_(world_position),
         target_position_(target_position),
-        up_direction_(up_direction){
+        up_direction_(up_direction),
+        near_plane_(near_plane),
+        far_plane_(far_plane),
+        vertical_fov_radian_(AngleToRadian(vertical_fov_angle)),
+        aspect_ratio_(aspect_ratio){
     FreshViewMatrix();
+    FreshProjectMatrix();
 }
 
 Matrix4x4f Camera::GetViewMatrix() const{
     return view_matrix_;
+}
+
+Matrix4x4f Camera::GetProjectMatrix() const{
+    return project_matrix_;
 }
 
 void Camera::FreshViewMatrix(){
@@ -42,5 +56,26 @@ void Camera::FreshViewMatrix(){
     view_matrix_.e33_ = 1.0f;
 }
 
+void Camera::FreshProjectMatrix(){
+    project_matrix_.e00_ = -1.0f/(aspect_ratio_ * std::tan(vertical_fov_radian_/2.0f));
+    project_matrix_.e01_ = 0.0f;
+    project_matrix_.e02_ = 0.0f;
+    project_matrix_.e03_ = 0.0f;
+
+    project_matrix_.e10_ = 0.0f;
+    project_matrix_.e11_ = -1.0f/std::tan(vertical_fov_radian_/2.0f);
+    project_matrix_.e12_ = 0.0f;
+    project_matrix_.e13_ = 0.0f;
+
+    project_matrix_.e20_ = 0.0f;
+    project_matrix_.e21_ = 0.0f;
+    project_matrix_.e22_ = (far_plane_ + near_plane_) / (near_plane_ - far_plane_);
+    project_matrix_.e23_ = 2.0f * near_plane_ * far_plane_ / (near_plane_ - far_plane_);
+
+    project_matrix_.e30_ = 0.0f;
+    project_matrix_.e31_ = 0.0f;
+    project_matrix_.e32_ = 1.0f;
+    project_matrix_.e33_ = 0.0f;
+}
 
 }

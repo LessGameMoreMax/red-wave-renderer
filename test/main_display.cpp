@@ -1,4 +1,4 @@
-#include "src/defs/SOFT_RTR.h"
+#include "../src/defs/SOFT_RTR.h"
 #include <SDL2/SDL.h>
 #include <time.h>
 
