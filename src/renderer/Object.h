@@ -41,6 +41,8 @@ public:
 
     Matrix4x4f GetWorldMatrix() const;
 
+    Matrix4x4f GetNormalWorldMatrix() const;
+
     Model* GetModel() const;
 };
 

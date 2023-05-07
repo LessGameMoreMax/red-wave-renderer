@@ -1,6 +1,36 @@
 #include "Tools.h"
+#include "Compute.h"
 
 namespace sablin{
+
+bool IsInFov(const AABB &aabb, const Matrix4x4f &P,
+        const Matrix4x4f &V, const Matrix4x4f &M,
+        const float near_plane, const float far_plane){
+    Matrix4x4f VM = V * M;
+
+    Vector4f one = aabb.min_coord_;
+    one = VM * one;
+    float one_z = one.z_;
+
+    Vector4f two = aabb.max_coord_;
+    two = VM * two;
+    float two_z = two.z_;
+
+    one = P * one;
+    one /= one.z_;
+    if(one.x_ >= -1.0f && one.x_ <= 1.0f &&
+            one.y_ >= -1.0f && one.y_ <= 1.0f &&
+            one_z <= -near_plane && one_z >= -far_plane)
+        return true;
+
+    two = P * two;
+    two /= two.z_;
+    if(two.x_ >= -1.0f && two.x_ <= 1.0f &&
+            two.y_ >= -1.0f && two.y_ <= 1.0f &&
+            two_z <= -near_plane && two_z >= -far_plane)
+        return true;
+    return false;
+}
 
 Vector3f LUPSolve3f(const Matrix3x3f &L, const Matrix3x3f &U,
         const Vector3i &pi, const Vector3f &b){

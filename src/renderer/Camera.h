@@ -31,6 +31,9 @@ public:
     ~Camera() = default;
     Matrix4x4f GetViewMatrix() const;
     Matrix4x4f GetProjectMatrix() const;
+
+    float GetNearPlane() const;
+    float GetFarPlane() const;
 };
 }
 #endif

@@ -7,6 +7,7 @@
 #include "Vectors.h"
 #include "Matrixes.h"
 #include <xmmintrin.h>
+#include "../data/AABB.h"
 #include <cmath>
 namespace sablin{
 
@@ -58,6 +59,10 @@ inline
 double AngleToRadian(const float angle){
     return (double)angle / 180.0 * PI;
 }
+
+bool IsInFov(const AABB&, const Matrix4x4f&,
+        const Matrix4x4f&, const Matrix4x4f&,
+        const float, const float);
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
 Vector3i LUPDecomposition3x3f(Matrix3x3f&);

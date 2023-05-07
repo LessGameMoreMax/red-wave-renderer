@@ -152,6 +152,31 @@ Matrix4x4f Object::GetWorldMatrix() const{
             local_rotation_ * local_scale_;
 }
 
+Matrix4x4f Object::GetNormalWorldMatrix() const{
+    Matrix4x4f local_scale_it;
+    local_scale_it.e00_ = 1.0f / local_scale_.e00_;
+    local_scale_it.e01_ = 0.0f;
+    local_scale_it.e02_ = 0.0f;
+    local_scale_it.e03_ = 0.0f;
+
+    local_scale_it.e10_ = 0.0f;
+    local_scale_it.e11_ = 1.0f / local_scale_.e11_;
+    local_scale_it.e12_ = 0.0f;
+    local_scale_it.e13_ = 0.0f;
+
+    local_scale_it.e20_ = 0.0f;
+    local_scale_it.e21_ = 0.0f;
+    local_scale_it.e22_ = 1.0f / local_scale_.e22_;
+    local_scale_it.e23_ = 0.0f;
+
+    local_scale_it.e30_ = 0.0f;
+    local_scale_it.e31_ = 0.0f;
+    local_scale_it.e32_ = 0.0f;
+    local_scale_it.e33_ = 1.0f / local_scale_.e33_;
+    return world_rotation_ * local_rotation_
+            * local_scale_it;
+}
+
 Model* Object::GetModel() const{
     return model_;
 }

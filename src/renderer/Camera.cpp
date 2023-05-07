@@ -78,4 +78,12 @@ void Camera::FreshProjectMatrix(){
     project_matrix_.e33_ = 0.0f;
 }
 
+float Camera::GetNearPlane() const{
+    return near_plane_;
+}
+
+float Camera::GetFarPlane() const{
+    return far_plane_;
+}
+
 }
