@@ -11,9 +11,10 @@ int main(){
 
     Scene scene(640, 480);
     scene.AddObject(cube);
-    scene.AddCamera(Vector4f(100.0f, 0.0f, 0.0f, 1.0f),
+
+    scene.AddCamera(Vector4f(0.0f, 0.0f, 250.0f, 1.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
-                Vector4f(0.0f, 0.0f, 1.0f, 0.0f),
+                Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
                 1.0f, 1000.0f, 45);
 
     
