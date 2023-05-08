@@ -6,7 +6,6 @@ namespace sablin{
 class FragmentShade{
 public:
     static void PerPixelLight(Fragment*);
-    static void Shade(Fragment*);
 };
 }
 #endif

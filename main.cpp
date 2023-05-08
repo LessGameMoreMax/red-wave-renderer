@@ -20,12 +20,15 @@ int main(){
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
-    int frame_number = 300;
+    int frame_number = 900;
     DisplayConfiguration display_configuration{640, 480};
     Display::Create(display_configuration);
 
+    int angle = 0;
+
     clock_gettime(CLOCK_REALTIME, &time_start);
     for(int i = 0;i != frame_number; ++i){
+        scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0,
                     Renderer::Render(&scene)});

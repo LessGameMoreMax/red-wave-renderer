@@ -6,7 +6,7 @@ Frame* Renderer::Render(Scene *scene){
     scene->GetFrame()->FreshColors();
     scene->FreshDepthBuffer();
 
-    VertexShade::Transform(scene);
+    VertexShade::PerVertexLight(scene);
     return scene->GetFrame();
 }
 }

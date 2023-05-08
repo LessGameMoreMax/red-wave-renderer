@@ -5,12 +5,6 @@
 #include "Clip.h"
 namespace sablin{
 
-void VertexShade::Transform(Scene *scene){
-    //Transform of Model,Light,Camera.
-    //...... 
-    VertexShade::PerVertexLight(scene);
-}
-
 void VertexShade::PerVertexLight(Scene *scene){
     Matrix4x4f P = scene->GetCamera()->GetProjectMatrix();
     Matrix4x4f V = scene->GetCamera()->GetViewMatrix();
