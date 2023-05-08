@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "../math/Tools.h"
 #include <iostream>
 namespace sablin{
 Scene::Scene(const int16_t frame_width,
@@ -8,6 +9,7 @@ Scene::Scene(const int16_t frame_width,
     objects_.clear();
     lights_.clear();
     frame_ = new Frame(frame_width, frame_height);
+    depth_buffer_ = new float[frame_width * frame_height];
 }
 
 Scene::~Scene(){
@@ -21,6 +23,8 @@ Scene::~Scene(){
         delete camera_;
     if(frame_ != nullptr)
         delete frame_;
+    if(depth_buffer_ != nullptr)
+        delete[] depth_buffer_;
 }
 
 
@@ -77,6 +81,15 @@ int16_t Scene::GetFrameHeight() const{
 
 Frame* Scene::GetFrame() const{
     return frame_;
+}
+
+float* Scene::GetDepthBuffer() const{
+    return depth_buffer_;
+}
+
+void Scene::FreshDepthBuffer(){
+    for(int16_t i = 0;i != frame_height_ * frame_width_; ++i)
+        depth_buffer_[i] = FLOAT_MIN;
 }
 
 }

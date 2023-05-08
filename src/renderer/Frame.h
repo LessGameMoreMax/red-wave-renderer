@@ -20,6 +20,7 @@ public:
     int16_t get_horizontal_size_() const;
     int16_t get_vertical_size_() const;
     Vector4f* get_colors_() const;
+    void FreshColors();
 };
 }
 #endif

@@ -15,6 +15,7 @@ private:
     int16_t              frame_width_;
     int16_t              frame_height_;
     Frame*               frame_;
+    float*               depth_buffer_;
 public:
     Scene(const int16_t, const int16_t);
     Scene(const Scene&) = default;
@@ -43,6 +44,8 @@ public:
     int16_t GetFrameHeight() const;
 
     Frame* GetFrame() const;
+    float* GetDepthBuffer() const;
+    void FreshDepthBuffer();
 };
 }
 #endif
