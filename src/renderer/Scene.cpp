@@ -88,7 +88,7 @@ float* Scene::GetDepthBuffer() const{
 }
 
 void Scene::FreshDepthBuffer(){
-    for(int16_t i = 0;i != frame_height_ * frame_width_; ++i)
+    for(int32_t i = 0;i != frame_height_ * frame_width_; ++i)
         depth_buffer_[i] = FLOAT_MIN;
 }
 

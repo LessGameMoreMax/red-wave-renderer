@@ -1,4 +1,5 @@
 #include "OutputMerger.h"
+#include <iostream>
 namespace sablin{
 
 void OutputMerger::DepthTest(Fragment *fragment){

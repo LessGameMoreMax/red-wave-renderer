@@ -9,6 +9,6 @@ void FragmentShade::PerPixelLight(Fragment *fragment){
 
 void FragmentShade::Shade(Fragment *fragment){
     fragment->color_ = Vector4f{1.0f, 0.0f, 0.0f, 1.0f};
-    OutputMerger::DepthTest(fragment);
+    // OutputMerger::DepthTest(fragment);
 }
 }

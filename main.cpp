@@ -7,11 +7,11 @@ int main(){
 //Load The Model
     ModelPool::Create();
     Model *cube = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
+            "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
 
     Scene scene(640, 480);
     scene.AddObject(cube);
-    scene.AddCamera(Vector4f(5.0f, 0.0f, 0.0f, 1.0f),
+    scene.AddCamera(Vector4f(100.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 0.0f, 1.0f, 0.0f),
                 1.0f, 1000.0f, 45);
