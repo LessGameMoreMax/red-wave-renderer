@@ -10,6 +10,11 @@ OBJ_S = main.o \
 		src/renderer/Camera.o \
 		src/renderer/Light.o \
 		src/renderer/Renderer.o \
+		src/renderer/VertexShade.o \
+		src/renderer/Clip.o \
+		src/renderer/Rasterizer.o \
+		src/renderer/FragmentShade.o \
+		src/renderer/OutputMerger.o \
 		src/driver/Loader.o \
 		src/data/Model.o \
 		src/data/Material.o \

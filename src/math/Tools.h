@@ -8,12 +8,15 @@
 #include "Matrixes.h"
 #include <xmmintrin.h>
 #include "../data/AABB.h"
+#include "../renderer/Primitive.h"
 #include <cmath>
 namespace sablin{
 
 static const float FLOAT_ERROR = 10e-5;
 static const float FLOAT_MAX = 10e35;
 static const float FLOAT_MIN = -10e35;
+static const int16_t INT16_T_MAX = 32700;
+static const int16_t INT16_T_MIN = -32700;
 static const double PI = std::acos(-1);
 
 inline
@@ -63,6 +66,8 @@ double AngleToRadian(const float angle){
 bool IsInFov(const AABB&, const Matrix4x4f&,
         const Matrix4x4f&, const Matrix4x4f&,
         const float, const float);
+
+void BoundingBoxScreen(const Primitive*,Vector2i*,Vector2i*);
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
 Vector3i LUPDecomposition3x3f(Matrix3x3f&);

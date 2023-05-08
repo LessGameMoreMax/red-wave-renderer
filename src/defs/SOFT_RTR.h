@@ -20,6 +20,13 @@
 #include "../renderer/Camera.h"
 #include "../renderer/Light.h"
 #include "../renderer/Renderer.h"
+#include "../renderer/Fragment.h"
+#include "../renderer/Primitive.h"
+#include "../renderer/VertexShade.h"
+#include "../renderer/Clip.h"
+#include "../renderer/Rasterizer.h"
+#include "../renderer/FragmentShade.h"
+#include "../renderer/OutputMerger.h"
 
 //driver
 #include "../driver/Loader.h"

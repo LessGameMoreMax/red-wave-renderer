@@ -32,6 +32,21 @@ bool IsInFov(const AABB &aabb, const Matrix4x4f &P,
     return false;
 }
 
+void BoundingBoxScreen(const Primitive *primitive, Vector2i *min_coord_,
+            Vector2i *max_coord_){
+    for(int8_t i = 0;i != 3; ++i){
+        if(std::floor(primitive->project_coord_[i].x_) < min_coord_->x_)
+            min_coord_->x_ = std::floor(primitive->project_coord_[i].x_);
+        if(std::floor(primitive->project_coord_[i].y_) < min_coord_->y_)
+            min_coord_->y_ = std::floor(primitive->project_coord_[i].y_);
+
+        if(std::ceil(primitive->project_coord_[i].x_) > max_coord_->x_)
+            max_coord_->x_ = std::ceil(primitive->project_coord_[i].x_);
+        if(std::ceil(primitive->project_coord_[i].y_) > max_coord_->y_)
+            max_coord_->y_ = std::ceil(primitive->project_coord_[i].y_);
+    }
+}
+
 Vector3f LUPSolve3f(const Matrix3x3f &L, const Matrix3x3f &U,
         const Vector3i &pi, const Vector3f &b){
     

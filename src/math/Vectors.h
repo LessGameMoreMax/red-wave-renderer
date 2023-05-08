@@ -189,5 +189,41 @@ Vector2f operator*(const Vector2f&, const float);
 Vector2f operator/(const Vector2f&, const float);
 bool     operator==(const Vector2f&, const Vector2f&);
 bool     operator!=(const Vector2f&, const Vector2f&);
+
+class Vector2i{
+public:
+    union{
+        struct{
+            int32_t x_ = 0.0f;
+            int32_t y_ = 0.0f;
+        };
+        int32_t s_[2];
+    };
+public:
+    explicit Vector2i(): x_(0), y_(0){}
+    explicit Vector2i(int32_t x, int32_t y);
+    Vector2i(const Vector2i&) = default;
+    Vector2i(Vector2i&&) = default;
+    Vector2i& operator=(const Vector2i&) = default;
+    Vector2i& operator=(Vector2i&&) = default;
+    ~Vector2i() = default;
+
+    Vector2i& operator+=(const Vector2i&);
+    Vector2i& operator+=(const int32_t);
+    Vector2i& operator-=(const Vector2i&);
+    Vector2i& operator-=(const int32_t);
+    Vector2i& operator*=(const int32_t);
+    Vector2i& operator/=(const int32_t);
+
+}__attribute__((aligned(16))); // explicitly align for 16 byte
+
+Vector2i operator+(const Vector2i&, const Vector2i&);
+Vector2i operator-(const Vector2i&, const Vector2i&);
+Vector2i operator+(const Vector2i&, const int32_t);
+Vector2i operator-(const Vector2i&, const int32_t);
+Vector2i operator*(const Vector2i&, const int32_t);
+Vector2i operator/(const Vector2i&, const int32_t);
+bool     operator==(const Vector2i&, const Vector2i&);
+bool     operator!=(const Vector2i&, const Vector2i&);
 }
 #endif

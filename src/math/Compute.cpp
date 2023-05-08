@@ -28,6 +28,10 @@ Vector4f CrossProduct(const Vector4f &rhs, const Vector4f &lhs){
                             rhs.x_*lhs.y_-rhs.y_*lhs.x_, 0.0f);
 }
 
+float CrossProduct(const Vector2f &lhs, const Vector2f &rhs){
+    return lhs.x_ * rhs.y_ - lhs.y_ * rhs.x_;
+}
+
 Vector3f operator*(const Vector3f &vector, const Matrix3x3f &matrix){
     Vector3f result;
     result.x_ = vector.x_ * matrix.e00_ + vector.y_ * matrix.e10_ + vector.z_ * matrix.e20_;

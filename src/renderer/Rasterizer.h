@@ -7,6 +7,7 @@ public:
     static void PerspectiveDivide(Primitive*);
     static void ViewportTransform(Primitive*);
     static void BackfaceCulling(Primitive*);
+    static void Rasterization(Primitive*);
 };
 }
 #endif

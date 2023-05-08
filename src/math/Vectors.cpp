@@ -498,4 +498,106 @@ bool operator==(const Vector2f &lhs, const Vector2f &rhs){
 bool operator!=(const Vector2f &lhs, const Vector2f &rhs){
     return !(lhs == rhs);
 }
+
+Vector2i::Vector2i(int32_t x, int32_t y):
+    x_(x),y_(y){}
+
+Vector2i& Vector2i::operator+=(const Vector2i &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ += rhs.x_;
+    y_ += rhs.y_;
+#endif
+    return *this;
+}
+
+Vector2i operator+(const Vector2i &lhs, const Vector2i &rhs){
+    Vector2i sum = lhs;
+    sum += rhs;
+    return sum;
+}
+
+Vector2i& Vector2i::operator+=(const int32_t i_number){
+#ifdef OPTIMIZE
+#else
+    x_ += i_number;
+    y_ += i_number;
+#endif
+    return *this;
+}
+
+Vector2i operator+(const Vector2i &lhs, const int32_t i_number){
+    Vector2i sum = lhs;
+    sum += i_number;
+    return sum;
+}
+
+Vector2i& Vector2i::operator-=(const Vector2i &rhs){ 
+#ifdef OPTIMIZE
+#else
+    x_ -= rhs.x_;
+    y_ -= rhs.y_;
+#endif
+    return *this;
+}
+
+Vector2i operator-(const Vector2i &lhs, const Vector2i &rhs){
+    Vector2i sum = lhs;
+    sum -= rhs;
+    return sum;
+}
+
+Vector2i& Vector2i::operator-=(const int32_t i_number){
+#ifdef OPTIMIZE
+#else
+    x_ -= i_number;
+    y_ -= i_number;
+#endif
+    return *this;
+}
+
+Vector2i operator-(const Vector2i &lhs, const int32_t i_number){
+    Vector2i sum = lhs;
+    sum -= i_number;
+    return sum;
+}
+
+Vector2i& Vector2i::operator*=(const int32_t i_number){
+    x_ *= i_number;
+    y_ *= i_number;
+    return *this;
+}
+
+Vector2i operator*(const Vector2i &lhs, const int32_t i_number){
+    Vector2i multi = lhs;
+    multi *= i_number;
+    return multi;
+}
+
+Vector2i& Vector2i::operator/=(const int32_t i_number){
+#ifdef ASSERT
+    assert(i_number != 0);
+#endif
+    x_ /= i_number;
+    y_ /= i_number;
+    return *this;
+}
+
+Vector2i operator/(const Vector2i &lhs, const int32_t i_number){
+#ifdef ASSERT
+    assert(i_number != 0);
+#endif
+    Vector2i div = lhs;
+    div /= i_number;
+    return div;
+}
+
+bool operator==(const Vector2i &lhs, const Vector2i &rhs){
+    return lhs.x_ == rhs.x_ &&
+                lhs.y_ == rhs.y_;
+}
+
+bool operator!=(const Vector2i &lhs, const Vector2i &rhs){
+    return !(lhs == rhs);
+}
 }
