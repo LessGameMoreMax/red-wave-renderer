@@ -19,6 +19,7 @@
 #include "../renderer/Scene.h"
 #include "../renderer/Camera.h"
 #include "../renderer/Light.h"
+#include "../renderer/ParallelLight.h"
 #include "../renderer/Renderer.h"
 #include "../renderer/Fragment.h"
 #include "../renderer/Primitive.h"

@@ -86,6 +86,10 @@ Vector3f operator*(const Vector3f &lhs, const float f_number){
     return multi;
 }
 
+Vector3f operator*(const Vector3f &lhs, const Vector3f &rhs){
+    return Vector3f{lhs.x_ * rhs.x_, lhs.y_ * rhs.y_, lhs.z_ * rhs.z_};
+}
+
 Vector3f& Vector3f::operator/=(const float f_number){
 #ifdef ASSERT
     assert(Abs(f_number) > FLOAT_ERROR);
@@ -131,6 +135,9 @@ Vector4f::Vector4f(float x, float y, float z, float w):
     x_(x),y_(y),z_(z),w_(w){}
 
 Vector4f::Vector4f(__m128 v): v_(v){}
+
+Vector4f::Vector4f(const Vector3f &xyz, float w):
+    x_(xyz.x_), y_(xyz.y_), z_(xyz.z_), w_(w){}
 
 Vector4f& Vector4f::operator+=(const Vector4f &rhs){
     x_ += rhs.x_;
@@ -200,6 +207,10 @@ Vector4f operator*(const Vector4f &lhs, const float f_number){
     Vector4f multi = lhs;
     multi *= f_number;
     return multi;
+}
+
+Vector4f operator*(const Vector4f &lhs, const Vector4f &rhs){
+    return Vector4f(_mm_mul_ps(lhs.v_, rhs.v_));
 }
 
 Vector4f& Vector4f::operator/=(const float f_number){

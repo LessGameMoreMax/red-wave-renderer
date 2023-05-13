@@ -4,6 +4,8 @@
 namespace sablin{
 
 class FragmentShade{
+private:
+    static Vector4f BlinnPhongShade(Fragment*);    
 public:
     static void PerPixelLight(Fragment*);
 };

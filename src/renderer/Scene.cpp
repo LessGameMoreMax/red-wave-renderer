@@ -53,6 +53,22 @@ int16_t Scene::ObjectNumber() const{
     return objects_.size();
 }
 
+void Scene::AddLight(Light *light){
+    lights_.push_back(light);
+}
+
+Light* Scene::GetLight(const int16_t index) const{
+    if(index >= lights_.size()){
+        std::cout << "GetLight Beyond!" << std::endl;
+        return nullptr;
+    }
+    return lights_[index];
+}
+
+int16_t Scene::LightNumber() const{
+    return lights_.size();
+}
+
 void Scene::AddCamera(const Vector4f &world_position,
                     const Vector4f &target_position,
                     const Vector4f &up_direction,

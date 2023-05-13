@@ -86,4 +86,8 @@ float Camera::GetFarPlane() const{
     return far_plane_;
 }
 
+Vector4f Camera::GetWorldPosition() const{
+    return world_position_;
+}
+
 }

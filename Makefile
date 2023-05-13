@@ -9,6 +9,7 @@ OBJ_S = main.o \
 		src/renderer/Scene.o \
 		src/renderer/Camera.o \
 		src/renderer/Light.o \
+		src/renderer/ParallelLight.o \
 		src/renderer/Renderer.o \
 		src/renderer/VertexShade.o \
 		src/renderer/Clip.o \

@@ -34,6 +34,7 @@ public:
 
     float GetNearPlane() const;
     float GetFarPlane() const;
+    Vector4f GetWorldPosition() const;
 };
 }
 #endif

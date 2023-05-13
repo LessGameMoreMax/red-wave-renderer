@@ -39,6 +39,10 @@ public:
                 const float far_plane,
                 const float vertical_fov_angle);
     Camera* GetCamera() const;
+
+    Light* GetLight(const int16_t) const;
+    void AddLight(Light*);
+    int16_t LightNumber() const;
     
     int16_t GetFrameWidth() const;
     int16_t GetFrameHeight() const;

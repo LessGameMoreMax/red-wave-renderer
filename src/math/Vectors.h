@@ -39,6 +39,7 @@ Vector3f operator-(const Vector3f&, const Vector3f&);
 Vector3f operator+(const Vector3f&, const float);
 Vector3f operator-(const Vector3f&, const float);
 Vector3f operator*(const Vector3f&, const float);
+Vector3f operator*(const Vector3f&, const Vector3f&);
 Vector3f operator/(const Vector3f&, const float);
 bool     operator==(const Vector3f&, const Vector3f&);
 bool     operator!=(const Vector3f&, const Vector3f&);
@@ -59,6 +60,7 @@ public:
     explicit Vector4f(): x_(0.0f), y_(0.0f), z_(0.0f), w_(0.0f){}
     explicit Vector4f(float x, float y, float z, float w);
     explicit Vector4f(__m128 v);
+    explicit Vector4f(const Vector3f&, float w);
     Vector4f(const Vector4f&) = default;
     Vector4f(Vector4f&&) = default;
     Vector4f& operator=(const Vector4f&) = default;
@@ -81,6 +83,7 @@ Vector4f operator-(const Vector4f&, const Vector4f&);
 Vector4f operator+(const Vector4f&, const float);
 Vector4f operator-(const Vector4f&, const float);
 Vector4f operator*(const Vector4f&, const float);
+Vector4f operator*(const Vector4f&, const Vector4f&);
 Vector4f operator/(const Vector4f&, const float);
 bool     operator==(const Vector4f&, const Vector4f&);
 bool     operator!=(const Vector4f&, const Vector4f&);

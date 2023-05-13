@@ -63,6 +63,13 @@ double AngleToRadian(const float angle){
     return (double)angle / 180.0 * PI;
 }
 
+inline
+float Saturate(float number){
+    if(number < 0.0f) return 0.0f;
+    if(number > 1.0f) return 1.0f;
+    return number;
+}
+
 bool IsInFov(const AABB&, const Matrix4x4f&,
         const Matrix4x4f&, const Matrix4x4f&,
         const float, const float);
