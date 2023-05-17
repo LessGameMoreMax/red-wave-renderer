@@ -6,18 +6,21 @@ using namespace std;
 int main(){
 //Load The Model
     ModelPool::Create();
+    Model *teapot = Loader::LoadOBJModel(
+            "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
     Model *cube = Loader::LoadOBJModel(
             "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
 
     Scene scene(640, 480);
-    scene.AddObject(cube);
+    scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f});
+    scene.AddObject(cube, Vector3f(40.0f, 1.0f, 40.0f), Vector3f(0.0f, -15.0f,0.0f));
 
-    scene.AddCamera(Vector4f(0.0f, 0.0f, 10.0f, 1.0f),
+    scene.AddCamera(Vector4f(0.0f, 50.0f, 100.0f, 0.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
                 1.0f, 1000.0f, 45);
     scene.AddParallelLight(Vector4f{1.0f, -1.0f, -1.0f, 0.0f},
-        Vector4f{0.5f, 0.5f, 0.5f, 1.0f});
+        Vector4f{0.8f, 0.8f, 0.8f, 1.0f});
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
