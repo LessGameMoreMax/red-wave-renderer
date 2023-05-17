@@ -41,7 +41,8 @@ public:
     Camera* GetCamera() const;
 
     Light* GetLight(const int16_t) const;
-    void AddLight(Light*);
+    void AddParallelLight(const Vector4f &direction,
+            const Vector4f &color);
     int16_t LightNumber() const;
     
     int16_t GetFrameWidth() const;

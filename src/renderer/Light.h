@@ -11,6 +11,7 @@ public:
             const Vector4f &color);
     virtual Vector4f LightDirection(const Vector4f&) = 0;
     virtual Vector4f LightColor(const Vector4f&) = 0;
+    virtual ~Light() = default;
 };
 }
 #endif

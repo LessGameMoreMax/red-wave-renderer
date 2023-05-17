@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "ParallelLight.h"
 #include "../math/Tools.h"
 #include <iostream>
 namespace sablin{
@@ -53,8 +54,9 @@ int16_t Scene::ObjectNumber() const{
     return objects_.size();
 }
 
-void Scene::AddLight(Light *light){
-    lights_.push_back(light);
+void Scene::AddParallelLight(const Vector4f &direction,
+        const Vector4f &color){
+    lights_.push_back(new ParallelLight(direction, color));
 }
 
 Light* Scene::GetLight(const int16_t index) const{
