@@ -27,7 +27,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
         
         for(int8_t i = 0;i != thread_number; ++i){
             threads[i] = new std::thread(VertexShade::PerVertexLight,
-                    );
+                    scene, , , object, M, NM, PVM);
         } 
 
         for(int8_t i = 0;i != thread_number; ++i){
