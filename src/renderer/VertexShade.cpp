@@ -3,8 +3,8 @@
 #include "Clip.h"
 namespace sablin{
 
-void VertexShade::Transform(Scene *scene, const int32_t begin_index,
-        const int32_t end_index, Object *object, const Matrix4x4f &M,
+void VertexShade::Transform(Scene *scene, const int64_t begin_index,
+        const int64_t end_index, Object *object, const Matrix4x4f &M,
         const Matrix4x4f &NM, const Matrix4x4f &PVM){
 
     Mesh *mesh = object->GetModel()->mesh_;
