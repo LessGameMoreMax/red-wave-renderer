@@ -5,7 +5,7 @@
 namespace sablin{
 class Renderer{
 public:
-    static Frame* Render(Scene*);
+    static Frame* Render(Scene*, const int8_t);
 };
 }
 #endif
