@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <vector>
+#include <mutex>
 #include "Object.h"
 #include "Camera.h"
 #include "Light.h"
@@ -17,9 +18,9 @@ private:
     Frame*               frame_;
     float*               depth_buffer_;
 public:
-    Scene(const int16_t, const int16_t);
-    Scene(const Scene&) = default;
-    Scene& operator=(const Scene&) = default;
+    std::mutex           depth_buffer_lock_; 
+public:
+    explicit Scene(const int16_t, const int16_t);
     ~Scene();
 
     void AddObject(Model *model, const Vector3f &scale = Vector3f(1.0f,1.0f,1.0f), 
