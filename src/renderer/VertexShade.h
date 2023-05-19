@@ -6,8 +6,7 @@ namespace sablin{
 
 class VertexShade{
 public:
-    static void Transform(Scene*, const int64_t, const int64_t, Object*,
-            const Matrix4x4f&, const Matrix4x4f&, const Matrix4x4f&);
+    static void* Transform(void*);
     static void PerVertexLight(Primitive*);
 };
 }

@@ -28,6 +28,7 @@
 #include "../renderer/Rasterizer.h"
 #include "../renderer/FragmentShade.h"
 #include "../renderer/OutputMerger.h"
+#include "../renderer/MultThreadArgs.h"
 
 //driver
 #include "../driver/Loader.h"

@@ -27,10 +27,10 @@ OBJ_S = main.o \
 		src/data/AABB.o
 
 main : ${OBJ_S}
-	g++ -Wall -o main.out $(OBJ_S) -lSDL2
+	g++ -Wall -o main.out $(OBJ_S) -lSDL2 -lpthread
 
 debug : ${OBJ_S}
-	g++ -Wall -g -o main.out $(OBJ_S) -lSDL2
+	g++ -Wall -g -o main.out $(OBJ_S) -lSDL2 -lpthread
 
 $(OBJ_S) : $(HEADER_S)
 

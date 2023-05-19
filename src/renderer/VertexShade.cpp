@@ -1,35 +1,43 @@
 #include "VertexShade.h"
 #include "../math/Compute.h"
 #include "Clip.h"
+#include "MultThreadArgs.h"
+#include <iostream>
 namespace sablin{
 
-void VertexShade::Transform(Scene *scene, const int64_t begin_index,
-        const int64_t end_index, Object *object, const Matrix4x4f &M,
-        const Matrix4x4f &NM, const Matrix4x4f &PVM){
+void* VertexShade::Transform(void *arg){
+    TransformArgs *temp = static_cast<TransformArgs*>(arg);
 
-    Mesh *mesh = object->GetModel()->mesh_;
+    cpu_set_t mask;
+    CPU_ZERO(&mask);
+    CPU_SET(temp->tid, &mask);
+    if(sched_setaffinity(0, sizeof(cpu_set_t), &mask) == -1){
+        std::cout << "Could not set CPU affinity!" << std::endl;
+    }
 
-    for(int64_t j = begin_index;j != end_index; ++j){
+    Mesh *mesh = temp->object->GetModel()->mesh_;
+
+    for(int64_t j = temp->begin_index;j != temp->end_index; ++j){
         Triangle *t = &mesh->triangle_pool_[j];
         Primitive primitive;
-        primitive.scene_ = scene;
-        primitive.object_ = object;
+        primitive.scene_ = temp->scene;
+        primitive.object_ = temp->object;
         primitive.material_ = t->material_;
-        primitive.plane_normal_ = (NM * t->normal_).Normalized();
+        primitive.plane_normal_ = ((*temp->NM) * t->normal_).Normalized();
 
         primitive.world_coord_[0]
-            = M * t->vertex_a_.get_local_coord_();
+            = (*temp->M) * t->vertex_a_.get_local_coord_();
         primitive.world_coord_[1]
-            = M * t->vertex_b_.get_local_coord_();
+            = (*temp->M) * t->vertex_b_.get_local_coord_();
         primitive.world_coord_[2]
-            = M * t->vertex_c_.get_local_coord_();
+            = (*temp->M) * t->vertex_c_.get_local_coord_();
 
         primitive.project_coord_[0]
-            = PVM * t->vertex_a_.get_local_coord_();
+            = (*temp->PVM) * t->vertex_a_.get_local_coord_();
         primitive.project_coord_[1]
-            = PVM * t->vertex_b_.get_local_coord_();
+            = (*temp->PVM) * t->vertex_b_.get_local_coord_();
         primitive.project_coord_[2]
-            = PVM * t->vertex_c_.get_local_coord_();
+            = (*temp->PVM) * t->vertex_c_.get_local_coord_();
 
         primitive.uv_coord_[0]
             = t->vertex_a_.get_uv_coord_();
@@ -39,13 +47,14 @@ void VertexShade::Transform(Scene *scene, const int64_t begin_index,
             = t->vertex_c_.get_uv_coord_();
 
         primitive.vertex_normal_[0]
-            = (NM * *t->vertex_a_.normal_).Normalized();
+            = ((*temp->NM) * *t->vertex_a_.normal_).Normalized();
         primitive.vertex_normal_[1]
-            = (NM * *t->vertex_b_.normal_).Normalized();
+            = ((*temp->NM) * *t->vertex_b_.normal_).Normalized();
         primitive.vertex_normal_[2]
-            = (NM * *t->vertex_c_.normal_).Normalized();
+            = ((*temp->NM) * *t->vertex_c_.normal_).Normalized();
         VertexShade::PerVertexLight(&primitive);
     }
+    return NULL;
 }
 
 void VertexShade::PerVertexLight(Primitive *primitive){
