@@ -10,8 +10,8 @@ void* VertexShade::Transform(void *arg){
 
     cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(temp->tid, &mask);
-    if(sched_setaffinity(0, sizeof(cpu_set_t), &mask) == -1){
+    CPU_SET(temp->tid + 2, &mask);
+    if(pthread_setaffinity_np(pthread_self(), sizeof(mask), &mask) == -1){
         std::cout << "Could not set CPU affinity!" << std::endl;
     }
 

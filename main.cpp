@@ -5,6 +5,13 @@ using namespace std;
 
 int main(){
 //Load The Model
+    cpu_set_t mask;
+    CPU_ZERO(&mask);
+    CPU_SET(0, &mask);
+    if(pthread_setaffinity_np(pthread_self(), sizeof(mask), &mask) == -1){
+        std::cout << "Could not set CPU affinity!" << std::endl;
+    }
+
     ModelPool::Create();
     Model *teapot = Loader::LoadOBJModel(
             "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
@@ -35,7 +42,7 @@ int main(){
         scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0,
-                    Renderer::Render(&scene, 4)});
+                    Renderer::Render(&scene, 2)});
         Display::GetSingleton()->Draw();
     }
     clock_gettime(CLOCK_REALTIME, &time_end);
