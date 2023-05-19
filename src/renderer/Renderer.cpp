@@ -30,8 +30,8 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
         if(slice == 0){
             TransformArgs arg;
             arg.scene = scene;
-            arg.begin_index = slice * i;
-            arg.end_index = slice * (i + 1);
+            arg.begin_index = 0;
+            arg.end_index = triangle_pool_size_;
             arg.object = object;
             arg.M = &M;
             arg.NM = &NM;
