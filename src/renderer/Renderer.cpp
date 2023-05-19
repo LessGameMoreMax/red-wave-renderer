@@ -1,5 +1,9 @@
 #include "Renderer.h"
 #include "VertexShade.h"
+#include "../math/Tools.h"
+#include "../math/Compute.h"
+#include <thread>
+#include <iostream>
 namespace sablin{
 
 Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
@@ -17,51 +21,28 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
             continue;
 
         Matrix4x4f PVM = P * V * M;
-        Mesh *mesh = object->GetModel()->mesh_;
         Matrix4x4f NM = object->GetNormalWorldMatrix();
+
+        std::thread *threads[thread_number];
         
-        for(int64_t j = 0;j != mesh->triangle_pool_size_; ++j){
-            Triangle *t = &mesh->triangle_pool_[j];
-            Primitive primitive;
-            //PerVertexLight:Fill class primitive
-            //......
-            primitive.scene_ = scene;
-            primitive.object_ = object;
-            primitive.material_ = t->material_;
-            primitive.plane_normal_ = (NM * t->normal_).Normalized();
+        for(int8_t i = 0;i != thread_number; ++i){
+            threads[i] = new std::thread(VertexShade::PerVertexLight,
+                    );
+        } 
 
-            primitive.world_coord_[0]
-                = M * t->vertex_a_.get_local_coord_();
-            primitive.world_coord_[1]
-                = M * t->vertex_b_.get_local_coord_();
-            primitive.world_coord_[2]
-                = M * t->vertex_c_.get_local_coord_();
-
-            primitive.project_coord_[0]
-                = PVM * t->vertex_a_.get_local_coord_();
-            primitive.project_coord_[1]
-                = PVM * t->vertex_b_.get_local_coord_();
-            primitive.project_coord_[2]
-                = PVM * t->vertex_c_.get_local_coord_();
-
-            primitive.uv_coord_[0]
-                = t->vertex_a_.get_uv_coord_();
-            primitive.uv_coord_[1]
-                = t->vertex_b_.get_uv_coord_();
-            primitive.uv_coord_[2]
-                = t->vertex_c_.get_uv_coord_();
-
-            primitive.vertex_normal_[0]
-                = (NM * *t->vertex_a_.normal_).Normalized();
-            primitive.vertex_normal_[1]
-                = (NM * *t->vertex_b_.normal_).Normalized();
-            primitive.vertex_normal_[2]
-                = (NM * *t->vertex_c_.normal_).Normalized();
-            Clip::PrimitiveClip(&primitive);
+        for(int8_t i = 0;i != thread_number; ++i){
+            if(threads[i]->joinable()){
+                threads[i]->join();
+                delete threads[i];
+            }else{
+                std::cout << "Not Joinable! Render::Render()" << std::endl;
+                for(int8_t j = i;j != thread_number; ++j)
+                    delete threads[j];
+                exit(-1);
+            }
         }
     }
 
-    VertexShade::PerVertexLight(scene);
     return scene->GetFrame();
 }
 }

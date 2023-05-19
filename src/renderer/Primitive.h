@@ -9,6 +9,7 @@ public:
     Object *object_;
 
     Material *material_;
+    Vector4f color_[3];
     Vector4f plane_normal_;
 
     Vector4f world_coord_[3];
