@@ -28,7 +28,6 @@
 #include "../renderer/Rasterizer.h"
 #include "../renderer/FragmentShade.h"
 #include "../renderer/OutputMerger.h"
-#include "../renderer/MultThreadArgs.h"
 
 //driver
 #include "../driver/Loader.h"
@@ -43,5 +42,8 @@
 #include "../data/Triangle.h"
 #include "../data/Vertex.h"
 #include "../data/AABB.h"
+
+//threads
+#include "../threads/MultThreadArgs.h"
 
 #endif

@@ -1,13 +1,13 @@
 #ifndef MULTITHREADARGS_H
 #define MULTITHREADARGS_H
-#include "Scene.h"
+#include "../renderer/Scene.h"
+#include <atomic>
 namespace sablin{
 
 class TransformArgs{
 public:
     Scene *scene;
-    int64_t begin_index;
-    int64_t end_index;
+    std::atomic<int64_t> *index;
     Object *object;
     Matrix4x4f *M;
     Matrix4x4f *NM;

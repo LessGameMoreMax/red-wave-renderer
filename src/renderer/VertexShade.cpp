@@ -1,7 +1,7 @@
 #include "VertexShade.h"
 #include "../math/Compute.h"
 #include "Clip.h"
-#include "MultThreadArgs.h"
+#include "../threads/MultThreadArgs.h"
 #include <iostream>
 namespace sablin{
 
@@ -17,8 +17,12 @@ void* VertexShade::Transform(void *arg){
 
     Mesh *mesh = temp->object->GetModel()->mesh_;
 
-    for(int64_t j = temp->begin_index;j != temp->end_index; ++j){
-        Triangle *t = &mesh->triangle_pool_[j];
+    int64_t i;
+    while((i = temp->index->load()) != mesh->triangle_pool_size_){
+        int64_t j = i;
+        if(!temp->index->compare_exchange_strong(j, j + 1)) continue;
+        
+        Triangle *t = &mesh->triangle_pool_[i];
         Primitive primitive;
         primitive.scene_ = temp->scene;
         primitive.object_ = temp->object;
