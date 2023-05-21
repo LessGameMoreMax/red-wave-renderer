@@ -19,8 +19,7 @@ void* VertexShade::Transform(void *arg){
 
     int64_t i;
     while((i = temp->index->load()) != mesh->triangle_pool_size_){
-        int64_t j = i;
-        if(!temp->index->compare_exchange_strong(j, j + 1)) continue;
+        if(!temp->index->compare_exchange_strong(i, i + 1)) continue;
         
         Triangle *t = &mesh->triangle_pool_[i];
         Primitive primitive;

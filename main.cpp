@@ -42,7 +42,7 @@ int main(){
         scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0,
-                    Renderer::Render(&scene, 4)});
+                    Renderer::Render(&scene, 8)});
         Display::GetSingleton()->Draw();
     }
     clock_gettime(CLOCK_REALTIME, &time_end);
