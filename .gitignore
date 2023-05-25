@@ -1,4 +1,6 @@
 .ccls-cache/
+.cache/
+compile_commands.json
 *.o
 *.out
 .git/
