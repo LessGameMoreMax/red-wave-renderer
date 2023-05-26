@@ -1,4 +1,5 @@
 #include "Loader.h"
+#include "PngLoader.h"
 #include "../data/ModelPool.h"
 #include "../math/Tools.h"
 #include <fstream>
@@ -43,9 +44,6 @@ HEdge* Loader::GetHEdgePair(Mesh *mesh, const int64_t index,
                 Vertex::IsSameCoord(b, t->vertex_a_))
             return t->vertex_a_.h_edge_;
     }
-//debug----------------------
-    std::cout << index << std::endl;
-//debug----------------------
     std::cout << "Fail to GetHEdgePair !" << std::endl;
     exit(-1);
 }
@@ -470,8 +468,7 @@ Loader::LoadMTLMaterial(const std::string &file_path){
     return string_material_map;
 }
 
-//TODO: Implement a PNG texture loader.
-Texture* Loader::LoadPNGTexture(const std::string&){
-    return nullptr;
+Texture* Loader::LoadPNGTexture(const std::string &file_path){
+    return PngLoader::LoadPNGTexture(file_path);
 }
 }

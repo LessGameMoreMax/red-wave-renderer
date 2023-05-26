@@ -31,6 +31,7 @@
 
 //driver
 #include "../driver/Loader.h"
+#include "../driver/PngLoader.h"
 
 //data
 #include "../data/Model.h"

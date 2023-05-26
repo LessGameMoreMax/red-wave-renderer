@@ -7,3 +7,7 @@ Reference points:
 3. Implement Perspective Correct Interpolation.
 Reference points:
     Rasterizer.cpp
+4. Implement Interlacing Adam7.
+    PNGLoader.cpp
+5. Implement Inflate zlib method.
+    PNGLoader.cpp

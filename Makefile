@@ -17,6 +17,7 @@ OBJ_S = main.o \
 		src/renderer/FragmentShade.o \
 		src/renderer/OutputMerger.o \
 		src/driver/Loader.o \
+		src/driver/PngLoader.o \
 		src/data/Model.o \
 		src/data/Material.o \
 		src/data/Mesh.o \
@@ -27,10 +28,10 @@ OBJ_S = main.o \
 		src/data/AABB.o
 
 main : ${OBJ_S}
-	g++ -Wall -o main.out $(OBJ_S) -lSDL2 -lpthread
+	g++ -Wall -o main.out $(OBJ_S) -lSDL2 -lpthread -lz
 
 debug : ${OBJ_S}
-	g++ -Wall -g -o main.out $(OBJ_S) -lSDL2 -lpthread
+	g++ -Wall -g -o main.out $(OBJ_S) -lSDL2 -lpthread -lz
 
 $(OBJ_S) : $(HEADER_S)
 

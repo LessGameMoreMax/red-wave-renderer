@@ -70,6 +70,12 @@ float Saturate(float number){
     return number;
 }
 
+inline
+void MemCopyRev(void *dist, void *src, size_t n){
+    for(size_t i = 0,j = n-1;i != n; ++i, --j)
+        ((char*)dist)[i] = ((char*)src)[j];
+}
+
 bool IsInFov(const AABB&, const Matrix4x4f&,
         const Matrix4x4f&, const Matrix4x4f&,
         const float, const float);
