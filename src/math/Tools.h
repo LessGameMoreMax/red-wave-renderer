@@ -80,6 +80,24 @@ bool IsInFov(const AABB&, const Matrix4x4f&,
         const Matrix4x4f&, const Matrix4x4f&,
         const float, const float);
 
+inline
+int32_t Mask32(int32_t number){
+    int32_t result = 1;
+    return (result << number) - 1;
+}
+
+inline
+int16_t Mask16(int16_t number){
+    int16_t result = 1;
+    return (result << number) - 1;
+}
+
+inline
+int8_t Mask8(int8_t number){
+    int8_t result = 1;
+    return (result << number) - 1;
+}
+
 void BoundingBoxScreen(const Primitive*,Vector2i*,Vector2i*);
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);

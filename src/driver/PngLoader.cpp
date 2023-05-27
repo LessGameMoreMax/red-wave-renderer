@@ -57,7 +57,7 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
 
 // Fill Chunks:
     char plte_type[]{'P', 'L', 'T', 'E'};
-    Vector4i *plte = nullptr;
+    Vector4f *plte = nullptr;
 
     char idat_type[]{'I', 'D', 'A', 'T'};
     std::vector<Chunk*> idats;
@@ -71,12 +71,12 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
                 std::cout << "Wrong PLTE!" << std::endl;
                 exit(-1);
             }
-            plte = new Vector4i[temp.length_/3];
+            plte = new Vector4f[temp.length_/3];
             for(int32_t i = 0;i != temp.length_/3; ++i){
-               plte[i].x_ = temp.data_[i * 3 + 0];
-               plte[i].y_ = temp.data_[i * 3 + 1];
-               plte[i].z_ = temp.data_[i * 3 + 2];
-               plte[i].w_ = 255;
+               plte[i].x_ = (uint8_t)temp.data_[i * 3 + 0] / 255.0f;
+               plte[i].y_ = (uint8_t)temp.data_[i * 3 + 1] / 255.0f;
+               plte[i].z_ = (uint8_t)temp.data_[i * 3 + 2] / 255.0f;
+               plte[i].w_ = 1.0f;
             }
         }else if(std::memcmp(idat_type, temp.type_, 4) == 0){
             idats.push_back(new Chunk(temp));
@@ -87,7 +87,7 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
                 exit(-1);
             }
             for(int32_t i = 0;i != temp.length_; ++i){
-                plte[i].w_ = temp.data_[i];
+                plte[i].w_ = (uint8_t)temp.data_[i] / 255.0f;
             }
         }
     }
@@ -168,13 +168,152 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
     output.clear();
 
 //Fill the Texture:
-    // Vector4f *texels = new Vector4f[width * height];
-    // Texture *texture = new Texture(width, height, texels);
+    Vector4f *texels = new Vector4f[width * height];
+    Texture *texture = new Texture(width, height, texels);
+
+    if(color_type == 0){
+        uint32_t max_number = (1 << bit_depth) - 1;
+        for(int32_t i = 0;i != width * height; ++i){
+            if(bit_depth <= 8){
+                int32_t index = i * bit_depth;
+                char temp = filtered_data[index / 8];
+                uint32_t result = (temp >> (8 - bit_depth - (index % 8))) & Mask8(bit_depth);
+                float heft = (float)result / (float)max_number;
+                texels[i].x_ = texels[i].y_ = texels[i].z_ = heft;
+                texels[i].w_ = 1.0f;
+            }else{
+                uint32_t result = filtered_data[i * 2];
+                result <<= 8;
+                result += filtered_data[i * 2 + 1];
+                float heft = (float)result / (float)max_number;
+                texels[i].x_ = texels[i].y_ = texels[i].z_ = heft;
+                texels[i].w_ = 1.0f;
+            }
+        }
+    }else if(color_type == 2){
+        int32_t max_number = (1 << bit_depth) - 1;
+        if(bit_depth == 8){
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 3];
+                texels[i].x_ = (float)temp / (float)max_number;
+                
+                temp = filtered_data[i * 3 + 1];
+                texels[i].y_ = (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 3 + 2];
+                texels[i].z_ = (float)temp / (float)max_number;
+                
+                texels[i].w_ = 1.0f;
+            }
+        }else if(bit_depth == 16){
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 6];
+                temp <<= 8;
+                temp += filtered_data[i * 6 + 1];
+                texels[i].x_ = (float)temp / (float)max_number;
+                
+                temp = filtered_data[i * 6 + 2];
+                temp <<= 8;
+                temp += filtered_data[i * 6 + 3];
+                texels[i].y_ = (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 6 + 4];
+                temp <<= 8;
+                temp += filtered_data[i * 6 + 5];
+                texels[i].z_ = (float)temp / (float)max_number;
+
+                texels[i].w_ = 1.0f;
+            }
+        }
+    }else if(color_type == 3){
+        for(int32_t i = 0;i != width * height; ++i){
+            if(bit_depth <= 8){
+                int32_t index = i * bit_depth;
+                char temp = filtered_data[index / 8];
+                uint32_t result = (temp >> (8 - bit_depth - (index % 8))) & Mask8(bit_depth);
+                texels[i] = plte[result];
+            }else{
+                uint32_t result = filtered_data[i * 2];
+                result <<= 8;
+                result += filtered_data[i * 2 + 1];
+                texels[i] = plte[result];
+            }
+        }
+    }else if(color_type == 4){
+        uint32_t max_number = (1 << bit_depth) - 1;
+        if(bit_depth == 8){
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 2];
+                texels[i].x_ = texels[i].y_ = texels[i].z_ =
+                    (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 2 + 1];
+                texels[i].w_ = (float)temp / (float)max_number;
+            }
+        }else{
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 4];
+                temp <<= 8;
+                temp += filtered_data[i * 4 + 1];
+                texels[i].x_ = texels[i].y_ = texels[i].z_ =
+                    (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 4 + 2];
+                temp <<= 8;
+                temp += filtered_data[i * 4 + 3];
+                texels[i].w_ = (float)temp / (float)max_number;
+            }
+        }
+    }else if(color_type == 6){
+        int32_t max_number = (1 << bit_depth) - 1;
+        if(bit_depth == 8){
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 4];
+                texels[i].x_ = (float)temp / (float)max_number;
+                
+                temp = filtered_data[i * 4 + 1];
+                texels[i].y_ = (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 4 + 2];
+                texels[i].z_ = (float)temp / (float)max_number;
+                
+                temp = filtered_data[i * 4 + 3];
+                texels[i].w_ = (float)temp / (float)max_number;
+            }
+        }else if(bit_depth == 16){
+            for(int32_t i = 0;i != width * height; ++i){
+                uint16_t temp = filtered_data[i * 8];
+                temp <<= 8;
+                temp += filtered_data[i * 8 + 1];
+                texels[i].x_ = (float)temp / (float)max_number;
+                
+                temp = filtered_data[i * 8 + 2];
+                temp <<= 8;
+                temp += filtered_data[i * 8 + 3];
+                texels[i].y_ = (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 8 + 4];
+                temp <<= 8;
+                temp += filtered_data[i * 8 + 5];
+                texels[i].z_ = (float)temp / (float)max_number;
+
+                temp = filtered_data[i * 8 + 6];
+                temp <<= 8;
+                temp += filtered_data[i * 8 + 7];
+                texels[i].w_ = (float)temp / (float)max_number;
+            }
+        }
+    }else{
+        std::cout << "Wrong Color Type!" << std::endl;
+        exit(-1);
+    }
 
 // Resource Collect:
     if(plte != nullptr)
         delete[] plte;
-    return nullptr;
+    if(filtered_data != nullptr)
+        delete[] filtered_data;
+    return texture;
 }
 
 bool PngLoader::IsPNG(std::ifstream &file){
