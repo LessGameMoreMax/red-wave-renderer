@@ -3,6 +3,7 @@
 #include "../data/Texture.h"
 #include <string>
 #include <fstream>
+#include <vector>
 namespace sablin{
 
 class Chunk{
@@ -22,6 +23,11 @@ class PngLoader{
 private:
     static bool IsPNG(std::ifstream&);
     static bool FillChunk(std::ifstream&, Chunk*);
+    static void FilterNone(const std::vector<char>&, char*, const int32_t, const int32_t, const int32_t);
+    static void FilterSub(const std::vector<char>&, char*, const int32_t, const int32_t, const int32_t);
+    static void FilterUp(const std::vector<char>&, char*, const int32_t, const int32_t, const int32_t);
+    static void FilterAverage(const std::vector<char>&, char*, const int32_t, const int32_t, const int32_t);
+    static void FilterPaeth(const std::vector<char>&, char*, const int32_t, const int32_t, const int32_t);
 public:
     static Texture* LoadPNGTexture(const std::string&);
 };

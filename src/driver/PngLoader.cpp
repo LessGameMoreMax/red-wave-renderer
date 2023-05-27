@@ -128,6 +128,48 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
         break;
     }
     output.resize(infstream.total_out);
+    delete[] input;
+
+//Filter the output data:
+    int8_t channel = 0;
+    if(color_type == 0) channel = 1;
+    else if(color_type == 2) channel = 3;
+    else if(color_type == 3) channel = 1;
+    else if(color_type == 4) channel = 2;
+    else if(color_type == 6) channel = 4;
+
+    int32_t bytes_per_row = output.size() / height;
+    int32_t bytes_per_pixel = std::max(1, channel * bit_depth / 8);
+    char *filtered_data = new char[output.size() - height];
+
+    for(int32_t i = 0;i != height; ++i){
+        int32_t filter_type = output[i * bytes_per_row];        
+        switch(filter_type){
+            case 0:
+                FilterNone(output, filtered_data, i, bytes_per_row, bytes_per_pixel);
+                break;
+            case 1:
+                FilterSub(output, filtered_data, i, bytes_per_row, bytes_per_pixel);
+                break;
+            case 2:
+                FilterUp(output, filtered_data, i, bytes_per_row, bytes_per_pixel);
+                break;
+            case 3:
+                FilterAverage(output, filtered_data, i, bytes_per_row, bytes_per_pixel);
+                break;
+            case 4:
+                FilterPaeth(output, filtered_data, i, bytes_per_row, bytes_per_pixel);
+            default:
+                std::cout << "Wrong Filter Type!" << std::endl;
+                exit(-1);
+        }
+    }
+    int32_t filtered_data_size = output.size() - height;
+    output.clear();
+
+//Fill the Texture:
+    // Vector4f *texels = new Vector4f[width * height];
+    // Texture *texture = new Texture(width, height, texels);
 
 // Resource Collect:
     if(plte != nullptr)
@@ -160,14 +202,120 @@ bool PngLoader::FillChunk(std::ifstream &file, Chunk *chunk){
     file.read(temp, 4);
     sablin::MemCopyRev(&chunk->crc_, temp, 4);
 
-//debug--------
-    // char idat_type[] = {'I', 'D', 'A' , 'T'};
-    // if(std::memcmp(idat_type, chunk->type_, 4) == 0){
-    //     for(int32_t i = 0;i != chunk->length_; ++i)
-    //         printf("%X\n", chunk->data_[i]);
-    // }
-//debug--------
     return true;
+}
+
+void PngLoader::FilterNone(const std::vector<char> &src, char *dst,
+        const int32_t cur_height, const int32_t bytes_per_row, const int32_t bytes_per_pixel){
+    for(int32_t i = 1;i != bytes_per_row; ++i){
+        dst[cur_height * (bytes_per_row - 1) + i - 1] =
+            src[cur_height * bytes_per_row + i];
+    }
+}
+
+void PngLoader::FilterSub(const std::vector<char> &src, char *dst,
+        const int32_t cur_height, const int32_t bytes_per_row, const int32_t bytes_per_pixel){
+    for(int32_t i = 1;i != bytes_per_row; ++i){
+        if(i < bytes_per_pixel + 1){
+            dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                src[cur_height * bytes_per_row + i];
+        }else{
+            char a = dst[cur_height * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+            dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                a + src[cur_height * bytes_per_row + i];
+        }
+    }
+}
+
+void PngLoader::FilterUp(const std::vector<char> &src, char *dst,
+        const int32_t cur_height, const int32_t bytes_per_row, const int32_t bytes_per_pixel){
+    if(cur_height == 0){
+        for(int32_t i = 1;i != bytes_per_row; ++i)
+            dst[i - 1] = src[i];
+    }else{
+        for(int32_t i = 1;i != bytes_per_row; ++i){
+            char b = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1];
+            dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                b + src[cur_height * bytes_per_row + i];
+        }
+    }
+}
+
+void PngLoader::FilterAverage(const std::vector<char> &src, char *dst,
+        const int32_t cur_height, const int32_t bytes_per_row, const int32_t bytes_per_pixel){
+    if(cur_height == 0){
+        for(int32_t i = 1;i != bytes_per_row; ++i){
+            if(i < bytes_per_pixel + 1){
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    src[cur_height * bytes_per_row + i];
+            }else{
+                char a = dst[cur_height * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+                a >>= 1;
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    a + src[cur_height * bytes_per_row + i];
+            }
+        }
+    }else{
+        for(int32_t i = 1;i != bytes_per_row; ++i){
+            if(i < bytes_per_pixel + 1){
+                char b = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1];
+                b >>= 1;
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    b + src[cur_height * bytes_per_row + i];
+            }else{
+                char a = dst[cur_height * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+                char b = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1];
+                char value = (a + b) >> 1;
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    value + src[cur_height * bytes_per_row + i];
+            }
+        }
+    }
+}
+
+void PngLoader::FilterPaeth(const std::vector<char> &src, char *dst,
+        const int32_t cur_height, const int32_t bytes_per_row, const int32_t bytes_per_pixel){
+    if(cur_height == 0){
+        for(int32_t i = 1;i != bytes_per_row; ++i){
+            if(i < bytes_per_pixel + 1){
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    src[cur_height * bytes_per_row + i];
+            }else{
+                char a = dst[cur_height * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+                a >>= 1;
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    a + src[cur_height * bytes_per_row + i];
+            }
+        }
+    }else{
+        for(int32_t i = 1;i != bytes_per_row; ++i){
+            if(i < bytes_per_pixel + 1){
+                char b = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1];
+                b >>= 1;
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    b + src[cur_height * bytes_per_row + i];
+            }else{
+                char a = dst[cur_height * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+                char b = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1];
+                char c = dst[(cur_height - 1) * (bytes_per_row - 1) + i - 1 - bytes_per_pixel];
+                char p = a + b - c;
+                char pa = std::abs(p - a);
+                char pb = std::abs(p - b);
+                char pc = std::abs(p - c);
+                char pr;
+
+                if(pa <= pb && pa <= pc) 
+                    pr = a;
+                else if(pb <= pc)
+                    pr = b;
+                else
+                    pr = c;
+
+                dst[cur_height * (bytes_per_row - 1) + i - 1] =
+                    pr + src[cur_height * bytes_per_row + i];
+            }
+        }
+    }
 }
 
 }
