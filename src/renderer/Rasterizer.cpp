@@ -88,25 +88,58 @@ void Rasterizer::Rasterization(Primitive *primitive){
 
             //color interpolation
             //......
-            fragment.depth_ =
-                a * primitive->project_coord_[0].z_ +
-                b * primitive->project_coord_[1].z_ + 
-                c * primitive->project_coord_[2].z_;
+            // fragment.depth_ =
+            //     a * primitive->project_coord_[0].z_ +
+            //     b * primitive->project_coord_[1].z_ + 
+            //     c * primitive->project_coord_[2].z_;
+            //
+            // fragment.world_coord_ =
+            //     primitive->world_coord_[0] * a +
+            //     primitive->world_coord_[1] * b +
+            //     primitive->world_coord_[2] * c;
+            //
+            // fragment.uv_coord_ =
+            //     primitive->uv_coord_[0] * a +
+            //     primitive->uv_coord_[1] * b +
+            //     primitive->uv_coord_[2] * c;
+            //
+            // fragment.vertex_normal_ =
+            //     primitive->vertex_normal_[0] * a +
+            //     primitive->vertex_normal_[1] * b +
+            //     primitive->vertex_normal_[2] * c;
+            
+            float za = primitive->project_coord_[0].z_;
+            float zb = primitive->project_coord_[1].z_;
+            float zc = primitive->project_coord_[2].z_;
+
+            fragment.depth_ = 1.0f / 
+                (a / za +
+                 b / zb +
+                 c / zc);
 
             fragment.world_coord_ =
-                primitive->world_coord_[0] * a +
-                primitive->world_coord_[1] * b +
-                primitive->world_coord_[2] * c;
+                (primitive->world_coord_[0] * a / za +
+                 primitive->world_coord_[1] * b / zb +
+                 primitive->world_coord_[2] * c / zc) *
+                fragment.depth_;
+
+            fragment.world_coord_ =
+                (primitive->world_coord_[0] * a / za +
+                 primitive->world_coord_[1] * b / zb +
+                 primitive->world_coord_[2] * c / zc) *
+                fragment.depth_;
 
             fragment.uv_coord_ =
-                primitive->uv_coord_[0] * a +
-                primitive->uv_coord_[1] * b +
-                primitive->uv_coord_[2] * c;
+                (primitive->uv_coord_[0] * a / za +
+                 primitive->uv_coord_[1] * b / zb +
+                 primitive->uv_coord_[2] * c / zc) *
+                fragment.depth_;
 
             fragment.vertex_normal_ =
-                primitive->vertex_normal_[0] * a +
-                primitive->vertex_normal_[1] * b +
-                primitive->vertex_normal_[2] * c;
+                (primitive->vertex_normal_[0] * a / za +
+                 primitive->vertex_normal_[1] * b / zb +
+                 primitive->vertex_normal_[2] * c / zc) *
+                fragment.depth_;
 
             fragment.screen_coord_.x_ = i;
             fragment.screen_coord_.y_ = j;
