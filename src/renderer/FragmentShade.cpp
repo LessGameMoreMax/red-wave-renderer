@@ -35,7 +35,11 @@ Vector4f FragmentShade::BlinnPhongShade(Fragment *fragment){
 
 void FragmentShade::PerPixelLight(Fragment *fragment){
 //Implement PerPixleLight 
-    fragment->color_ = BlinnPhongShade(fragment);
+    // fragment->color_ = BlinnPhongShade(fragment);
+    if(fragment->material_->map_kd_ != nullptr)
+        fragment->color_ = fragment->material_->map_kd_->Sample(fragment->uv_coord_);
+    else
+        fragment->color_ = Vector4f(0.6f, 0.6f, 0.6f, 1.0f);
     OutputMerger::DepthTest(fragment);
 }
 

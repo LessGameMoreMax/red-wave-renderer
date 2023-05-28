@@ -17,6 +17,7 @@ public:
     ~Texture();
 
     Vector4f Sample(const float, const float) const;
+    Vector4f Sample(const Vector2f&) const;
 };
 }
 #endif

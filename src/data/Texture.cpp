@@ -15,4 +15,8 @@ Vector4f Texture::Sample(const float u, const float v) const{
     return texels_[real_v * width_ + real_u];
 }
 
+Vector4f Texture::Sample(const Vector2f &uv) const{
+    return Sample(uv.x_, uv.y_);
+}
+
 }
