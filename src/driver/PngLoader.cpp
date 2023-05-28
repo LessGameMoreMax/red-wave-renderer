@@ -56,10 +56,10 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
     }
 
 //debug---------
-    std::cout << "width: " << width << std::endl;
-    std::cout << "height: " << height << std::endl;
-    std::cout << "color_type: " << (int16_t)color_type << std::endl;
-    std::cout << "bit_depth: " << (int16_t)bit_depth << std::endl;
+    // std::cout << "width: " << width << std::endl;
+    // std::cout << "height: " << height << std::endl;
+    // std::cout << "color_type: " << (int16_t)color_type << std::endl;
+    // std::cout << "bit_depth: " << (int16_t)bit_depth << std::endl;
 //debug---------
 // Fill Chunks:
     char plte_type[]{'P', 'L', 'T', 'E'};
@@ -136,7 +136,7 @@ Texture* PngLoader::LoadPNGTexture(const std::string &file_path){
     output.resize(infstream.total_out);
     delete[] input;
 //debug------------
-    std::cout << "inflate size: " << output.size() << std::endl;
+    // std::cout << "inflate size: " << output.size() << std::endl;
 //debug------------
 
 //Filter the output data:
