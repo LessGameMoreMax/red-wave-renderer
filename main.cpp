@@ -22,7 +22,7 @@ int main(){
     // scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f});
     scene.AddObject(cube);
 
-    scene.AddCamera(Vector4f(0.0f, 5.0f, 3.0f, 0.0f),
+    scene.AddCamera(Vector4f(0.0f, 4.0f, 3.0f, 0.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 0.0f, 1.0f, 0.0f),
                 1.0f, 1000.0f, 45);

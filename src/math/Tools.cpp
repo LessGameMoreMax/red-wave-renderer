@@ -17,14 +17,14 @@ bool IsInFov(const AABB &aabb, const Matrix4x4f &P,
     float two_z = two.z_;
 
     one = P * one;
-    one /= one.z_;
+    one /= one.w_;
     if(one.x_ >= -1.0f && one.x_ <= 1.0f &&
             one.y_ >= -1.0f && one.y_ <= 1.0f &&
             one_z <= -near_plane && one_z >= -far_plane)
         return true;
 
     two = P * two;
-    two /= two.z_;
+    two /= two.w_;
     if(two.x_ >= -1.0f && two.x_ <= 1.0f &&
             two.y_ >= -1.0f && two.y_ <= 1.0f &&
             two_z <= -near_plane && two_z >= -far_plane)
