@@ -46,5 +46,6 @@
 
 //threads
 #include "../threads/MultThreadArgs.h"
+#include "../threads/LockFreeList.h"
 
 #endif

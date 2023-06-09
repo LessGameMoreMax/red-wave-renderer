@@ -32,14 +32,13 @@ void FragmentShade::BlinnPhongShade(Fragment *fragment){
                     
         color += ambient + diffuse + specular;
     }
-    color /= light_number;
 
-    if(light_number == 0 && fragment->material_->map_kd_ != nullptr)
-        color = fragment->material_->map_kd_->Sample(fragment->uv_coord_);
+    if(light_number != 0)
+        fragment->color_ = fragment->color_ * color / light_number;
+    else if(light_number == 0 && fragment->material_->map_kd_ != nullptr)
+        fragment->color_ = fragment->color_ * fragment->material_->map_kd_->Sample(fragment->uv_coord_);
 
-    color.w_ = 1.0f;
-
-    fragment->color_ = fragment->color_ * color;
+    fragment->color_.w_ = 1.0f;
 }
 
 void FragmentShade::PerPixelLight(Fragment *fragment){

@@ -1,5 +1,6 @@
 #include "VertexShade.h"
 #include "../math/Compute.h"
+#include "../math/Tools.h"
 #include "Clip.h"
 #include "../threads/MultThreadArgs.h"
 #include <iostream>
@@ -55,6 +56,12 @@ void* VertexShade::Transform(void *arg){
             = ((*temp->NM) * *t->vertex_b_.normal_).Normalized();
         primitive->vertex_normal_[2]
             = ((*temp->NM) * *t->vertex_c_.normal_).Normalized();
+
+        if(std::abs(primitive->material_->d_ - 1.0f) > FLOAT_ERROR){
+            temp->transparent_list->PushFront(primitive);
+            continue;
+        }
+
         VertexShade::PerVertexLight(primitive);
     }
     return NULL;
@@ -63,9 +70,9 @@ void* VertexShade::Transform(void *arg){
 void VertexShade::PerVertexLight(Primitive *primitive){
 // Implement per vertex light:
 // ......
-    primitive->color_[0] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-    primitive->color_[1] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
-    primitive->color_[2] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    primitive->color_[0] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
+    primitive->color_[1] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
+    primitive->color_[2] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
     
     // primitive->color_[0] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
     // primitive->color_[1] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);

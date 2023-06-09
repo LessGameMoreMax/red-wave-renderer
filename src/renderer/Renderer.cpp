@@ -3,6 +3,7 @@
 #include "../math/Tools.h"
 #include "../math/Compute.h"
 #include "../threads/MultThreadArgs.h"
+#include "../threads/LockFreeList.h"
 #include <iostream>
 #include <pthread.h>
 namespace sablin{
@@ -11,9 +12,11 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
     scene->GetFrame()->FreshColors();
     scene->FreshDepthBuffer();
 
+    LockFreeList<Primitive*> list; 
+
     Matrix4x4f P = scene->GetCamera()->GetProjectMatrix();
     Matrix4x4f V = scene->GetCamera()->GetViewMatrix();
-    //TODO:Thread Safe Stack
+
     for(int16_t i = 0;i != scene->ObjectNumber(); ++i){
         Object *object = scene->GetObject(i);
         Matrix4x4f M = object->GetWorldMatrix();
@@ -33,6 +36,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
         TransformArgs *args = new TransformArgs[thread_number]; 
 
         for(int8_t i = 0;i != thread_number; ++i){
+            args[i].transparent_list = &list;
             args[i].scene = scene;
             args[i].index = &triangle_index;
             args[i].object = object;
@@ -57,8 +61,10 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
         delete []args;
     }
 
-    //TODO: Implement Transparent algorithm
-    //TODO: MultiThread Version
+    //TODO: Implement Transparent algorithm MultiThread Version
+    while(!list.IsEmpty())
+        VertexShade::PerVertexLight(list.PopFront());
+
     return scene->GetFrame();
 }
 }
