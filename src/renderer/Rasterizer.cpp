@@ -36,7 +36,10 @@ void Rasterizer::BackfaceCulling(Primitive *primitive){
     Vector2f b{
         primitive->project_coord_[2].x_ - primitive->project_coord_[0].x_,
         primitive->project_coord_[2].y_ - primitive->project_coord_[0].y_};
-    if(a.x_ * b.y_ - a.y_ * b.x_ > 0.0f) return;
+    if(a.x_ * b.y_ - a.y_ * b.x_ > 0.0f) {
+        delete primitive;
+        return;
+    }
     Rasterizer::Rasterization(primitive);
 }
 
@@ -124,11 +127,14 @@ void Rasterizer::Rasterization(Primitive *primitive){
                  primitive->color_[2] * c / zc) *
                 fragment.depth_;
 
+
             fragment.screen_coord_.x_ = i;
             fragment.screen_coord_.y_ = j;
 
             FragmentShade::PerPixelLight(&fragment);
         }
+
+    delete primitive;
 }
 
 }

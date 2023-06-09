@@ -22,40 +22,40 @@ void* VertexShade::Transform(void *arg){
         if(!temp->index->compare_exchange_strong(i, i + 1)) continue;
         
         Triangle *t = &mesh->triangle_pool_[i];
-        Primitive primitive;
-        primitive.scene_ = temp->scene;
-        primitive.object_ = temp->object;
-        primitive.material_ = t->material_;
-        primitive.plane_normal_ = ((*temp->NM) * t->normal_).Normalized();
+        Primitive *primitive= new Primitive();
+        primitive->scene_ = temp->scene;
+        primitive->object_ = temp->object;
+        primitive->material_ = t->material_;
+        primitive->plane_normal_ = ((*temp->NM) * t->normal_).Normalized();
 
-        primitive.world_coord_[0]
+        primitive->world_coord_[0]
             = (*temp->M) * t->vertex_a_.get_local_coord_();
-        primitive.world_coord_[1]
+        primitive->world_coord_[1]
             = (*temp->M) * t->vertex_b_.get_local_coord_();
-        primitive.world_coord_[2]
+        primitive->world_coord_[2]
             = (*temp->M) * t->vertex_c_.get_local_coord_();
 
-        primitive.project_coord_[0]
+        primitive->project_coord_[0]
             = (*temp->PVM) * t->vertex_a_.get_local_coord_();
-        primitive.project_coord_[1]
+        primitive->project_coord_[1]
             = (*temp->PVM) * t->vertex_b_.get_local_coord_();
-        primitive.project_coord_[2]
+        primitive->project_coord_[2]
             = (*temp->PVM) * t->vertex_c_.get_local_coord_();
 
-        primitive.uv_coord_[0]
+        primitive->uv_coord_[0]
             = t->vertex_a_.get_uv_coord_();
-        primitive.uv_coord_[1]
+        primitive->uv_coord_[1]
             = t->vertex_b_.get_uv_coord_();
-        primitive.uv_coord_[2]
+        primitive->uv_coord_[2]
             = t->vertex_c_.get_uv_coord_();
 
-        primitive.vertex_normal_[0]
+        primitive->vertex_normal_[0]
             = ((*temp->NM) * *t->vertex_a_.normal_).Normalized();
-        primitive.vertex_normal_[1]
+        primitive->vertex_normal_[1]
             = ((*temp->NM) * *t->vertex_b_.normal_).Normalized();
-        primitive.vertex_normal_[2]
+        primitive->vertex_normal_[2]
             = ((*temp->NM) * *t->vertex_c_.normal_).Normalized();
-        VertexShade::PerVertexLight(&primitive);
+        VertexShade::PerVertexLight(primitive);
     }
     return NULL;
 }
