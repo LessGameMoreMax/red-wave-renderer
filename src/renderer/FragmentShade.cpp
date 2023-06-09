@@ -19,6 +19,9 @@ Vector4f FragmentShade::BlinnPhongShade(Fragment *fragment){
         Vector4f diffuse = light_color * Vector4f{fragment->material_->kd_, 0.0f} * 
             Saturate(DotProduct(world_normal, light_direction));
 
+        if(fragment->material_->map_kd_ != nullptr)
+            diffuse = diffuse * fragment->material_->map_kd_->Sample(fragment->uv_coord_);
+
         Vector4f view_direction = (fragment->scene_->GetCamera()->GetWorldPosition() -
             fragment->world_coord_).Normalized();
         Vector4f half_direction = (view_direction + light_direction).Normalized();
@@ -29,17 +32,18 @@ Vector4f FragmentShade::BlinnPhongShade(Fragment *fragment){
                     
         color += diffuse + specular;
     }
+
+    if(light_number == 0 && fragment->material_->map_kd_ != nullptr)
+        color = fragment->material_->map_kd_->Sample(fragment->uv_coord_);
+
     color.w_ = 1.0f;
     return color;
 }
 
 void FragmentShade::PerPixelLight(Fragment *fragment){
 //Implement PerPixleLight 
-    // fragment->color_ = BlinnPhongShade(fragment);
-    if(fragment->material_->map_kd_ != nullptr)
-        fragment->color_ = fragment->material_->map_kd_->Sample(fragment->uv_coord_);
-    else
-        fragment->color_ = Vector4f(0.6f, 0.6f, 0.6f, 1.0f);
+    //TODO: Implement material color
+    fragment->color_ = BlinnPhongShade(fragment);
     OutputMerger::DepthTest(fragment);
 }
 

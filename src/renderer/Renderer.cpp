@@ -13,6 +13,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
 
     Matrix4x4f P = scene->GetCamera()->GetProjectMatrix();
     Matrix4x4f V = scene->GetCamera()->GetViewMatrix();
+    //TODO:Thread Safe Stack
     for(int16_t i = 0;i != scene->ObjectNumber(); ++i){
         Object *object = scene->GetObject(i);
         Matrix4x4f M = object->GetWorldMatrix();
@@ -55,6 +56,9 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
         delete []threads;
         delete []args;
     }
+
+    //TODO: Implement Transparent algorithm
+    //TODO: MultiThread Version
     return scene->GetFrame();
 }
 }

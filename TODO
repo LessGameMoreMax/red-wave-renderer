@@ -1,12 +1,6 @@
 1. Implement a thread pool to organize threads.
 Reference points:
     Display.cpp line:150
-2. Implement a PNG texture loader.
-Reference points:
-    Loader.cpp
-3. Implement Perspective Correct Interpolation.
-Reference points:
-    Rasterizer.cpp
 4. Implement Interlacing Adam7.
     PNGLoader.cpp
 5. Implement Inflate zlib method.

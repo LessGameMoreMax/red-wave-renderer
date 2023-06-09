@@ -81,33 +81,10 @@ void Rasterizer::Rasterization(Primitive *primitive){
             float b = judge_one / total_area;
             float c = judge_three / total_area;
 
-            //TODO:Implement Perspective Correct Interpolate
             Fragment fragment;
             fragment.material_ = primitive->material_;
             fragment.scene_ = primitive->scene_;
 
-            //color interpolation
-            //......
-            // fragment.depth_ =
-            //     a * primitive->project_coord_[0].z_ +
-            //     b * primitive->project_coord_[1].z_ + 
-            //     c * primitive->project_coord_[2].z_;
-            //
-            // fragment.world_coord_ =
-            //     primitive->world_coord_[0] * a +
-            //     primitive->world_coord_[1] * b +
-            //     primitive->world_coord_[2] * c;
-            //
-            // fragment.uv_coord_ =
-            //     primitive->uv_coord_[0] * a +
-            //     primitive->uv_coord_[1] * b +
-            //     primitive->uv_coord_[2] * c;
-            //
-            // fragment.vertex_normal_ =
-            //     primitive->vertex_normal_[0] * a +
-            //     primitive->vertex_normal_[1] * b +
-            //     primitive->vertex_normal_[2] * c;
-            
             float za = primitive->project_coord_[0].z_;
             float zb = primitive->project_coord_[1].z_;
             float zc = primitive->project_coord_[2].z_;

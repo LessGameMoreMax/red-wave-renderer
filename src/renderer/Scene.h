@@ -18,7 +18,7 @@ private:
     Frame*               frame_;
     float*               depth_buffer_;
 public:
-    std::mutex           depth_buffer_lock_; 
+    std::mutex           depth_buffer_lock_;
 public:
     explicit Scene(const int16_t, const int16_t);
     ~Scene();
