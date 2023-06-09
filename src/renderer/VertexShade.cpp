@@ -66,6 +66,10 @@ void VertexShade::PerVertexLight(Primitive *primitive){
     primitive->color_[0] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
     primitive->color_[1] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
     primitive->color_[2] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    
+    // primitive->color_[0] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
+    // primitive->color_[1] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
+    // primitive->color_[2] = Vector4f(1.0f, 0.0f, 0.0f, 1.0f);
     Clip::PrimitiveClip(primitive);
 }
 }
