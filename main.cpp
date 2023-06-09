@@ -15,21 +15,15 @@ int main(){
     ModelPool::Create();
     Model *teapot = Loader::LoadOBJModel(
             "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
-    Model *transparent_cube = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/cube.obj");
+    Model *cube = Loader::LoadOBJModel(
+            "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
 
     Scene scene(640, 480);
-    // scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f});
-    scene.AddObject(transparent_cube, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(),
-            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
+    scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f},
+            Vector3f(0.0f, -20.0f, 0.0f));
+    // scene.AddObject(cube);
 
-    scene.AddObject(transparent_cube, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(0.5f, -0.5f, -0.3f),
-            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
-
-    scene.AddObject(transparent_cube, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(-0.5f, -0.5f, 0.3f),
-            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
-
-    scene.AddCamera(Vector4f(0.0f, 0.0f, 10.0f, 0.0f),
+    scene.AddCamera(Vector4f(0.0f, 20.0f, 100.0f, 0.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
                 1.0f, 1000.0f, 45);
@@ -38,7 +32,7 @@ int main(){
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
-    int frame_number = 900;
+    int frame_number = 300;
     DisplayConfiguration display_configuration{640, 480};
     Display::Create(display_configuration);
 
@@ -46,7 +40,7 @@ int main(){
 
     clock_gettime(CLOCK_REALTIME, &time_start);
     for(int i = 0;i != frame_number; ++i){
-        // scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
+        scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0,
                     Renderer::Render(&scene, 3)});

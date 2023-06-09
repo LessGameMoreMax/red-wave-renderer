@@ -13,17 +13,26 @@ int main(){
     }
 
     ModelPool::Create();
-    Model *teapot = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
-    Model *cube = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
+    Model *red = Loader::LoadOBJModel(
+            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/red/cube.obj");
+
+    Model *green = Loader::LoadOBJModel(
+            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/green/cube.obj");
+
+    Model *blue = Loader::LoadOBJModel(
+            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/blue/cube.obj");
 
     Scene scene(640, 480);
-    scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f},
-            Vector3f(0.0f, -20.0f, 0.0f));
-    // scene.AddObject(cube);
+    scene.AddObject(red, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(),
+            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
 
-    scene.AddCamera(Vector4f(0.0f, 20.0f, 100.0f, 0.0f),
+    scene.AddObject(green, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(0.5f, -0.5f, -0.3f),
+            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
+
+    scene.AddObject(blue, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(-0.5f, -0.5f, 0.3f),
+            90.0f , Vector3f(1.0f, 0.0f, 0.0f));
+
+    scene.AddCamera(Vector4f(0.0f, 3.0f, 10.0f, 0.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
                 1.0f, 1000.0f, 45);
@@ -32,7 +41,7 @@ int main(){
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
-    int frame_number = 300;
+    int frame_number = 900;
     DisplayConfiguration display_configuration{640, 480};
     Display::Create(display_configuration);
 
@@ -40,10 +49,10 @@ int main(){
 
     clock_gettime(CLOCK_REALTIME, &time_start);
     for(int i = 0;i != frame_number; ++i){
-        scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
+        // scene.GetObject(0)->LocalRotate(++angle % 360, Vector3f(0.0f, 1.0f, 0.0f));
         Display::GetSingleton()->FreshChildDisplayConfiguration(
                 ChildDisplayConfiguration{0, 0,
-                    Renderer::Render(&scene, 7)});
+                    Renderer::Render(&scene, 3)});
         Display::GetSingleton()->Draw();
     }
     clock_gettime(CLOCK_REALTIME, &time_end);

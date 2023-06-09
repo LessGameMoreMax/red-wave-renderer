@@ -42,9 +42,12 @@ void FragmentShade::BlinnPhongShade(Fragment *fragment){
 }
 
 void FragmentShade::PerPixelLight(Fragment *fragment){
-//Implement PerPixleLight 
-    //TODO: Implement material color
     BlinnPhongShade(fragment);
+
+// Just For Test Transparent:
+    // fragment->color_ = Vector4f{fragment->material_->ka_, 1.0f};
+// Just For Test Transparent.
+
     OutputMerger::DepthTest(fragment);
 }
 
