@@ -3,7 +3,7 @@
 #include "../math/Tools.h"
 #include "../math/Compute.h"
 namespace sablin{
-Vector4f FragmentShade::BlinnPhongShade(Fragment *fragment){
+void FragmentShade::BlinnPhongShade(Fragment *fragment){
     Vector4f color{0.0f, 0.0f, 0.0f, 0.0f};
     int16_t light_number = fragment->scene_->LightNumber();
     for(int16_t i = 0;i != light_number; ++i){
@@ -30,20 +30,22 @@ Vector4f FragmentShade::BlinnPhongShade(Fragment *fragment){
             std::pow(std::max(0.0f, DotProduct(world_normal, half_direction)), 
                     fragment->material_->ns_);
                     
-        color += diffuse + specular;
+        color += ambient + diffuse + specular;
     }
+    color /= light_number;
 
     if(light_number == 0 && fragment->material_->map_kd_ != nullptr)
         color = fragment->material_->map_kd_->Sample(fragment->uv_coord_);
 
     color.w_ = 1.0f;
-    return color;
+
+    fragment->color_ = fragment->color_ * color;
 }
 
 void FragmentShade::PerPixelLight(Fragment *fragment){
 //Implement PerPixleLight 
     //TODO: Implement material color
-    fragment->color_ = BlinnPhongShade(fragment);
+    BlinnPhongShade(fragment);
     OutputMerger::DepthTest(fragment);
 }
 

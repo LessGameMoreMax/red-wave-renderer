@@ -63,9 +63,9 @@ void* VertexShade::Transform(void *arg){
 void VertexShade::PerVertexLight(Primitive *primitive){
 // Implement per vertex light:
 // ......
-    primitive->color_[0] = Vector4f();
-    primitive->color_[1] = Vector4f();
-    primitive->color_[2] = Vector4f();
+    primitive->color_[0] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    primitive->color_[1] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+    primitive->color_[2] = Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
     Clip::PrimitiveClip(primitive);
 }
 }

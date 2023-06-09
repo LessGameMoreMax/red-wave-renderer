@@ -118,6 +118,12 @@ void Rasterizer::Rasterization(Primitive *primitive){
                  primitive->vertex_normal_[2] * c / zc) *
                 fragment.depth_;
 
+            fragment.color_ =
+                (primitive->color_[0] * a / za +
+                 primitive->color_[1] * b / zb +
+                 primitive->color_[2] * c / zc) *
+                fragment.depth_;
+
             fragment.screen_coord_.x_ = i;
             fragment.screen_coord_.y_ = j;
 
