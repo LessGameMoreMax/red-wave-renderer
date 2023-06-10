@@ -68,7 +68,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
     //TODO: Implement Transparent algorithm MultiThread Version
     //TODO: Implement Sort Algorithm in list
     list.Sort([](const Primitive *a, const Primitive *b){
-        return a->camera_distance_ < b->camera_distance_;
+        return a->camera_distance_ <= b->camera_distance_;
     });
 
     while(!list.IsEmpty())

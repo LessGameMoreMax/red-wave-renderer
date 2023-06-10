@@ -74,7 +74,11 @@ bool LockFreeList<T>::IsEmpty() const{
 template <typename T>
 template <typename Compare>
 void LockFreeList<T>::Sort(Compare compare){
-    std::set<T, decltype(compare)> temp_set(compare);
+    std::multiset<T, decltype(compare)> temp_set(compare);
+    while(!IsEmpty())
+        temp_set.insert(PopFront());
+    for(auto iter = temp_set.rbegin(); iter != temp_set.rend(); ++iter)
+        PushFront(*iter);
 }
 
 }
