@@ -4,6 +4,7 @@
 #include "../math/Compute.h"
 #include "../threads/MultThreadArgs.h"
 #include "../threads/LockFreeList.h"
+#include "Primitive.h"
 #include <iostream>
 #include <pthread.h>
 #include <queue>
@@ -66,9 +67,10 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
 
     //TODO: Implement Transparent algorithm MultiThread Version
     //TODO: Implement Sort Algorithm in list
-    list.Sort([](Primitive *a, Primitive *b){
-       return a->camera_distance_ < b->camera_distance_;
+    list.Sort([](const Primitive *a, const Primitive *b){
+        return a->camera_distance_ < b->camera_distance_;
     });
+
     while(!list.IsEmpty())
         VertexShade::PerVertexLight(list.PopFront());
 

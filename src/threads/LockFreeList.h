@@ -2,6 +2,7 @@
 #define LOCK_FREE_LIST_H
 #include <atomic>
 #include <pthread.h>
+#include <set>
 namespace sablin{
 template <typename T>
 struct ListNode{
@@ -23,6 +24,9 @@ public:
     void PushFront(const T&);
     T PopFront();
     bool IsEmpty() const;
+
+    template <typename Compare>
+    void Sort(Compare);
 };
 
 template <typename T>
@@ -65,6 +69,12 @@ T LockFreeList<T>::PopFront(){
 template <typename T>
 bool LockFreeList<T>::IsEmpty() const{
     return head_.load() == nullptr;
+}
+
+template <typename T>
+template <typename Compare>
+void LockFreeList<T>::Sort(Compare compare){
+    std::set<T, decltype(compare)> temp_set(compare);
 }
 
 }
