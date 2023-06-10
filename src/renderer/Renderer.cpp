@@ -26,6 +26,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
                     scene->GetCamera()->GetFarPlane()))
             continue;
 
+        Matrix4x4f VM = V * M;
         Matrix4x4f PVM = P * V * M;
         Matrix4x4f NM = object->GetNormalWorldMatrix();
 
@@ -43,6 +44,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
             args[i].object = object;
             args[i].M = &M;
             args[i].NM = &NM;
+            args[i].VM = &VM;
             args[i].PVM = &PVM;
             args[i].tid = i;
             if(pthread_create(&threads[i], NULL, VertexShade::Transform,
@@ -65,7 +67,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
     //TODO: Implement Transparent algorithm MultiThread Version
     //TODO: Implement Sort Algorithm in list
     list.Sort([](Primitive *a, Primitive *b){
-       return a->camera_distance_ > b->camera_distance_;
+       return a->camera_distance_ < b->camera_distance_;
     });
     while(!list.IsEmpty())
         VertexShade::PerVertexLight(list.PopFront());

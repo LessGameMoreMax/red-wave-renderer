@@ -58,9 +58,10 @@ void* VertexShade::Transform(void *arg){
             = ((*temp->NM) * *t->vertex_c_.normal_).Normalized();
 
         if(std::abs(primitive->material_->d_ - 1.0f) > FLOAT_ERROR){
-            primitive->camera_distance_ = 
-                    (primitive->scene_->GetCamera()->GetWorldPosition() - 
-                    (primitive->world_coord_[0] + primitive->world_coord_[1] + primitive->world_coord_[2]) / 3.0f).Norm();
+            float a = ((*temp->VM) * t->vertex_a_.get_local_coord_()).z_;
+            float b = ((*temp->VM) * t->vertex_b_.get_local_coord_()).z_;
+            float c = ((*temp->VM) * t->vertex_c_.get_local_coord_()).z_;
+            primitive->camera_distance_ = a + b + c;
             temp->transparent_list->PushFront(primitive);
             continue;
         }

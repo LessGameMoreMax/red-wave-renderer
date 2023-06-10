@@ -13,6 +13,7 @@ public:
     std::atomic<int64_t> *index;
     Object *object;
     Matrix4x4f *M;
+    Matrix4x4f *VM;
     Matrix4x4f *NM;
     Matrix4x4f *PVM;
     int8_t tid;
