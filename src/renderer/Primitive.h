@@ -16,6 +16,9 @@ public:
     Vector4f project_coord_[3];
     Vector2f uv_coord_[3];
     Vector4f vertex_normal_[3];
+
+    // Only Use for Blender
+    float camera_distance_;
 };
 }
 #endif
