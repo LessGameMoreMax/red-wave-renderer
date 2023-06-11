@@ -1,7 +1,19 @@
 1. Implement a thread pool to organize threads.
 Reference points:
     Display.cpp line:150
-4. Implement Interlacing Adam7.
+4. Implement interlacing Adam7.
     PNGLoader.cpp
-5. Implement Inflate zlib method.
+5. Implement inflate zlib method.
     PNGLoader.cpp
+6. Implement transparent algorithm multi-thread version.
+    Renderer.cpp
+7. Implement sort algorithm in list.
+    LockFreeList.h
+8. Implement a display method to replace SDL.
+    sdl_display/    
+9. Implement per vertex light.
+    VertexShade.cpp 
+10. Implement primitive clip.
+    Clip.cpp
+11. Implement more accurency version of depth buffer and stencil buffer.
+    OutputMerge.cpp
