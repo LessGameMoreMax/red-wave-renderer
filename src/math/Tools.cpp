@@ -3,32 +3,61 @@
 
 namespace sablin{
 
+bool IsInFovJudge(const Vector4f &src, const Matrix4x4f &P, const Matrix4x4f &VM,
+        const float near_plane, const float far_plane){
+    Vector4f temp = VM * src;
+    float z = temp.z_;
+    temp = P * temp;
+    temp /= temp.w_;
+    if(temp.x_ >= -1.0f && temp.x_ <= 1.0f &&
+            temp.y_ >= -1.0f && temp.y_ <= 1.0f &&
+            z <= -near_plane && z >= -far_plane)
+        return true;
+    return false;
+}
+
 bool IsInFov(const AABB &aabb, const Matrix4x4f &P,
         const Matrix4x4f &V, const Matrix4x4f &M,
         const float near_plane, const float far_plane){
     Matrix4x4f VM = V * M;
-
-    Vector4f one = aabb.min_coord_;
-    one = VM * one;
-    float one_z = one.z_;
-
-    Vector4f two = aabb.max_coord_;
-    two = VM * two;
-    float two_z = two.z_;
-
-    one = P * one;
-    one /= one.w_;
-    if(one.x_ >= -1.0f && one.x_ <= 1.0f &&
-            one.y_ >= -1.0f && one.y_ <= 1.0f &&
-            one_z <= -near_plane && one_z >= -far_plane)
+    Vector4f diff = aabb.max_coord_ - aabb.min_coord_;
+    
+    if(IsInFovJudge(aabb.min_coord_, P, VM, near_plane, far_plane))
         return true;
 
-    two = P * two;
-    two /= two.w_;
-    if(two.x_ >= -1.0f && two.x_ <= 1.0f &&
-            two.y_ >= -1.0f && two.y_ <= 1.0f &&
-            two_z <= -near_plane && two_z >= -far_plane)
+    Vector4f two = aabb.min_coord_;
+    two.x_ += diff.x_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
         return true;
+
+    two = aabb.min_coord_;
+    two.y_ += diff.y_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
+        return true;
+
+    two = aabb.min_coord_;
+    two.z_ += diff.z_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
+        return true;
+
+    two = aabb.max_coord_;
+    two.x_ -= diff.x_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
+        return true;
+
+    two = aabb.max_coord_;
+    two.y_ -= diff.y_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
+        return true;
+
+    two = aabb.max_coord_;
+    two.z_ -= diff.z_;
+    if(IsInFovJudge(two, P, VM, near_plane, far_plane))
+        return true;
+
+    if(IsInFovJudge(aabb.max_coord_, P, VM, near_plane, far_plane))
+        return true;
+
     return false;
 }
 

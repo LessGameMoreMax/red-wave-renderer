@@ -59,9 +59,15 @@ void Rasterizer::Rasterization(Primitive *primitive){
         primitive->project_coord_[0].y_ - primitive->project_coord_[1].y_};
     
     float total_area = CrossProduct(vec02, Vector2f{-vec10.x_, -vec10.y_});
+    
+    int16_t width = primitive->scene_->GetFrameWidth();
+    int16_t height = primitive->scene_->GetFrameHeight();
 
     for(int16_t i = min_screen_pos.x_; i != max_screen_pos.x_; ++i)
         for(int16_t j = min_screen_pos.y_; j != max_screen_pos.y_; ++j){
+
+            if(i < 0 || i >= width || j < 0 || j >= height) continue;
+
             Vector2f pixel_coord{i + 0.5f, j + 0.5f};
             Vector2f vec0p{
                 pixel_coord.x_ - primitive->project_coord_[0].x_,
