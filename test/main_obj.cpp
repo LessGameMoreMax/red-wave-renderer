@@ -12,7 +12,7 @@ int main(){
     ModelPool::Create();
     Model *cube = 
         Loader::LoadOBJModel(
-                "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
+                "Assets/Models/teapot/teapot.obj");
     // Model *cube = 
     //     Loader::LoadOBJModel(
     //             "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");

@@ -7,7 +7,7 @@ using namespace sablin;
 int main(){
     ModelPool::Create();
     Model *cube = Loader::LoadOBJModel(
-                "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
+                "Assets/Models/cube/cube.obj");
     // Model *cube = Loader::LoadOBJModel(
     //             "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
 

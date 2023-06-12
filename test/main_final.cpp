@@ -14,9 +14,9 @@ int main(){
 
     ModelPool::Create();
     Model *teapot = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/teapot/teapot.obj");
+            "Assets/Models/teapot/teapot.obj");
     Model *cube = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/cube/cube.obj");
+            "Assets/Models/cube/cube.obj");
 
     Scene scene(640, 480);
     scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f});

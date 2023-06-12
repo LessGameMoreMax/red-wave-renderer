@@ -14,13 +14,13 @@ int main(){
 
     ModelPool::Create();
     Model *red = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/red/cube.obj");
+            "Assets/Models/transparent_cube/red/cube.obj");
 
     Model *green = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/green/cube.obj");
+            "Assets/Models/transparent_cube/green/cube.obj");
 
     Model *blue = Loader::LoadOBJModel(
-            "/home/sablin/Projects/soft-rtr/Assets/Models/transparent_cube/blue/cube.obj");
+            "Assets/Models/transparent_cube/blue/cube.obj");
 
     Scene scene(640, 480);
     scene.AddObject(red, Vector3f(1.0f, 0.1f, 1.0f),Vector3f(),
