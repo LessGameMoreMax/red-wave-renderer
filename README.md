@@ -6,6 +6,7 @@ Red Wave Renderer is a easy 3D rendering toy which just supports GUN/Linux platf
 
 Development Tools:
 
+|Type|Tool|
 |:--:|:--:|
 |OS|Archlinux and Pop!OS|
 |Editor|NVIM|
