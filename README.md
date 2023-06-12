@@ -5,7 +5,8 @@ A real-time soft renderer toy.
 Red Wave Renderer is a easy 3D rendering toy which just supports GUN/Linux platform.
 
 Development Tools:
-|--|:--:|--:|
+
+|:--:|:--:|
 |OS|Archlinux and Pop!OS|
 |Editor|NVIM|
 |Compiler|GNU C++ Compiler|
@@ -22,10 +23,15 @@ Red Wave Renderer has simulated easy rendering-pipeline.
 Red Wave Renderer is released under GPLv3 License. So, you are free to use its source codes under the premise of protecting others freedom.
 ### How to rock and roll.
 Preparation:
+
     GUN/Linux OS
+
     SDL2 lib
+
     zlib
+
     git
+
     make
 1. Clone the project to your folder:
 > git clone https://github.com/LessGameMoreMax/red-wave-renderer.git
