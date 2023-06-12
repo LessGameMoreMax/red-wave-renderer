@@ -20,15 +20,15 @@ int main(){
 
     Scene scene(640, 480);
     scene.AddObject(teapot, Vector3f{0.5f, 0.5f, 0.5f},
-            Vector3f(10.0f, 10.0f, 0.0f));
-    // scene.AddObject(cube);
+            Vector3f(-10.0f, -13.0f, 10.0f));
+    scene.AddObject(cube, Vector3f(60.0f, 0.2f, 40.0f), Vector3f(0.0f, -15.0f, 0.0f));
 
     scene.AddCamera(Vector4f(0.0f, 20.0f, 100.0f, 0.0f),
                 Vector4f(0.0f, 0.0f, 0.0f, 1.0f),
                 Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
                 1.0f, 1000.0f, 45);
-    // scene.AddParallelLight(Vector4f{1.0f, -1.0f, -1.0f, 0.0f},
-        // Vector4f{0.8f, 0.8f, 0.8f, 1.0f});
+    scene.AddParallelLight(Vector4f{1.0f, -1.0f, -1.0f, 0.0f},
+        Vector4f{0.8f, 0.8f, 0.8f, 1.0f});
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};
