@@ -33,5 +33,6 @@ Preparation:
 > make
 4. Execute:
 > ./main.out
+
 Ok!
 In the /test folder there are some code samples.
