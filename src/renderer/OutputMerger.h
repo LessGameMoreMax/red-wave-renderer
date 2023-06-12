@@ -5,6 +5,7 @@ namespace sablin{
 
 class OutputMerger{
 public:
+    static void StencilTest(Fragment*);
     static void DepthTest(Fragment*);
 };
 }

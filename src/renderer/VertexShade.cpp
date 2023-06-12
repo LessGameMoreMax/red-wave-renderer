@@ -17,6 +17,7 @@ void* VertexShade::Transform(void *arg){
     }
 
     Mesh *mesh = temp->object->GetModel()->mesh_;
+    Matrix4x4f *shadow_matrix = temp->object->GetShadowMatrix();
 
     int64_t i;
     while((i = temp->index->load()) != mesh->triangle_pool_size_){
@@ -56,6 +57,36 @@ void* VertexShade::Transform(void *arg){
             = ((*temp->NM) * *t->vertex_b_.normal_).Normalized();
         primitive->vertex_normal_[2]
             = ((*temp->NM) * *t->vertex_c_.normal_).Normalized();
+
+        primitive->is_shadow_ = false;
+       
+       if(shadow_matrix != nullptr){
+            Primitive *shadow_primitive = new Primitive();
+            shadow_primitive->scene_ = temp->scene;
+            shadow_primitive->object_ = temp->object;
+            shadow_primitive->material_ = temp->object->GetShadowMaterial();
+
+            shadow_primitive->world_coord_[0]
+                = (*shadow_matrix) * primitive->world_coord_[0];
+            shadow_primitive->world_coord_[1]
+                = (*shadow_matrix) * primitive->world_coord_[1];
+            shadow_primitive->world_coord_[2]
+                = (*shadow_matrix) * primitive->world_coord_[2];
+
+            shadow_primitive->project_coord_[0]
+                = (*temp->PV) * shadow_primitive->world_coord_[0];
+            shadow_primitive->project_coord_[1]
+                = (*temp->PV) * shadow_primitive->world_coord_[1];
+            shadow_primitive->project_coord_[2]
+                = (*temp->PV) * shadow_primitive->world_coord_[2];
+
+            float a = ((*temp->V) * shadow_primitive->world_coord_[0]).z_;
+            float b = ((*temp->V) * shadow_primitive->world_coord_[1]).z_;
+            float c = ((*temp->V) * shadow_primitive->world_coord_[2]).z_;
+            shadow_primitive->camera_distance_ = a + b + c;
+            shadow_primitive->is_shadow_ = true;
+            temp->transparent_list->PushFront(shadow_primitive);
+       }
 
         if(std::abs(primitive->material_->d_ - 1.0f) > FLOAT_ERROR){
             float a = ((*temp->VM) * t->vertex_a_.get_local_coord_()).z_;

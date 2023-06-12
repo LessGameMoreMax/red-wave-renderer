@@ -29,6 +29,11 @@ int main(){
                 1.0f, 1000.0f, 45);
     scene.AddParallelLight(Vector4f{1.0f, -1.0f, -1.0f, 0.0f},
         Vector4f{0.8f, 0.8f, 0.8f, 1.0f});
+
+    Matrix4x4f shadow_matrix = ShadowMatrix(Vector3f(0.0f, 1.0f, 0.0f),
+            Vector3f(-1.0f, 1.0f, 1.0f).Normalized(), 14.6f, false);
+
+    scene.GetObject(0)->SetShadowMatrix(&shadow_matrix);
     
     struct timespec time_start = {0, 0};
     struct timespec time_end = {0, 0};

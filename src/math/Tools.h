@@ -99,6 +99,8 @@ int8_t Mask8(int8_t number){
 }
 
 void BoundingBoxScreen(const Primitive*,Vector2i*,Vector2i*);
+Matrix4x4f ShadowMatrix(const Vector3f &n, const Vector3f &l, 
+            const float d, const bool is_point_light);
 
 Vector3f LUPSolve3f(const Matrix3x3f&, const Matrix3x3f&, const Vector3i&, const Vector3f&);
 Vector3i LUPDecomposition3x3f(Matrix3x3f&);

@@ -17,8 +17,10 @@ private:
     int16_t              frame_height_;
     Frame*               frame_;
     float*               depth_buffer_;
+    int8_t*              stencil_buffer_;
 public:
     std::mutex           depth_buffer_lock_;
+    std::mutex           stencil_buffer_lock_;
 public:
     explicit Scene(const int16_t, const int16_t);
     ~Scene();
@@ -50,8 +52,12 @@ public:
     int16_t GetFrameHeight() const;
 
     Frame* GetFrame() const;
+
     float* GetDepthBuffer() const;
     void FreshDepthBuffer();
+
+    int8_t* GetStencilBuffer() const;
+    void FreshStencilBuffer();
 };
 }
 #endif

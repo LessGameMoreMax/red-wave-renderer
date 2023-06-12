@@ -195,6 +195,24 @@ Vector4f operator-(const Vector4f &rhs, const float f_number){
     return sum;
 }
 
+Vector4f operator-(const float f_number, const Vector4f &lhs){
+    Vector4f sum = lhs;
+    sum.x_ = f_number - lhs.x_;
+    sum.y_ = f_number - lhs.y_;
+    sum.z_ = f_number - lhs.z_;
+    sum.w_ = f_number - lhs.w_;
+    return sum;
+}
+
+Vector4f operator-(const Vector4f &lhs){
+    Vector4f sum = lhs;
+    sum.x_ = -lhs.x_;
+    sum.y_ = -lhs.y_;
+    sum.z_ = -lhs.z_;
+    sum.w_ = -lhs.w_;
+    return sum;
+}
+
 Vector4f& Vector4f::operator*=(const float f_number){
     x_ *= f_number;
     y_ *= f_number;

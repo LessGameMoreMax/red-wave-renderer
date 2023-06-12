@@ -1,5 +1,4 @@
 1. Implement a thread pool to organize threads.
-Reference points:
     Display.cpp line:150
 4. Implement interlacing Adam7.
     PNGLoader.cpp
@@ -17,3 +16,5 @@ Reference points:
     Clip.cpp
 11. Implement more accurency version of depth buffer and stencil buffer.
     OutputMerge.cpp
+12. Implement MSAA
+    Rasterizer.cpp

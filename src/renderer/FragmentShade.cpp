@@ -4,6 +4,11 @@
 #include "../math/Compute.h"
 namespace sablin{
 void FragmentShade::BlinnPhongShade(Fragment *fragment){
+    if(fragment->is_shadow_){
+        fragment->color_ = Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
+        return;
+    }
+
     Vector4f color{0.0f, 0.0f, 0.0f, 0.0f};
     int16_t light_number = fragment->scene_->LightNumber();
     for(int16_t i = 0;i != light_number; ++i){
@@ -48,7 +53,7 @@ void FragmentShade::PerPixelLight(Fragment *fragment){
     // fragment->color_ = Vector4f{fragment->material_->ka_, 1.0f};
 // Just For Test Transparent.
 
-    OutputMerger::DepthTest(fragment);
+    OutputMerger::StencilTest(fragment);
 }
 
 }

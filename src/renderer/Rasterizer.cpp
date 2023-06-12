@@ -137,6 +137,8 @@ void Rasterizer::Rasterization(Primitive *primitive){
             fragment.screen_coord_.x_ = i;
             fragment.screen_coord_.y_ = j;
 
+            fragment.is_shadow_ = primitive->is_shadow_;
+
             FragmentShade::PerPixelLight(&fragment);
         }
 

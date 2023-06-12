@@ -82,6 +82,8 @@ Vector4f operator+(const Vector4f&, const Vector4f&);
 Vector4f operator-(const Vector4f&, const Vector4f&);
 Vector4f operator+(const Vector4f&, const float);
 Vector4f operator-(const Vector4f&, const float);
+Vector4f operator-(const float, const Vector4f&);
+Vector4f operator-(const Vector4f&);
 Vector4f operator*(const Vector4f&, const float);
 Vector4f operator*(const Vector4f&, const Vector4f&);
 Vector4f operator/(const Vector4f&, const float);

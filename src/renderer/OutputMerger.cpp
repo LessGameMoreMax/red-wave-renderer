@@ -3,6 +3,22 @@
 #include <iostream>
 namespace sablin{
 
+void OutputMerger::StencilTest(Fragment *fragment){
+    int32_t index = fragment->screen_coord_.y_ *
+            fragment->scene_->GetFrameWidth() + fragment->screen_coord_.x_;
+    if(fragment->is_shadow_){
+        fragment->scene_->stencil_buffer_lock_.lock();
+        if(fragment->scene_->GetStencilBuffer()[index] == 0){
+            fragment->scene_->GetStencilBuffer()[index] = 1;
+            fragment->scene_->stencil_buffer_lock_.unlock();
+        }else{
+            fragment->scene_->stencil_buffer_lock_.unlock();
+            return;
+        }
+    }
+    OutputMerger::DepthTest(fragment);
+}
+
 void OutputMerger::DepthTest(Fragment *fragment){
     int32_t index = fragment->screen_coord_.y_ * 
         fragment->scene_->GetFrameWidth() + fragment->screen_coord_.x_;

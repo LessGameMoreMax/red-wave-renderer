@@ -19,6 +19,9 @@ public:
 
     // Only Use for Blender
     float camera_distance_;
+
+    // Only Use for Shadow
+    bool is_shadow_;
 };
 }
 #endif

@@ -11,6 +11,7 @@ Scene::Scene(const int16_t frame_width,
     lights_.clear();
     frame_ = new Frame(frame_width, frame_height);
     depth_buffer_ = new float[frame_width * frame_height];
+    stencil_buffer_ = new int8_t[frame_width * frame_height];
 }
 
 Scene::~Scene(){
@@ -26,6 +27,8 @@ Scene::~Scene(){
         delete frame_;
     if(depth_buffer_ != nullptr)
         delete[] depth_buffer_;
+    if(stencil_buffer_ != nullptr)
+        delete[] stencil_buffer_;
 }
 
 
@@ -108,6 +111,15 @@ float* Scene::GetDepthBuffer() const{
 void Scene::FreshDepthBuffer(){
     for(int32_t i = 0;i != frame_height_ * frame_width_; ++i)
         depth_buffer_[i] = FLOAT_MIN;
+}
+
+int8_t* Scene::GetStencilBuffer() const{
+    return stencil_buffer_;
+}
+
+void Scene::FreshStencilBuffer(){
+    for(int32_t i = 0;i != frame_height_ * frame_width_; ++i)
+        stencil_buffer_[i] = 0;
 }
 
 }

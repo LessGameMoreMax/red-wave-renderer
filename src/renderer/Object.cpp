@@ -10,7 +10,7 @@ Object::Object(Model *model, const Vector3f &scale,
             const Vector3f &world_rotation_position,
             const float world_rotation_angle,
             const Vector3f &world_rotation_axis):
-        model_(model){
+        model_(model), shadow_matrix_(nullptr), shadow_material_(nullptr){
 #ifdef ASSERT
     assert(model_ != nullptr);
 #endif
@@ -22,6 +22,10 @@ Object::Object(Model *model, const Vector3f &scale,
             world_rotation_angle,
             world_rotation_axis);
             
+}
+
+Object::~Object(){
+    if(shadow_material_ != nullptr) delete shadow_material_;
 }
 
 void Object::BuildLocalScale(const Vector3f &scale){
@@ -179,6 +183,20 @@ Matrix4x4f Object::GetNormalWorldMatrix() const{
 
 Model* Object::GetModel() const{
     return model_;
+}
+
+void Object::SetShadowMatrix(Matrix4x4f *shadow_matrix){
+    shadow_matrix_ = shadow_matrix;
+    shadow_material_ = new Material();
+    shadow_material_->d_ = 0.5;
+}
+
+Matrix4x4f* Object::GetShadowMatrix() const{
+    return shadow_matrix_;
+}
+
+Material* Object::GetShadowMaterial() const{
+    return shadow_material_;
 }
 
 }

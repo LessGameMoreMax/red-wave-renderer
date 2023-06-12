@@ -13,6 +13,7 @@ namespace sablin{
 Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
     scene->GetFrame()->FreshColors();
     scene->FreshDepthBuffer();
+    scene->FreshStencilBuffer();
 
     LockFreeList<Primitive*> list; 
 
@@ -28,6 +29,7 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
             continue;
 
         Matrix4x4f VM = V * M;
+        Matrix4x4f PV = P * V;
         Matrix4x4f PVM = P * V * M;
         Matrix4x4f NM = object->GetNormalWorldMatrix();
 
@@ -44,6 +46,8 @@ Frame* Renderer::Render(Scene *scene, const int8_t thread_number){
             args[i].index = &triangle_index;
             args[i].object = object;
             args[i].M = &M;
+            args[i].V = &V;
+            args[i].PV = &PV;
             args[i].NM = &NM;
             args[i].VM = &VM;
             args[i].PVM = &PVM;

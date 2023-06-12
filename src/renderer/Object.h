@@ -10,6 +10,8 @@ private:
     Matrix4x4f local_rotation_;
     Matrix4x4f world_translate_;
     Matrix4x4f world_rotation_;
+    Matrix4x4f *shadow_matrix_;
+    Material   *shadow_material_;
 private:
     void BuildLocalScale(const Vector3f&);
     void BuildLocalRotation(const float, const Vector3f&);
@@ -26,7 +28,7 @@ public:
             const Vector3f &world_rotation_axis = Vector3f(0.0f,1.0f,0.0f));
     Object(const Object&) = default;
     Object& operator=(const Object&) = default;
-    ~Object() = default;
+    ~Object();
 
     void LocalScale(const Vector3f &scale);
     
@@ -44,6 +46,11 @@ public:
     Matrix4x4f GetNormalWorldMatrix() const;
 
     Model* GetModel() const;
+
+    void SetShadowMatrix(Matrix4x4f*);
+    Matrix4x4f* GetShadowMatrix() const;
+
+    Material* GetShadowMaterial() const;
 };
 
 

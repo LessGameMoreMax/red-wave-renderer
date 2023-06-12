@@ -76,6 +76,19 @@ void BoundingBoxScreen(const Primitive *primitive, Vector2i *min_coord_,
     }
 }
 
+Matrix4x4f ShadowMatrix(const Vector3f &n, const Vector3f &l,
+            const float d, const bool is_point_light){
+    int l_w = static_cast<int>(is_point_light);
+    // return Matrix4x4f{DotProduct(n, l) + d * l_w - l.x_ * n.x_ , - l.y_ * n.x_, - l.z_ * n.x_, - l_w * n.x_,
+    //                 -l.x_ * n.y_, DotProduct(n, l) + d * l_w - l.y_ * n.y_, -l.z_ * n.y_, -l_w * n.y_,
+    //                 -l.x_ * n.z_, -l.y_ * n.z_, DotProduct(n, l) + d * l_w - l.z_ * n.z_, -l_w * n.z_,
+    //                 -l.x_ * d, -l.y_ * d, -l.z_ * d, DotProduct(n, l)};
+    return Matrix4x4f{DotProduct(n, l) + d * l_w - l.x_ * n.x_, -l.x_ * n.y_, -l.x_ * n.z_, -l.x_ * d,
+                    -l.y_ * n.x_, DotProduct(n, l) + d * l_w - l.y_ * n.y_, -l.y_ * n.z_, -l.y_ * d,
+                    -l.z_ * n.x_, -l.z_ * n.y_, DotProduct(n, l) + d * l_w - l.z_ * n.z_, -l.z_ * d,
+                    -l_w * n.x_, -l_w * n.y_, -l_w * n.z_, DotProduct(n, l)};
+}
+
 Vector3f LUPSolve3f(const Matrix3x3f &L, const Matrix3x3f &U,
         const Vector3i &pi, const Vector3f &b){
     

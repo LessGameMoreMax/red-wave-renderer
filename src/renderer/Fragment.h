@@ -16,6 +16,9 @@ public:
     Vector4f vertex_normal_;
 
     Vector2i screen_coord_;
+
+    // Only for Shadow
+    bool is_shadow_;
 };
 }
 #endif
