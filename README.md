@@ -3,11 +3,13 @@ A real-time soft renderer toy.
 ## Warning: Red Wave Renderer is just a small TOY which help me to learn rendering-pipeline, so it CAN NOT use for actual production.
 ### 3D but only support GNU/Linux platform.
 Red Wave Renderer is a easy 3D rendering toy which just supports GUN/Linux platform.
-Development Tools: \
-| OS | Archlinux and Pop!OS |
-| Editor | NVIM |
-| Compiler | GNU C++ Compiler |
-| VCS | Git |
+
+Development Tools:
+|--|:--:|--:|
+|OS|Archlinux and Pop!OS|
+|Editor|NVIM|
+|Compiler|GNU C++ Compiler|
+|VCS|Git|
 ### Basic features.
 Red Wave Renderer has simulated easy rendering-pipeline.
 - support .obj model format. 
